@@ -1,6 +1,7 @@
 import type { OpenAPIHono, RouteConfig, RouteHandler } from "@hono/zod-openapi";
 
 import type { BASE_PATH } from "./constants";
+import { models } from "../db";
 
 export type AppEnv = {
   Bindings: {
@@ -16,3 +17,4 @@ export type AppEnv = {
 export type AppOpenAPI = OpenAPIHono<AppEnv, {}, typeof BASE_PATH>;
 
 export type AppRouteHandler<R extends RouteConfig> = RouteHandler<R, AppEnv>;
+export type tModel = keyof typeof models

@@ -1,4 +1,4 @@
-import type { ErrorSchema } from "@tasks-app/api-client";
+import type { ErrorSchema } from "@teamapp/api-client";
 
 export default function formatApiError(apiError: ErrorSchema) {
   return apiError

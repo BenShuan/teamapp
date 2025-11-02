@@ -1,4 +1,4 @@
-name = "tasks-app"
+name = "teamapp"
 main = "src/app.ts"
 compatibility_date = "2024-12-05"
 compatibility_flags = [ "nodejs_compat" ]
@@ -9,8 +9,8 @@ binding = "ASSETS"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "tasks-app"
-database_id = "000-000-000-000"
+database_name = "teamapp"
+database_id = "ee97e382-5ab8-4a6e-8603-ad5c359adb38"
 migrations_dir = "src/db/migrations"
 
 [vars]

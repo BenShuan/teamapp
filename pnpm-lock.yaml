@@ -34,7 +34,7 @@ importers:
       '@scalar/hono-api-reference':
         specifier: ^0.5.164
         version: 0.5.164(hono@4.6.13)
-      '@tasks-app/eslint-config':
+      '@teamapp/eslint-config':
         specifier: workspace:^
         version: link:../../packages/eslint-config
       drizzle-orm:
@@ -102,8 +102,6 @@ importers:
         specifier: ^3.95.0
         version: 3.95.0(@cloudflare/workers-types@4.20241205.0)
 
-  apps/smtp-dev-server: {}
-
   apps/web:
     dependencies:
       '@auth/core':
@@ -121,13 +119,13 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.90.0
         version: 1.90.0(@tanstack/router-generator@1.87.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@tasks-app/api':
+      '@teamapp/api':
         specifier: workspace:^
         version: link:../api
-      '@tasks-app/api-client':
+      '@teamapp/api-client':
         specifier: workspace:^
         version: link:../../packages/api-client
-      '@tasks-app/eslint-config':
+      '@teamapp/eslint-config':
         specifier: workspace:^
         version: link:../../packages/eslint-config
       '@types/node':
@@ -200,10 +198,10 @@ importers:
 
   packages/api-client:
     dependencies:
-      '@tasks-app/api':
+      '@teamapp/api':
         specifier: workspace:^
         version: link:../../apps/api
-      '@tasks-app/eslint-config':
+      '@teamapp/eslint-config':
         specifier: workspace:^
         version: link:../eslint-config
       '@types/node':

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { patchTasksSchema } from "@tasks-app/api/schema";
+import { patchTasksSchema } from "@teamapp/api/schema";
 import { useForm } from "react-hook-form";
 
 import RoutePending from "@/web/components/route-pending";

@@ -1,3 +1,3 @@
-import apiClient from "@tasks-app/api-client";
+import apiClient from "@teamapp/api-client";
 
 export default apiClient("/");

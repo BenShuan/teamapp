@@ -1,3 +1,3 @@
-import config from "@tasks-app/eslint-config";
+import config from "@teamapp/eslint-config";
 
 export default config;

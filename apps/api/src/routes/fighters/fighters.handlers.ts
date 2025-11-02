@@ -5,32 +5,32 @@ import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import type { AppRouteHandler } from "@/api/lib/types";
 
 import { createDb } from "@/api/db";
-import { tasks } from "@/api/db/schema";
+import { fighter } from "@/api/db/schema";
 import { ZOD_ERROR_CODES, ZOD_ERROR_MESSAGES } from "@/api/lib/constants";
 
-import type { CreateRoute, GetOneRoute, ListRoute, PatchRoute, RemoveRoute } from "./tasks.routes";
+import type { CreateRoute, GetOneRoute, ListRoute, PatchRoute, RemoveRoute } from "./fighters.routes";
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const db = createDb(c.env);
-  const tasks = await db.query.tasks.findMany({
+  const fighter = await db.query.fighter.findMany({
     orderBy(fields, operators) {
       return operators.desc(fields.createdAt);
     },
   });
-  return c.json(tasks);
+  return c.json(fighter);
 };
 
 export const create: AppRouteHandler<CreateRoute> = async (c) => {
   const db = createDb(c.env);
   const task = c.req.valid("json");
-  const [inserted] = await db.insert(tasks).values(task).returning();
+  const [inserted] = await db.insert(fighter).values(task).returning();
   return c.json(inserted, HttpStatusCodes.OK);
 };
 
 export const getOne: AppRouteHandler<GetOneRoute> = async (c) => {
   const db = createDb(c.env);
   const { id } = c.req.valid("param");
-  const task = await db.query.tasks.findFirst({
+  const task = await db.query.fighter.findFirst({
     where(fields, operators) {
       return operators.eq(fields.id, id);
     },
@@ -72,9 +72,9 @@ export const patch: AppRouteHandler<PatchRoute> = async (c) => {
     );
   }
 
-  const [task] = await db.update(tasks)
+  const [task] = await db.update(fighter)
     .set(updates)
-    .where(eq(tasks.id, id))
+    .where(eq(fighter.id, id))
     .returning();
 
   if (!task) {
@@ -92,8 +92,8 @@ export const patch: AppRouteHandler<PatchRoute> = async (c) => {
 export const remove: AppRouteHandler<RemoveRoute> = async (c) => {
   const db = createDb(c.env);
   const { id } = c.req.valid("param");
-  const result: D1Response = await db.delete(tasks)
-    .where(eq(tasks.id, id));
+  const result: D1Response = await db.delete(fighter)
+    .where(eq(fighter.id, id));
 
   if (result.meta.changes === 0) {
     return c.json(

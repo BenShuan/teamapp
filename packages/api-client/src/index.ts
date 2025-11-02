@@ -1,4 +1,4 @@
-import type { router } from "@tasks-app/api/routes";
+import type { router } from "@teamapp/api/routes";
 
 import { hc } from "hono/client";
 

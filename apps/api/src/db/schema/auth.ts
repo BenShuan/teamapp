@@ -1,26 +1,24 @@
+import { ID_FIELD, INTEGER_TIMESTEMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "@/api/utils/schemeHelper";
 import type { AdapterAccountType } from "@auth/core/adapters";
 
 import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const users = sqliteTable("user", {
-  id: text()
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  name: text(),
-  email: text().unique(),
-  emailVerified: integer({ mode: "timestamp_ms" }),
-  image: text(),
+  id: ID_FIELD('id'),
+  name: TEXT_REQUIERD_FIELD("name"),
+  email: TEXT_REQUIERD_FIELD("email").unique(),
+  emailVerified: INTEGER_TIMESTEMP_OPTIONAL_FIELD("emailVerified"),
+  image: TEXT_OPTIONAL_FIELD("image"),
 });
 
 export const accounts = sqliteTable(
   "account",
   {
-    userId: text("userId")
-      .notNull()
+    userId: TEXT_REQUIERD_FIELD("userId")
       .references(() => users.id, { onDelete: "cascade" }),
-    type: text("type").$type<AdapterAccountType>().notNull(),
-    provider: text("provider").notNull(),
-    providerAccountId: text("providerAccountId").notNull(),
+    type: TEXT_OPTIONAL_FIELD("type").$type<AdapterAccountType>().notNull(),
+    provider: TEXT_REQUIERD_FIELD("provider"),
+    providerAccountId: TEXT_REQUIERD_FIELD("providerAccountId"),
     refresh_token: text("refresh_token"),
     access_token: text("access_token"),
     expires_at: integer("expires_at"),
@@ -29,11 +27,10 @@ export const accounts = sqliteTable(
     id_token: text("id_token"),
     session_state: text("session_state"),
   },
-  account => ({
-    compoundKey: primaryKey({
-      columns: [account.provider, account.providerAccountId],
-    }),
+  account => [primaryKey({
+    columns: [account.provider, account.providerAccountId],
   }),
+  ]
 );
 
 export const sessions = sqliteTable("session", {

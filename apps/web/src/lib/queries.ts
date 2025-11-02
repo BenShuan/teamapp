@@ -1,4 +1,4 @@
-import type { insertTasksSchema, patchTasksSchema } from "@tasks-app/api/schema";
+import type { insertTasksSchema, patchTasksSchema } from "@teamapp/api/schema";
 
 import { queryOptions } from "@tanstack/react-query";
 

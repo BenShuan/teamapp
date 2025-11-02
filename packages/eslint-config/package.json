@@ -1,5 +1,5 @@
 {
-  "name": "@tasks-app/eslint-config",
+  "name": "@teamapp/eslint-config",
   "type": "module",
   "version": "1.0.0",
   "exports": {

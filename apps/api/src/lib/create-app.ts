@@ -19,17 +19,17 @@ export default function createApp() {
     })
     .basePath(BASE_PATH) as AppOpenAPI;
 
-  app
-    .use(
-      "*",
-      async (c, next) => {
-        c.set("authConfig", createAuthConfig(c.env));
-        return next();
-      },
-    )
-    .use("/auth/*", authHandler())
-    .notFound(notFound)
-    .onError(onError);
+  // app
+  //   .use(
+  //     "*",
+  //     async (c, next) => {
+  //       c.set("authConfig", createAuthConfig(c.env));
+  //       return next();
+  //     },
+  //   )
+  //   .use("/auth/*", authHandler())
+  //   .notFound(notFound)
+  //   .onError(onError);
 
   return app;
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@tasks-app/api-client",
+  "name": "@teamapp/api-client",
   "type": "module",
   "version": "1.0.0",
   "main": "./dist/index.js",
@@ -10,8 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tasks-app/api": "workspace:^",
-    "@tasks-app/eslint-config": "workspace:^",
+    "@teamapp/api": "workspace:^",
+    "@teamapp/eslint-config": "workspace:^",
     "@types/node": "^22.10.2",
     "hono": "^4.6.13"
   },

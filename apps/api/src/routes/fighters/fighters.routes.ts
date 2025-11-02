@@ -3,18 +3,20 @@ import * as HttpStatusCodes from "stoker/http-status-codes";
 import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
 import { createErrorSchema, IdParamsSchema } from "stoker/openapi/schemas";
 
-import { insertTasksSchema, patchTasksSchema, selectTasksSchema } from "@/api/db/schema";
 import { notFoundSchema } from "@/api/lib/constants";
+import { fighterSchema, NewFighterSchema, UpdateFighterSchema } from "@/api/types/fighter";
 
-const tags = ["Tasks"];
+
+
+const tags = ["fighters"];
 
 export const list = createRoute({
-  path: "/tasks",
+  path: "/fighters",
   method: "get",
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      z.array(selectTasksSchema),
+      z.array(fighterSchema),
       "The list of tasks",
     ),
   },
@@ -25,18 +27,18 @@ export const create = createRoute({
   method: "post",
   request: {
     body: jsonContentRequired(
-      insertTasksSchema,
+      NewFighterSchema,
       "The task to create",
     ),
   },
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      selectTasksSchema,
+      fighterSchema,
       "The created task",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(insertTasksSchema),
+      createErrorSchema(NewFighterSchema),
       "The validation error(s)",
     ),
   },
@@ -51,7 +53,7 @@ export const getOne = createRoute({
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      selectTasksSchema,
+      NewFighterSchema,
       "The requested task",
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
@@ -71,14 +73,14 @@ export const patch = createRoute({
   request: {
     params: IdParamsSchema,
     body: jsonContentRequired(
-      patchTasksSchema,
+      UpdateFighterSchema,
       "The task updates",
     ),
   },
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      selectTasksSchema,
+      fighterSchema,
       "The updated task",
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
@@ -86,7 +88,7 @@ export const patch = createRoute({
       "Task not found",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(patchTasksSchema)
+      createErrorSchema(UpdateFighterSchema)
         .or(createErrorSchema(IdParamsSchema)),
       "The validation error(s)",
     ),

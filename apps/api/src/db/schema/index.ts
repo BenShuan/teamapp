@@ -1,44 +1,8 @@
-/* eslint-disable ts/no-redeclare */
-import type { z } from "zod";
-
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export * from "./auth";
+export * from "./fighter";
+export * from "./platoon";
+export * from "./team";
+export * from "./attendance";
+export * from "./platoon";
 
-export const tasks = sqliteTable("tasks", {
-  id: integer({ mode: "number" })
-    .primaryKey({ autoIncrement: true }),
-  name: text()
-    .notNull(),
-  done: integer({ mode: "boolean" })
-    .notNull()
-    .default(false),
-  createdAt: integer()
-    .notNull()
-    .$defaultFn(() => Date.now()),
-  updatedAt: integer()
-    .notNull()
-    .$defaultFn(() => Date.now())
-    .$onUpdate(() => Date.now()),
-});
-
-export const selectTasksSchema = createSelectSchema(tasks);
-export type selectTasksSchema = z.infer<typeof selectTasksSchema>;
-
-export const insertTasksSchema = createInsertSchema(
-  tasks,
-  {
-    name: schema => schema.min(1).max(500),
-  },
-).required({
-  done: true,
-}).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-export type insertTasksSchema = z.infer<typeof insertTasksSchema>;
-
-export const patchTasksSchema = insertTasksSchema.partial();
-export type patchTasksSchema = z.infer<typeof patchTasksSchema>;

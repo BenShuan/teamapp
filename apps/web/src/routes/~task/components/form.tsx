@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { insertTasksSchema } from "@tasks-app/api/schema";
+import { insertTasksSchema } from "@teamapp/api/schema";
 import { useForm } from "react-hook-form";
 
 import { createTask, queryKeys } from "@/web/lib/queries";

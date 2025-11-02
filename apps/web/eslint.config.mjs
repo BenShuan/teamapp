@@ -1,5 +1,5 @@
 import pluginQuery from "@tanstack/eslint-plugin-query";
-import createConfig from "@tasks-app/eslint-config/create-config";
+import createConfig from "@teamapp/eslint-config/create-config";
 
 export default createConfig({
   react: true,

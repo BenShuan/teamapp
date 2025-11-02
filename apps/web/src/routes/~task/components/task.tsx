@@ -1,4 +1,4 @@
-import type { selectTasksSchema } from "@tasks-app/api/schema";
+import type { selectTasksSchema } from "@teamapp/api/schema";
 
 import { Link } from "@tanstack/react-router";
 
