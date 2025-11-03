@@ -1,6 +1,7 @@
 import { sqliteTable, unique } from "drizzle-orm/sqlite-core";
 import { timestamps } from "../../utils/timeStamps";
-
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
+import type { z } from "zod";
 import { team } from "./team";
 import { relations } from "drizzle-orm";
 import { ID_FIELD, INTEGER_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "@/api/utils/schemeHelper";
@@ -39,3 +40,23 @@ export const fighter = sqliteTable(
 export const fighterTeamRelations = relations(fighter, ({ one }) => ({
   team: one(team),
 }));
+
+
+// Insert validator (runtime)
+export const NewFighterSchema = createInsertSchema(fighter).omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+});
+
+// Select validator (useful for output shaping)
+export const fighterSchema = createSelectSchema(fighter);
+
+
+// Select validator (useful for output shaping)
+export const UpdateFighterSchema = createUpdateSchema(fighter);
+
+
+export type NewFighter = z.infer<typeof NewFighterSchema>;
+export type UpdateFighter = z.infer<typeof UpdateFighterSchema>;
+export type Fighter = z.infer<typeof fighterSchema>;

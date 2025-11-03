@@ -4,6 +4,8 @@ import { relations } from "drizzle-orm";
 import { fighter } from "./fighter";
 import { ID_FIELD, TEXT_REQUIERD_FIELD, TEXT_OPTIONAL_FIELD } from "@/api/utils/schemeHelper";
 import { sqliteTable } from "drizzle-orm/sqlite-core";
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
+import { z } from "zod";
 
 export const team = sqliteTable("teams", {
   id: ID_FIELD("id"),
@@ -16,3 +18,20 @@ export const team = sqliteTable("teams", {
 export const teamRelations = relations(team, ({ many }) => ({
   fighters: many(fighter),
 }));
+
+
+// Insert validator (runtime)
+export const NewTeamSchema = createInsertSchema(team, {
+});
+
+// Select validator (useful for output shaping)
+export const teamSchema = createSelectSchema(team);
+
+
+// Select validator (useful for output shaping)
+export const UpdateTeamSchema = createUpdateSchema(team);
+
+
+export type NewTeam = z.infer<typeof NewTeamSchema>;
+export type UpdateTeam = z.infer<typeof UpdateTeamSchema>;
+export type Team = z.infer<typeof teamSchema>;

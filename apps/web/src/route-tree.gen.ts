@@ -10,8 +10,8 @@
 
 import { Route as rootRoute } from './routes/~__root'
 import { Route as IndexImport } from './routes/~index'
-import { Route as TaskIdEditImport } from './routes/~task/~$id/~edit'
-import { Route as TaskIdIndexImport } from './routes/~task/~$id/~index'
+import { Route as FighterIndexImport } from './routes/~fighter/~index'
+import { Route as FighterIdIndexImport } from './routes/~fighter/~$id/~index'
 
 // Create/Update Routes
 
@@ -21,15 +21,15 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const TaskIdEditRoute = TaskIdEditImport.update({
-  id: '/task/$id/edit',
-  path: '/task/$id/edit',
+const FighterIndexRoute = FighterIndexImport.update({
+  id: '/fighter/',
+  path: '/fighter/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const TaskIdIndexRoute = TaskIdIndexImport.update({
-  id: '/task/$id/',
-  path: '/task/$id/',
+const FighterIdIndexRoute = FighterIdIndexImport.update({
+  id: '/fighter/$id/',
+  path: '/fighter/$id/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -44,18 +44,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/task/$id/': {
-      id: '/task/$id/'
-      path: '/task/$id'
-      fullPath: '/task/$id'
-      preLoaderRoute: typeof TaskIdIndexImport
+    '/fighter/': {
+      id: '/fighter/'
+      path: '/fighter'
+      fullPath: '/fighter'
+      preLoaderRoute: typeof FighterIndexImport
       parentRoute: typeof rootRoute
     }
-    '/task/$id/edit': {
-      id: '/task/$id/edit'
-      path: '/task/$id/edit'
-      fullPath: '/task/$id/edit'
-      preLoaderRoute: typeof TaskIdEditImport
+    '/fighter/$id/': {
+      id: '/fighter/$id/'
+      path: '/fighter/$id'
+      fullPath: '/fighter/$id'
+      preLoaderRoute: typeof FighterIdIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -65,42 +65,42 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/task/$id': typeof TaskIdIndexRoute
-  '/task/$id/edit': typeof TaskIdEditRoute
+  '/fighter': typeof FighterIndexRoute
+  '/fighter/$id': typeof FighterIdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/task/$id': typeof TaskIdIndexRoute
-  '/task/$id/edit': typeof TaskIdEditRoute
+  '/fighter': typeof FighterIndexRoute
+  '/fighter/$id': typeof FighterIdIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/task/$id/': typeof TaskIdIndexRoute
-  '/task/$id/edit': typeof TaskIdEditRoute
+  '/fighter/': typeof FighterIndexRoute
+  '/fighter/$id/': typeof FighterIdIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/task/$id' | '/task/$id/edit'
+  fullPaths: '/' | '/fighter' | '/fighter/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/task/$id' | '/task/$id/edit'
-  id: '__root__' | '/' | '/task/$id/' | '/task/$id/edit'
+  to: '/' | '/fighter' | '/fighter/$id'
+  id: '__root__' | '/' | '/fighter/' | '/fighter/$id/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  TaskIdIndexRoute: typeof TaskIdIndexRoute
-  TaskIdEditRoute: typeof TaskIdEditRoute
+  FighterIndexRoute: typeof FighterIndexRoute
+  FighterIdIndexRoute: typeof FighterIdIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  TaskIdIndexRoute: TaskIdIndexRoute,
-  TaskIdEditRoute: TaskIdEditRoute,
+  FighterIndexRoute: FighterIndexRoute,
+  FighterIdIndexRoute: FighterIdIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -114,18 +114,18 @@ export const routeTree = rootRoute
       "filePath": "~__root.tsx",
       "children": [
         "/",
-        "/task/$id/",
-        "/task/$id/edit"
+        "/fighter/",
+        "/fighter/$id/"
       ]
     },
     "/": {
       "filePath": "~index.tsx"
     },
-    "/task/$id/": {
-      "filePath": "~task/~$id/~index.tsx"
+    "/fighter/": {
+      "filePath": "~fighter/~index.tsx"
     },
-    "/task/$id/edit": {
-      "filePath": "~task/~$id/~edit.tsx"
+    "/fighter/$id/": {
+      "filePath": "~fighter/~$id/~index.tsx"
     }
   }
 }

@@ -4,7 +4,7 @@ import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
 import { createErrorSchema, IdParamsSchema } from "stoker/openapi/schemas";
 
 import { notFoundSchema } from "@/api/lib/constants";
-import { fighterSchema, NewFighterSchema, UpdateFighterSchema } from "@/api/types/fighter";
+import { fighterSchema, NewFighterSchema, UpdateFighterSchema } from "@/api/db/schema";
 
 
 
@@ -23,19 +23,19 @@ export const list = createRoute({
 });
 
 export const create = createRoute({
-  path: "/tasks",
+  path: "/fighters",
   method: "post",
   request: {
     body: jsonContentRequired(
       NewFighterSchema,
-      "The task to create",
+      "The fighter to create",
     ),
   },
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       fighterSchema,
-      "The created task",
+      "The created fighter",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
       createErrorSchema(NewFighterSchema),
@@ -45,7 +45,7 @@ export const create = createRoute({
 });
 
 export const getOne = createRoute({
-  path: "/tasks/{id}",
+  path: "/fighters/{id}",
   method: "get",
   request: {
     params: IdParamsSchema,
@@ -54,11 +54,11 @@ export const getOne = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       NewFighterSchema,
-      "The requested task",
+      "The requested fighters",
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
       notFoundSchema,
-      "Task not found",
+      "Task not fighters",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
       createErrorSchema(IdParamsSchema),
@@ -68,24 +68,24 @@ export const getOne = createRoute({
 });
 
 export const patch = createRoute({
-  path: "/tasks/{id}",
+  path: "/fighters/{id}",
   method: "patch",
   request: {
     params: IdParamsSchema,
     body: jsonContentRequired(
       UpdateFighterSchema,
-      "The task updates",
+      "The fighter updates",
     ),
   },
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       fighterSchema,
-      "The updated task",
+      "The updated fighter",
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
       notFoundSchema,
-      "Task not found",
+      "Fighter not found",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
       createErrorSchema(UpdateFighterSchema)
@@ -96,7 +96,7 @@ export const patch = createRoute({
 });
 
 export const remove = createRoute({
-  path: "/tasks/{id}",
+  path: "/fighters/{id}",
   method: "delete",
   request: {
     params: IdParamsSchema,

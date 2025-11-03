@@ -7,7 +7,7 @@ export default function AppNavbar() {
   return (
     <nav className="container">
       <ul>
-        <li><strong>Tasks App</strong></li>
+        <li><strong>Team App</strong></li>
       </ul>
       <ul>
         {location.pathname !== "/" && (
