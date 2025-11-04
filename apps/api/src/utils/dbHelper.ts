@@ -1,19 +1,17 @@
+import { NewFighterSchema, NewTeamSchema, NewAttendanceSchema, UpdateFighterSchema, UpdateTeamSchema, AttendanceSchema } from "../db/schema";
 
-import { NewAttendanceSchema, AttendanceSchema } from "../types/attendance";
-import { NewFighterSchema, UpdateFighterSchema } from "../types/fighter";
-import { PlatoonSchema } from "../types/platoon";
-import { NewTeamSchema, UpdateTeamSchema } from "../types/team";
+
 
 
 export const schemaNewSwitch = {
   fighter: NewFighterSchema,
   team: NewTeamSchema,
-  platoon: PlatoonSchema,
+  // platoon: PlatoonSchema,
   attendance:NewAttendanceSchema
 };
 export const schemaUpdateSwitch = {
   fighter: UpdateFighterSchema,
   team: UpdateTeamSchema,
-  platoon: PlatoonSchema,
+  // platoon: PlatoonSchema,
   attendance:AttendanceSchema
 };

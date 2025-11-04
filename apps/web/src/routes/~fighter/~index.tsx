@@ -12,16 +12,19 @@ import {
   DialogContent,
   DialogTitle,
 } from '@/web/components/ui/dialog'
+import FighterTable from './components/FighterTable'
 
 const FightersPage = async () => {
   return (
     <div>
-      <FightersList />
+      <FighterTable />
+      {/* <FightersList /> */}
       <div className="mt-4">
-        <Dialog>
-          <DialogTrigger>הוסף חייל</DialogTrigger>
-          <DialogContent className="w-5/6 max-w-[500px] max-h-[80vh] overflow-y-scroll">
-            <DialogTitle>הוסף חייל</DialogTitle>
+        <Dialog  >
+          <DialogTrigger  >הוסף חייל</DialogTrigger>
+
+          <DialogContent dir='rtl' className="w-5/6 max-w-[800px] max-h-[80vh] overflow-y-scroll flex flex-col text-right ">
+            <DialogTitle >הוסף חייל</DialogTitle>
             <FighterForm />
           </DialogContent>
         </Dialog>

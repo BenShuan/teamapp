@@ -25,7 +25,7 @@ export const fighter = sqliteTable(
     teamId: TEXT_OPTIONAL_FIELD("team_id").references(() => team.id, {
       onDelete: "set null",
     }), // references team(id) if available
-    ironNumber: INTEGER_OPTIONAL_FIELD("iron_number"), // tinyint
+    ironNumber: TEXT_OPTIONAL_FIELD("iron_number"), // tinyint
     class: TEXT_OPTIONAL_FIELD("class"), // varchar(1)
     kit: TEXT_OPTIONAL_FIELD("kit"), // varchar(10)
     ...timestamps,
@@ -54,7 +54,12 @@ export const fighterSchema = createSelectSchema(fighter);
 
 
 // Select validator (useful for output shaping)
-export const UpdateFighterSchema = createUpdateSchema(fighter);
+export const UpdateFighterSchema = createUpdateSchema(fighter,{
+  createdAt:(schema)=>schema.transform((str)=>new Date(str))
+}).omit({
+  createdAt: true,
+  updatedAt: true,
+});
 
 
 export type NewFighter = z.infer<typeof NewFighterSchema>;

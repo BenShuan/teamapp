@@ -1,7 +1,7 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
-import { createErrorSchema, IdParamsSchema } from "stoker/openapi/schemas";
+import { createErrorSchema, IdUUIDParamsSchema } from "stoker/openapi/schemas";
 
 import { notFoundSchema } from "@/api/lib/constants";
 import { fighterSchema, NewFighterSchema, UpdateFighterSchema } from "@/api/db/schema";
@@ -48,12 +48,12 @@ export const getOne = createRoute({
   path: "/fighters/{id}",
   method: "get",
   request: {
-    params: IdParamsSchema,
+    params: IdUUIDParamsSchema,
   },
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      NewFighterSchema,
+      fighterSchema,
       "The requested fighters",
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
@@ -61,7 +61,7 @@ export const getOne = createRoute({
       "Task not fighters",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(IdParamsSchema),
+      createErrorSchema(IdUUIDParamsSchema),
       "Invalid id error",
     ),
   },
@@ -71,7 +71,7 @@ export const patch = createRoute({
   path: "/fighters/{id}",
   method: "patch",
   request: {
-    params: IdParamsSchema,
+    params: IdUUIDParamsSchema,
     body: jsonContentRequired(
       UpdateFighterSchema,
       "The fighter updates",
@@ -89,7 +89,7 @@ export const patch = createRoute({
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
       createErrorSchema(UpdateFighterSchema)
-        .or(createErrorSchema(IdParamsSchema)),
+        .or(createErrorSchema(IdUUIDParamsSchema)),
       "The validation error(s)",
     ),
   },
@@ -99,7 +99,7 @@ export const remove = createRoute({
   path: "/fighters/{id}",
   method: "delete",
   request: {
-    params: IdParamsSchema,
+    params: IdUUIDParamsSchema,
   },
   tags,
   responses: {
@@ -111,7 +111,7 @@ export const remove = createRoute({
       "Task not found",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(IdParamsSchema),
+      createErrorSchema(IdUUIDParamsSchema),
       "Invalid id error",
     ),
   },

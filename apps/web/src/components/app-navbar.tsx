@@ -1,20 +1,24 @@
 import { signOut, useSession } from "@hono/auth-js/react";
 import { Link, useLocation } from "@tanstack/react-router";
+import appNavRoutes from "@/web/lib/router";
 
 export default function AppNavbar() {
   const location = useLocation();
   const session = useSession();
   return (
-    <nav className="container">
+    <nav className="container gap-4">
       <ul>
-        <li><strong>Team App</strong></li>
+        <li><strong>הצוות</strong></li>
       </ul>
-      <ul>
-        {location.pathname !== "/" && (
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-        )}
+      <ul className="flex-1">
+        {Object.values(appNavRoutes).map((item) => {
+          const isActive = location.pathname === item.to;
+          return (
+            <li key={item.label} aria-current={isActive ? "page" : undefined}>
+              <Link to={item.to}>{item.label}</Link>
+            </li>
+          );
+        })}
         {session.data?.user && (
           <>
             <li className="user-avatar">

@@ -2,60 +2,60 @@
 
 import { TextField, NumberField, AutocompleteField } from "@/web/components/forms";
 import { useTeams } from "@/web/hooks/useTeams";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
 import type { Fighter, NewFighter } from "@teamapp/api/schema";
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
-import { createFighter } from "../utils/apiService";
 import { Card, CardContent } from "@/web/components/ui/card";
 import { Button } from "@/web/components/ui/button";
+import useFighterForm from "@/web/hooks/useFighterForm";
 
 
 
 type FighterFormProps = {
-  fighter?:Fighter
+  fighter?: Fighter
   onCreated?: (fighter: any) => void;
 };
 
 
-const FighterForm: React.FC<FighterFormProps> = ({  }) => {
-  const qc = useQueryClient();
+const defaultFighter = {
+  firstName: "",
+  lastName: "",
+  idNumber: "",
+  personalNumber: "",
+  email: "",
+  phoneNumber: "",
+  shoesSize: undefined,
+  shirtSize: "",
+  pantsSize: "",
+  professional: "",
+  ironNumber: undefined,
+  teamId: undefined,
+  class: "",
+  kit: "",
+  address: undefined,
+} satisfies Partial<Fighter> as Fighter
+
+const FighterForm: React.FC<FighterFormProps> = ({ fighter }) => {
+
+  const isNew = !fighter?.id
 
   // Use NewFighter for creation to match API type
-  const methods = useForm<NewFighter>({
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      idNumber: "",
-      personalNumber: "",
-      email: "",
-      phoneNumber: "",
-      shoesSize: undefined,
-      shirtSize: "",
-      pantsSize: "",
-      professional: "",
-      ironNumber: undefined,
-      teamId: undefined,
-      class: "",
-      kit: "",
-      address: undefined,
-    } satisfies Partial<NewFighter> as NewFighter,
+  const methods = useForm<Partial<Fighter>>({
+    defaultValues: isNew ? defaultFighter : fighter,
   });
 
-const teamsData = useTeams();
 
-  const { mutateAsync, isPending } = useMutation<unknown, Error, NewFighter>({
-    mutationFn: (variables) => createFighter(variables),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["fighters"] });
-    },
-  });
+  const teamsData = useTeams();
+
+  const { mutateAsync, isPending } = useFighterForm(isNew,fighter?.id)
+
+  
 
   const onSubmit: SubmitHandler<NewFighter> = async (values) => {
     await mutateAsync(values);
+
     methods.reset();
   };
 
-  // const teams = teamOptions && teamOptions.length > 0 ? teamOptions : defaultTeamOptions;/
 
   return (
     <Card>
@@ -65,11 +65,13 @@ const teamsData = useTeams();
             onSubmit={methods.handleSubmit(onSubmit)}
             className="space-y-4 py-4"
           >
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="flex flex-col md:flex-row md:flex-wrap gap-4  md:justify-between ">
+
               <TextField
                 name="firstName"
                 label="שם פרטי"
                 requiredMark
+                className=""
                 rules={{ required: "שדה חובה" }}
               />
               <TextField
@@ -97,8 +99,8 @@ const teamsData = useTeams();
               <NumberField
                 name="shoesSize"
                 label="מידת נעליים"
-                min={20}
-                max={60}
+                
+               
               />
               <TextField
                 name="shirtSize"
@@ -112,11 +114,11 @@ const teamsData = useTeams();
               />
               <TextField name="professional" label="מקצוע" />
 
-              <NumberField name="ironNumber" label="מספר נשק" />
+              <TextField name="ironNumber" label="מספר נשק" placeholder="#######"/>
               <AutocompleteField
                 name="teamId"
                 label="צוות"
-                options={teamsData?.map((team ) => ({
+                options={teamsData?.map((team) => ({
                   label: team.name,
                   value: team.id,
                 })) || []}

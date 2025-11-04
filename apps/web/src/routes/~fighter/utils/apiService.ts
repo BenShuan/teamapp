@@ -12,6 +12,13 @@ export const fighterQueryOptions = queryOptions({
     return response.json();
   },
 });
+export const fighterItemQueryOptions = (id:string)=>queryOptions({
+  ...queryKeys.fighterItem(id),
+  queryFn: async () => {
+    const response = await apiClient.api.fighters[":id"].$get({param:{id}});
+    return response.json();
+  },
+});
 
 export const createFighterQueryOptions = (id: string) => queryOptions({
   ...queryKeys.fighterItem(id),
@@ -61,7 +68,7 @@ export const deleteFighter = async (id: string) => {
   }
 };
 
-export const updateTask = async ({ id, fighter }: { id: string; fighter: UpdateFighter }) => {
+export const updateFighter = async ({ id, fighter }: { id: string; fighter: UpdateFighter }) => {
   const response = await apiClient.api.fighters[":id"].$patch({
     param: {
       id,

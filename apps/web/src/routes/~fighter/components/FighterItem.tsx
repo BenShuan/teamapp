@@ -1,5 +1,6 @@
 import { Badge } from "@/web/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/web/components/ui/card";
+import { Link } from "@tanstack/react-router";
 import { Fighter } from "@teamapp/api/schema";
 import React from "react";
 
@@ -13,7 +14,9 @@ const FighterItem: React.FC<Props> = ({ fighter }) => {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between gap-2">
         <CardTitle className="truncate" title={fName}>
+          <Link to={"/fighter/"+fighter.id} >
           {fName || "אין שם"}
+          </Link>
         </CardTitle>
         {fighter.class ? <Badge variant="secondary">כיתה {fighter.class}</Badge> : null}
       </CardHeader>
