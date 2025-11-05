@@ -10,7 +10,7 @@ export type AppNavItem = {
 // Map routes by their label for quick lookup
 export const appNavRoutes = {
   Home: { to: "/", label: "בית" },
-  Fighters: { to: "/fighter/", label: "לוחמים" },
+  Fighter: { to: "/fighter", label: "לוחמים" },
 } as const satisfies Record<string, AppNavItem>;
 
 export type AppNavRoutesMap = typeof appNavRoutes;

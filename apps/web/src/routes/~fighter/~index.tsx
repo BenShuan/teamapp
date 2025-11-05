@@ -1,4 +1,3 @@
-import FightersList from './components/FightersList'
 import FighterForm from './components/FighterForm'
 
 import { createFileRoute } from '@tanstack/react-router'
@@ -16,7 +15,7 @@ import FighterTable from './components/FighterTable'
 
 const FightersPage = async () => {
   return (
-    <div>
+    <div className='mx-4 flex flex-col gap-4'>
       <FighterTable />
       {/* <FightersList /> */}
       <div className="mt-4">

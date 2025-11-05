@@ -11,32 +11,28 @@ function FighterTable() {
   if (isLoading) return <div>Loading fighters…</div>;
   if (isError) return <div>Failed to load: {(error as Error)?.message}</div>;
 
-  const fightersColumns: ColumnDef<Fighter>[] = [
+  const fightersColumns: ColumnDef<Fighter>[] = ([
     {
-      id: 'name',
-      header: ({ column }) => <DataTableColumnHeader column={column} title='שם' />,
+      id: 'שם',
       accessorFn: (row) => `${row.firstName} ${row.lastName}`.trim(),
       cell: (ctx) => ctx.getValue<string>(),
-      enableSorting:true,
-      enableHiding:true
-      
     },
     {
       accessorKey: 'idNumber',
-      header: 'ת.ז',
+      id: 'ת.ז',
     },
     {
       accessorKey: 'personalNumber',
-      header: 'מספר אישי',
+      id: 'מספר אישי',
     },
     {
       accessorKey: 'teamId',
-      header: 'צוות',
+      id: 'צוות',
       cell: ({ getValue }) => getValue<string | null>() ?? '-',
     },
     {
       accessorKey: 'ironNumber',
-      header: 'מספר ברזל',
+      id: 'מספר ברזל',
       cell: ({ getValue }) => {
         const v = getValue<number | null>();
         return v ?? '-';
@@ -44,27 +40,27 @@ function FighterTable() {
     },
     {
       accessorKey: 'class',
-      header: 'כיתה',
+      id: 'כיתה',
       cell: ({ getValue }) => getValue<string | null>() ?? '-',
     },
     {
       accessorKey: 'professional',
-      header: 'מקצוע',
+      id: 'מקצוע',
       cell: ({ getValue }) => getValue<string | null>() ?? '-',
     },
     {
       accessorKey: 'phoneNumber',
-      header: 'פלאפון',
+      id: 'פלאפון',
       cell: ({ getValue }) => getValue<string | null>() ?? '-',
     },
     {
       accessorKey: 'email',
-      header: 'Email',
+      id: 'Email',
       cell: ({ getValue }) => getValue<string | null>() ?? '-',
     },
     {
       accessorKey: 'shoesSize',
-      header: 'מידת נעליים',
+      id: 'מידת נעליים',
       cell: ({ getValue }) => {
         const v = getValue<number | null>();
         return v ?? '-';
@@ -72,18 +68,18 @@ function FighterTable() {
     },
     {
       accessorKey: 'מידת חולצה',
-      header: 'Shirt',
+      id: 'מידת חולצה',
       cell: ({ getValue }) => getValue<string | null>() ?? '-',
+
     },
     {
       accessorKey: 'מידת מכנס',
-      header: 'Pants',
+        id: 'מידת מכנס',
       cell: ({ getValue }) => getValue<string | null>() ?? '-',
-      enableSorting:true
     },
     // {
     //   accessorKey: 'createdAt',
-    //   header: 'Created',
+    //   id: 'Created',
     //   cell: ({ getValue }) => {
     //     const v = getValue<string | Date | null | undefined>();
     //     if (!v) return '-';
@@ -91,15 +87,22 @@ function FighterTable() {
     //     return dateFormatter.format(d);
     //   },
     // },
-  ]
 
+  ] as ColumnDef<Fighter>[])
+  .map((col) => ({ ...col,
+    header: ({ column }) => <DataTableColumnHeader column={column} title={column.id} />, 
+    enableHiding: true, 
+    enableSorting: true 
+  })) as ColumnDef<Fighter>[]
 
   return (
-    
-    <DataTable columns={fightersColumns} data={(data ?? []) as Fighter[]}/>
+
+    <DataTable columns={fightersColumns} data={(data ?? []) as Fighter[]}>
+
+    </DataTable>
   )
 }
 
-export default FighterTable 
+export default FighterTable
 
 

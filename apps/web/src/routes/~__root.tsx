@@ -12,7 +12,7 @@ export const Route = createRootRouteWithContext<{
   session: Session;
 }>()({
   component: () => (
-    <div className="h-dvh overflow-scroll">
+    <div className="h-dvh overflow-scroll bg-background">
       <AppNavbar />
       <main className="container my-4" >
         <Outlet />
