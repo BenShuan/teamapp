@@ -1,21 +1,26 @@
 import { DataTableColumnHeader } from '@/web/components/dataTable/columnHeader';
-import { DataTable } from '@/web/components/dataTable/DataTable'
+import { DataTableViewOptions } from '@/web/components/dataTable/columnToggle';
+import { DataTable, DataTableSearch } from '@/web/components/dataTable/DataTable'
 import { useFighters } from '@/web/hooks/useFighter';
+import { useTeams } from '@/web/hooks/useTeams';
+import { Link } from '@tanstack/react-router';
 import { ColumnDef } from '@tanstack/react-table'
 import type { Fighter } from '@teamapp/api/schema'
+import { Edit2 } from 'lucide-react';
+
+
+const initHiddenCols = ['מידת מכנס', 'מידת חולצה', 'מידת נעליים', 'מקצוע', 'כיתה']
 
 function FighterTable() {
 
   const { data, isLoading, isError, error } = useFighters();
-
-  if (isLoading) return <div>Loading fighters…</div>;
-  if (isError) return <div>Failed to load: {(error as Error)?.message}</div>;
-
+  const { teamsMap } = useTeams()
   const fightersColumns: ColumnDef<Fighter>[] = ([
     {
       id: 'שם',
       accessorFn: (row) => `${row.firstName} ${row.lastName}`.trim(),
       cell: (ctx) => ctx.getValue<string>(),
+
     },
     {
       accessorKey: 'idNumber',
@@ -28,7 +33,8 @@ function FighterTable() {
     {
       accessorKey: 'teamId',
       id: 'צוות',
-      cell: ({ getValue }) => getValue<string | null>() ?? '-',
+      cell: ({ getValue }) => teamsMap?.[getValue<string | null>() ?? '']?.name ?? '-',
+
     },
     {
       accessorKey: 'ironNumber',
@@ -74,31 +80,38 @@ function FighterTable() {
     },
     {
       accessorKey: 'מידת מכנס',
-        id: 'מידת מכנס',
+      id: 'מידת מכנס',
       cell: ({ getValue }) => getValue<string | null>() ?? '-',
     },
-    // {
-    //   accessorKey: 'createdAt',
-    //   id: 'Created',
-    //   cell: ({ getValue }) => {
-    //     const v = getValue<string | Date | null | undefined>();
-    //     if (!v) return '-';
-    //     const d = typeof v === 'string' ? new Date(v) : v;
-    //     return dateFormatter.format(d);
-    //   },
-    // },
+    {
+      id: "actions",
+      cell: ({ row }) => <><Link to={`/fighter/${row.original.id}`}><Edit2></Edit2></Link></>
+    }
 
   ] as ColumnDef<Fighter>[])
-  .map((col) => ({ ...col,
-    header: ({ column }) => <DataTableColumnHeader column={column} title={column.id} />, 
-    enableHiding: true, 
-    enableSorting: true 
-  })) as ColumnDef<Fighter>[]
+    .map((col) => ({
+      ...col,
+      header: ({ column }) => <DataTableColumnHeader column={column} title={column.id} />,
+      enableHiding: true,
+      enableSorting: true
+    })) as ColumnDef<Fighter>[]
 
+  if (isLoading) return <div>Loading fighters…</div>;
+  if (isError) return <div>Failed to load: {(error as Error)?.message}</div>;
+
+  const columnVisibility = fightersColumns.reduce((acc, col) => {
+    if (initHiddenCols.includes(col.id as string)) {
+      acc[col.id as string] = false;
+    } else {
+      acc[col.id as string] = true;
+    }
+    return acc;
+  }, {} as Record<string, boolean>);
   return (
 
-    <DataTable columns={fightersColumns} data={(data ?? []) as Fighter[]}>
-
+    <DataTable columns={fightersColumns} data={(data ?? []) as Fighter[]} initialState={{ columnVisibility }}>
+      <DataTableViewOptions />
+      <DataTableSearch />
     </DataTable>
   )
 }

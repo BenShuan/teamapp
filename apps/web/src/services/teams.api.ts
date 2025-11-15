@@ -1,29 +1,28 @@
-import apiClient from "@/web/lib/api-client";
-import formatApiError from "@/web/lib/format-api-error";
-import { qk as queryKeys } from "@/web/lib/queries";
 import { queryOptions } from "@tanstack/react-query";
-import { NewFighter, UpdateFighter } from "@teamapp/api/schema";
+import apiClient from "../lib/api-client";
+import { queryKeys } from "../lib/queries";
+import formatApiError from "../lib/format-api-error";
+import {  Team, UpdateTeam } from "@teamapp/api/schema";
 
-
-export const fighterQueryOptions = queryOptions({
-  ...queryKeys.fighters,
+export const teamQueryOptions = queryOptions({
+  ...queryKeys.teams,
   queryFn: async () => {
-    const response = await apiClient.api.fighters.$get();
+    const response = await apiClient.api.teams.$get();
     return response.json();
   },
 });
-export const fighterItemQueryOptions = (id:string)=>queryOptions({
-  ...queryKeys.fighterItem(id),
+export const teamItemQueryOptions = (id: string) => queryOptions({
+  ...queryKeys.teamItem(id),
   queryFn: async () => {
-    const response = await apiClient.api.fighters[":id"].$get({param:{id}});
+    const response = await apiClient.api.teams[":id"].$get({ param: { id } });
     return response.json();
   },
 });
 
-export const createFighterQueryOptions = (id: string) => queryOptions({
-  ...queryKeys.fighterItem(id),
+export const createTeamQueryOptions = (id: string) => queryOptions({
+  ...queryKeys.teamItem(id),
   queryFn: async () => {
-    const response = await apiClient.api.fighters[":id"].$get({
+    const response = await apiClient.api.teams[":id"].$get({
       param: {
         id,
       },
@@ -40,9 +39,9 @@ export const createFighterQueryOptions = (id: string) => queryOptions({
   },
 });
 
-export const createFighter = async (fighter:NewFighter ) => {
-  const response = await apiClient.api.fighters.$post({
-    json: fighter as any,
+export const createTeam = async (team:Team) => {
+  const response = await apiClient.api.teams.$post({
+    json: team as any,
   });
   const json = await response.json();
   if ("success" in json) {
@@ -52,8 +51,8 @@ export const createFighter = async (fighter:NewFighter ) => {
   return json;
 };
 
-export const deleteFighter = async (id: string) => {
-  const response = await apiClient.api.fighters[":id"].$delete({
+export const deleteTeam = async (id: string) => {
+  const response = await apiClient.api.teams[":id"].$delete({
     param: {
       id,
     },
@@ -68,12 +67,12 @@ export const deleteFighter = async (id: string) => {
   }
 };
 
-export const updateFighter = async ({ id, fighter }: { id: string; fighter: UpdateFighter }) => {
+export const updateFighter = async ({ id, team }: { id: string;team:UpdateTeam }) => {
   const response = await apiClient.api.fighters[":id"].$patch({
     param: {
       id,
     },
-    json: fighter as any,
+    json: team as any,
   });
   if (response.status !== 200) {
     const json = await response.json();

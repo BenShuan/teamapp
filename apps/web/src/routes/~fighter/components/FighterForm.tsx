@@ -2,7 +2,7 @@
 
 import { TextField, NumberField, AutocompleteField } from "@/web/components/forms";
 import { useTeams } from "@/web/hooks/useTeams";
-import type { Fighter, NewFighter } from "@teamapp/api/schema";
+import type { Fighter, NewFighter, Team } from "@teamapp/api/schema";
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { Card, CardContent } from "@/web/components/ui/card";
 import { Button } from "@/web/components/ui/button";
@@ -46,16 +46,15 @@ const FighterForm: React.FC<FighterFormProps> = ({ fighter }) => {
 
   const teamsData = useTeams();
 
-  const { mutateAsync, isPending } = useFighterForm(isNew,fighter?.id)
+  const { mutateAsync, isPending } = useFighterForm(isNew, fighter?.id)
 
-  
+
 
   const onSubmit: SubmitHandler<NewFighter> = async (values) => {
     await mutateAsync(values);
 
     methods.reset();
   };
-
 
   return (
     <Card>
@@ -99,8 +98,8 @@ const FighterForm: React.FC<FighterFormProps> = ({ fighter }) => {
               <NumberField
                 name="shoesSize"
                 label="מידת נעליים"
-                
-               
+
+
               />
               <TextField
                 name="shirtSize"
@@ -114,15 +113,16 @@ const FighterForm: React.FC<FighterFormProps> = ({ fighter }) => {
               />
               <TextField name="professional" label="מקצוע" />
 
-              <TextField name="ironNumber" label="מספר נשק" placeholder="#######"/>
+              <TextField name="ironNumber" label="מספר נשק" placeholder="#######" />
               <AutocompleteField
                 name="teamId"
                 label="צוות"
-                options={teamsData?.map((team) => ({
+                options={teamsData?.data?.map((team: Team) => ({
                   label: team.name,
                   value: team.id,
                 })) || []}
                 placeholder="בחר צוות"
+                isLoading={teamsData.isLoading}
               />
 
               <TextField name="class" label="כיתה" maxLength={2} />

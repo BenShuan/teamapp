@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {  NewFighter, UpdateFighter } from '@teamapp/api/schema';
-import { createFighter, updateFighter } from '../routes/~fighter/utils/apiService';
+import { createFighter, updateFighter } from '../services/fighter.api';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 

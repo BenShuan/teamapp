@@ -3,7 +3,7 @@ import FighterForm from '../components/FighterForm'
 import { useFighters } from '@/web/hooks/useFighter'
 import queryClient from '@/web/lib/query-client'
 import RoutePending from '@/web/components/route-pending'
-import { fighterItemQueryOptions } from '../utils/apiService'
+import { fighterItemQueryOptions } from '../../../services/fighter.api'
 
 function FighterItemPage() {
   const { id } = useParams({ from: "/fighter/$id/" })

@@ -1,7 +1,6 @@
 import { Column } from "@tanstack/react-table"
 import { ArrowDown, ArrowUp, ChevronsUpDown, EyeOff } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
-import { Button } from "../ui/button"
 import { cn } from "@/web/lib/utils"
 
 
@@ -24,13 +23,9 @@ export function DataTableColumnHeader<TData, TValue>({
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild className="">
-          <Button
-            size="sm"
-            className=" -ml-3 h-8 "
-            
-          >
-            <span>{title}</span>
+        <DropdownMenuTrigger className="flex justify-center items-center cursor-pointer">
+
+            <span className="text-center w-full">{title}</span>
             {column.getIsSorted() === "desc" ? (
               <ArrowDown />
             ) : column.getIsSorted() === "asc" ? (
@@ -38,9 +33,8 @@ export function DataTableColumnHeader<TData, TValue>({
             ) : (
               <ChevronsUpDown />
             )}
-          </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
+        <DropdownMenuContent align="start" className="bg-background">
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
             <ArrowUp />
             Asc

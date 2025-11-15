@@ -1,7 +1,6 @@
 "use client"
 
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
-import { Table } from "@tanstack/react-table"
 import { Settings2 } from "lucide-react"
 
 import { Button } from "@/web/components/ui/button"
@@ -12,27 +11,44 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/web/components/ui/dropdown-menu"
+import { useTableContext } from "./TableContext"
+import { useCallback, useState } from "react"
 
-export function DataTableViewOptions<TData>({
-  table,
-}: {
-  table: Table<TData>
-}) {
-  return (
-    <DropdownMenu>
+export function DataTableViewOptions<TData>() {
+
+  const { table } = useTableContext<TData>()
+
+  const [selectAll, setSelectAll] = useState(false)
+
+  const handleSelecctAll = useCallback((value: boolean) => { table.toggleAllColumnsVisible(!!value); setSelectAll(!!value) }
+    ,
+    [selectAll],
+  )
+
+
+  return (  
+    <DropdownMenu >
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
           size="sm"
-          className="ml-auto hidden h-8 lg:flex"
+          className="hidden h-8 md:flex"
         >
           <Settings2 />
           עמודות
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent  className="w-[150px]">
-        <DropdownMenuLabel>בחר עמודות</DropdownMenuLabel>
+      <DropdownMenuContent className="w-[150px] bg-background">
+        <DropdownMenuLabel className="text-right">בחר עמודות</DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuCheckboxItem
+          key={"all"}
+          className="capitalize flex-row-reverse "
+          checked={selectAll}
+          onCheckedChange={handleSelecctAll}
+        >
+          בחר הכל
+        </DropdownMenuCheckboxItem>
         {table
           .getAllColumns()
           .filter(

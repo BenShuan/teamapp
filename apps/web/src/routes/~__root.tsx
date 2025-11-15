@@ -12,9 +12,9 @@ export const Route = createRootRouteWithContext<{
   session: Session;
 }>()({
   component: () => (
-    <div className="h-dvh overflow-scroll bg-background">
+    <div className="h-dvh overflow-scroll bg-background flex flex-col items-center-safe ">
       <AppNavbar />
-      <main className="container my-4" >
+      <main className="container my-4 " >
         <Outlet />
         <TanStackRouterDevtools />
       </main>

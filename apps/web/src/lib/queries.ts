@@ -5,7 +5,7 @@
 // import apiClient from "./api-client";
 // import formatApiError from "./format-api-error"
 
-export const qk = {
+export const queryKeys = {
   me: ["me"] as const,
   fighters: { queryKey: ["fighter"] as const },
   fighterItem: (userId: string) => ({ queryKey: ["fighter", userId] as const }),

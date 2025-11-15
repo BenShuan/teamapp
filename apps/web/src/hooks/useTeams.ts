@@ -1,16 +1,18 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
+import { teamQueryOptions } from "../services/teams.api";
 import { Team } from "@teamapp/api/schema";
-import apiClient from "../lib/api-client";
 
 
 export function useTeams() {
 
-  // return useQuery({
-  //   queryKey: [qk.teams],
-  //   queryFn: () => apiClient.api,
-  // });
+  const query = useQuery(teamQueryOptions);
 
-  return  [] as Team[]
-  
+  const teamsMap = query.data?.reduce((acc, team) => {
+
+    acc[team.id] = team
+    return acc
+  }, {} as Record<string, Team>)
+
+  return { ...query, teamsMap }
 }

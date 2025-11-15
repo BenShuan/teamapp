@@ -1,10 +1,10 @@
 "use client";
 
-import * as React from "react";
 import { type FieldValues, type Path, type RegisterOptions } from "react-hook-form";
 import { Field, type FieldRenderProps } from "./Field";
 import { cn } from "@/web/lib/utils";
-import { Input , type InputProps} from "../ui/input";
+import { Input, type InputProps } from "../ui/input";
+import { useEffect, useMemo, useState } from "react";
 
 export type Option = { label: string; value: string | number };
 
@@ -16,6 +16,7 @@ export type AutocompleteFieldProps<TFieldValues extends FieldValues = FieldValue
   requiredMark?: boolean;
   options: Option[];
   emptyMessage?: string;
+  isLoading?:boolean;
 };
 
 export function AutocompleteField<TFieldValues extends FieldValues = FieldValues>({
@@ -27,6 +28,7 @@ export function AutocompleteField<TFieldValues extends FieldValues = FieldValues
   className,
   options,
   emptyMessage = "No results",
+  isLoading =false,
   ...inputProps
 }: AutocompleteFieldProps<TFieldValues>) {
   return (
@@ -38,10 +40,17 @@ export function AutocompleteField<TFieldValues extends FieldValues = FieldValues
       requiredMark={requiredMark}
       className={cn("relative", className)}
       render={({ field, error }: FieldRenderProps<TFieldValues, Path<TFieldValues>>) => {
-        const [open, setOpen] = React.useState(false);
-        const [query, setQuery] = React.useState<string>(field.value ?? "");
+        const [open, setOpen] = useState(false);
+        const [query, setQuery] = useState<string>("");
 
-        const filtered = React.useMemo(() => {
+        useEffect(() => {
+          if (options.length > 0) {
+            setQuery(options.find((o) => o.value === field.value)?.label??'')
+          }
+        }, [isLoading])
+
+
+        const filtered = useMemo(() => {
           const q = String(query).toLowerCase();
           return options.filter((o) => o.label.toLowerCase().includes(q));
         }, [options, query]);

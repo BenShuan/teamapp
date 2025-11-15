@@ -22,7 +22,7 @@ export const teamRelations = relations(team, ({ many }) => ({
 
 // Insert validator (runtime)
 export const NewTeamSchema = createInsertSchema(team, {
-});
+}).omit({id: true, createdAt: true, updatedAt: true});
 
 // Select validator (useful for output shaping)
 export const teamSchema = createSelectSchema(team);
