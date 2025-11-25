@@ -13,6 +13,8 @@ export const queryKeys = {
     queryKey: ["team"] as const
   },
   teamItem: (userId: string) => ({ queryKey: ["team", userId] as const }) as const,
+  attendance: { queryKey: ["attendance"] as const },
+  attendanceItem: (id: string) => ({ queryKey: ["attendance", id] as const }),
 };
 
 

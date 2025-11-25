@@ -5,16 +5,18 @@ import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import type { AppRouteHandler } from "@/api/lib/types";
 
 import { createDb } from "@/api/db";
-import { attendance } from "@/api/db/schema";
+import { attendance, NewAttendance } from "@/api/db/schema";
 import { ZOD_ERROR_CODES, ZOD_ERROR_MESSAGES } from "@/api/lib/constants";
 
 import type { CreateRoute, GetOneRoute, ListRoute, PatchRoute, RemoveRoute } from "./attendance.routes";
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const db = createDb(c.env);
-  const rows = await db.query.attendance.findMany({
+  const rows = await db.query.fighter.findMany({
+    columns: { id: true, firstName: true, lastName: true, personalNumber : true },
+    with: { attendances: true },
     orderBy(fields, operators) {
-      return operators.desc(fields.createdAt);
+      return operators.desc(fields.firstName);
     },
   });
   return c.json(rows);
@@ -23,7 +25,8 @@ export const list: AppRouteHandler<ListRoute> = async (c) => {
 export const create: AppRouteHandler<CreateRoute> = async (c) => {
   const db = createDb(c.env);
   const body = c.req.valid("json");
-  const [inserted] = await db.insert(attendance).values(body).returning();
+
+  const inserted = await db.insert(attendance).values(body).onConflictDoNothing().returning();
   return c.json(inserted, HttpStatusCodes.OK);
 };
 

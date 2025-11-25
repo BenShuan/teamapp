@@ -5,6 +5,7 @@ import type { z } from "zod";
 import { team } from "./team";
 import { relations } from "drizzle-orm";
 import { ID_FIELD, INTEGER_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "@/api/utils/schemeHelper";
+import { attendance } from "./attendance";
 
 // Fighters table based on the FighterSchema fields
 export const fighter = sqliteTable(
@@ -37,8 +38,9 @@ export const fighter = sqliteTable(
   ]
 );
 
-export const fighterTeamRelations = relations(fighter, ({ one }) => ({
+export const fighterTeamRelations = relations(fighter, ({ one, many }) => ({
   team: one(team),
+  attendances: many(attendance),
 }));
 
 

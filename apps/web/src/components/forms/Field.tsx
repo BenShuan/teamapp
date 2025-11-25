@@ -55,7 +55,7 @@ export function Field<TFieldValues extends FieldValues = FieldValues, TName exte
         </Label>
       ) : null}
       <Controller
-        name={name as Path<TFieldValues>}
+        name={name as TName}
         control={usedControl}
         rules={rules}
         render={({ field, fieldState }) => (

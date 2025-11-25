@@ -11,6 +11,7 @@
 import { Route as rootRoute } from './routes/~__root'
 import { Route as IndexImport } from './routes/~index'
 import { Route as FighterIndexImport } from './routes/~fighter/~index'
+import { Route as AttendanceIndexImport } from './routes/~attendance/~index'
 import { Route as FighterIdIndexImport } from './routes/~fighter/~$id/~index'
 
 // Create/Update Routes
@@ -24,6 +25,12 @@ const IndexRoute = IndexImport.update({
 const FighterIndexRoute = FighterIndexImport.update({
   id: '/fighter/',
   path: '/fighter/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AttendanceIndexRoute = AttendanceIndexImport.update({
+  id: '/attendance/',
+  path: '/attendance/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -42,6 +49,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/attendance/': {
+      id: '/attendance/'
+      path: '/attendance'
+      fullPath: '/attendance'
+      preLoaderRoute: typeof AttendanceIndexImport
       parentRoute: typeof rootRoute
     }
     '/fighter/': {
@@ -65,12 +79,14 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/attendance': typeof AttendanceIndexRoute
   '/fighter': typeof FighterIndexRoute
   '/fighter/$id': typeof FighterIdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/attendance': typeof AttendanceIndexRoute
   '/fighter': typeof FighterIndexRoute
   '/fighter/$id': typeof FighterIdIndexRoute
 }
@@ -78,27 +94,30 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/attendance/': typeof AttendanceIndexRoute
   '/fighter/': typeof FighterIndexRoute
   '/fighter/$id/': typeof FighterIdIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/fighter' | '/fighter/$id'
+  fullPaths: '/' | '/attendance' | '/fighter' | '/fighter/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/fighter' | '/fighter/$id'
-  id: '__root__' | '/' | '/fighter/' | '/fighter/$id/'
+  to: '/' | '/attendance' | '/fighter' | '/fighter/$id'
+  id: '__root__' | '/' | '/attendance/' | '/fighter/' | '/fighter/$id/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AttendanceIndexRoute: typeof AttendanceIndexRoute
   FighterIndexRoute: typeof FighterIndexRoute
   FighterIdIndexRoute: typeof FighterIdIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AttendanceIndexRoute: AttendanceIndexRoute,
   FighterIndexRoute: FighterIndexRoute,
   FighterIdIndexRoute: FighterIdIndexRoute,
 }
@@ -114,12 +133,16 @@ export const routeTree = rootRoute
       "filePath": "~__root.tsx",
       "children": [
         "/",
+        "/attendance/",
         "/fighter/",
         "/fighter/$id/"
       ]
     },
     "/": {
       "filePath": "~index.tsx"
+    },
+    "/attendance/": {
+      "filePath": "~attendance/~index.tsx"
     },
     "/fighter/": {
       "filePath": "~fighter/~index.tsx"

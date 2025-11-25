@@ -4,7 +4,7 @@ import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
 import { createErrorSchema, IdUUIDParamsSchema } from "stoker/openapi/schemas";
 
 import { notFoundSchema } from "@/api/lib/constants";
-import { AttendanceSchema, NewAttendanceSchema, UpdateAttendanceSchema } from "@/api/db/schema";
+import { AttendanceSchema, FightersAttendanceSchema, NewAttendanceSchema, UpdateAttendanceSchema } from "@/api/db/schema";
 
 
 const tags = ["attendance"];
@@ -15,7 +15,7 @@ export const list = createRoute({
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      z.array(AttendanceSchema),
+      FightersAttendanceSchema,
       "The list of attendance rows",
     ),
   },
@@ -26,18 +26,18 @@ export const create = createRoute({
   method: "post",
   request: {
     body: jsonContentRequired(
-      NewAttendanceSchema,
+      z.array(NewAttendanceSchema),
       "The attendance row to create",
     ),
   },
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      AttendanceSchema,
+      z.array(AttendanceSchema),
       "The created attendance row",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(NewAttendanceSchema),
+      createErrorSchema(z.array(NewAttendanceSchema)),
       "The validation error(s)",
     ),
   },

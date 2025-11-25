@@ -11,6 +11,7 @@ export type AppNavItem = {
 export const appNavRoutes = {
   Home: { to: "/", label: "בית" },
   Fighter: { to: "/fighter", label: "לוחמים" },
+  Attendance: { to: "/attendance", label: "נוכחות" },
 } as const satisfies Record<string, AppNavItem>;
 
 export type AppNavRoutesMap = typeof appNavRoutes;
