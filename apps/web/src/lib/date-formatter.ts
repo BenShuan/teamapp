@@ -29,3 +29,19 @@ export const dateRangeBuilder = (startDate: Date, endDate: Date) => {
   return dates;
 
 }
+
+export const getDatesByRange=(dayToRefrence:Date=new Date(),daysBefore:number=0,daysAfter:number=7)=>{
+  
+    // Default to 7 days back for start date
+  const startDate = new Date(dayToRefrence.getTime() - daysBefore * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split('T')[0];
+  const endDate = new Date(dayToRefrence.getTime() + daysAfter * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split('T')[0];
+
+      return {
+        startDate,endDate
+      }
+
+}

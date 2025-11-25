@@ -3,6 +3,8 @@
 import React, { useMemo, useState } from 'react';
 import { useAttendance, useCreateAttendance } from '@/web/hooks/useAttendance';
 import { AttendanceCell } from './AttendanceCell';
+import { AttendanceTableProvider } from './AttendanceTableContext';
+import { SelectionIndicator } from './SelectionIndicator';
 import { DataTable, DataTableSearch } from '@/web/components/dataTable/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
 import { Attendance, Fighter, NewAttendance, statusLocations } from '@teamapp/api/schema';
@@ -29,12 +31,10 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
   const { data: fighterArray } = useFighters()
 
   const [datesRangeToCreate, setdatesRangeToCreate] = useState<string[]>([])
-
   // Generate array of dates between startDate and endDate
   const dateRange = useMemo(() => {
     const start = new Date(startDate);
     const end = new Date(endDate);
-
     return dateRangeBuilder(start, end);
 
   }, [startDate, endDate]);
@@ -87,11 +87,14 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
             </div>
           );
         },
-        cell: (ctx) => <AttendanceCell attendance={ctx.getValue<Attendance | undefined>()} />,
+        cell: (ctx) => {
+          const att = ctx.getValue<Attendance | undefined>();
+          return <AttendanceCell attendance={att} />;
+        },
       })
     }
     return columns;
-  }, [])
+  }, [dateRange])
 
   if (isLoading || isPending) {
     return <div className="p-4">טוען...</div>;
@@ -121,16 +124,21 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
     setdatesRangeToCreate([]);
   }
 
+  const allAttendanceRecords:Attendance[] = (attendanceRecords as any[]?? []).flatMap((r: any) => r.attendances).filter((a: Attendance) => dateRange.includes(a.workDate));  
+
   return (
-    <div className="w-full overflow-x-auto" dir="rtl">
-      <DataTable columns={attendanceColumns} data={(attendanceRecords ?? []) as []} initialState={{}}>
-        <DataTableSearch />
-        <div className={cn("flex items-center gap-3 ", datesRangeToCreate.length === 0 && 'hidden')}>
+    <AttendanceTableProvider>
+      <div className="w-full overflow-x-auto" dir="rtl">
+        <DataTable columns={attendanceColumns} data={(attendanceRecords ?? []) as []} initialState={{}}>
+          <DataTableSearch />
+          <SelectionIndicator allItems={allAttendanceRecords } />
+          <div className={cn("flex items-center gap-3 ", datesRangeToCreate.length === 0 && 'hidden')}>
 
-          <Button onClick={() => createAttendenceForFighterByDates(datesRangeToCreate, (fighterArray ?? []) as Fighter[])}>צור נוכחות בתאריכים אלו</Button>
-        </div>
-      </DataTable>
+            <Button onClick={() => createAttendenceForFighterByDates(datesRangeToCreate, (fighterArray ?? []) as Fighter[])}>צור נוכחות בתאריכים אלו</Button>
+          </div>  
+        </DataTable>
 
-    </div>
+      </div>
+    </AttendanceTableProvider>
   );
 };

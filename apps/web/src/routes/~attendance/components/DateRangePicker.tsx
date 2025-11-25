@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Input } from '@/web/components/ui/input';
-import { Label } from '@/web/components/ui/label';
-import DatePicker, { DatePickerCalendar, DatePickerInput, DatePickerRoot } from '@/web/components/ui/date-picker';
+import { DatePicker } from '@/web/components/ui/date-picker';
+import { RefreshCwIcon } from 'lucide-react';
+import { getDatesByRange } from '@/web/lib/date-formatter';
 
 interface DateRangePickerProps {
   startDate: string;
@@ -19,36 +19,28 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
   onEndDateChange,
 }) => {
   return (
-    <div className="flex gap-4 mb-6 items-end" dir="rtl">
-
-      <DatePickerRoot label='תאריך התחלה'>
-        <DatePickerInput  />
-        <DatePickerCalendar/>
-      </DatePickerRoot>
-
+    <div className="flex gap-4 mb-6 items-end " dir="rtl">
       <div>
-        <Label htmlFor="start-date" className="block mb-2">
-          תאריך התחלה
-        </Label>
-        <Input
-          id="start-date"
-          type="date"
-          value={startDate}
-          onChange={(e) => onStartDateChange(e.target.value)}
-          className="w-40"
-        />
+        <DatePicker label='תאריך התחלה' value={new Date(startDate)}
+          onChange={(date) => onStartDateChange(date ? date.toUTCString() : '')}>
+          <DatePicker.Input />
+        </DatePicker>
       </div>
       <div>
-        <Label htmlFor="end-date" className="block mb-2">
-          תאריך סיום
-        </Label>
-        <Input
-          id="end-date"
-          type="date"
-          value={endDate}
-          onChange={(e) => onEndDateChange(e.target.value)}
-          className="w-40"
-        />
+        <DatePicker label='תאריך סיום' value={new Date(endDate)}
+          onChange={(date) => onEndDateChange(date ? date.toUTCString() : '')}>
+          <DatePicker.Input />
+        </DatePicker>
+      </div>
+
+      <div className='mb-2'>
+
+        <RefreshCwIcon size={24} className='cursor-pointer hover:text-primary transition-colors'
+          onClick={() => {
+            const { startDate, endDate } = getDatesByRange(new Date(), 7, 0);
+            onStartDateChange(startDate);
+            onEndDateChange(endDate);
+          }} />
       </div>
     </div>
   );
