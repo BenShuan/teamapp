@@ -15,7 +15,7 @@ import FighterTable from './components/FighterTable'
 import FightersList from './components/FightersList'
 import { Button } from '@/web/components/ui/button'
 
-const FightersPage = async () => {
+const FightersPage =  () => {
   return (
     <div className='mx-4 flex flex-col gap-4 '>
       <div className='hidden md:block'>
@@ -28,7 +28,7 @@ const FightersPage = async () => {
       </div>
       <div className="mt-4">
         <Dialog  >
-          <DialogTrigger  >
+          <DialogTrigger asChild  >
             <Button>
               הוסף חייל
             </Button>
