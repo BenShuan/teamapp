@@ -50,9 +50,13 @@ export const updateAttendance = async ({
   attendance: UpdateAttendance;
 }) => {
 
+  const payload = {
+    ...attendanceUpdate,
+   
+  };
   const response = await apiClient.api.attendance[":id"].$patch({
     param: { id },
-    json: attendanceUpdate as any,
+    json: payload as any,
   });
   if (response.status !== 200) {
     const json = await response.json();

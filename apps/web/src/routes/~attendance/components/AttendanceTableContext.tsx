@@ -1,12 +1,13 @@
 'use client';
 
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, } from '@/web/components/ui/context-menu';
-import { statusLocations } from '@teamapp/api/schema';
+import { statusLocations, Attendance } from '@teamapp/api/schema';
 import React, { createContext, useContext, useState } from 'react';
 import { attendnanceColorMap } from './AttendanceCell';
 import { cn } from '@/web/lib/utils';
 import { useUpdateAttendance } from '@/web/hooks/useAttendance';
 import { ChevronRight } from 'lucide-react';
+import { AttendancePopover } from './AttendancePopover';
 
 interface AttendanceTableContextType {
   pickedIds: Set<string>;
@@ -15,6 +16,7 @@ interface AttendanceTableContextType {
   handleLocationChange: (attendanceId: string, newLocation: string) => void;
   isPending: boolean;
   setContextPos: (pos: { x: number, y: number }) => void;
+  openAttendanceForm: (attendance: Attendance, fighterName: string) => void;
 }
 
 const AttendanceTableContext = createContext<AttendanceTableContextType | undefined>(undefined);
@@ -22,6 +24,9 @@ const AttendanceTableContext = createContext<AttendanceTableContextType | undefi
 export const AttendanceTableProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { mutate: updateAttendance, isPending } = useUpdateAttendance();
   const [contextPos, setContextPos] = useState({ x: 0, y: 0 })
+  const [selectedAttendance, setSelectedAttendance] = useState<Attendance | null>(null);
+  const [selectedFighterName, setSelectedFighterName] = useState('');
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const [pickedIds, setPickedIds] = useState<Set<string>>(new Set());
 
@@ -41,6 +46,11 @@ export const AttendanceTableProvider: React.FC<{ children: React.ReactNode }> = 
     setPickedIds(new Set());
   };
 
+  const openAttendanceForm = (attendance: Attendance, fighterName: string) => {
+    setSelectedAttendance(attendance);
+    setSelectedFighterName(fighterName);
+    setIsPopoverOpen(true);
+  };
 
   const handleLocationChange = (attendanceId: string | null, newLocation: string) => {
     // if there are multiple picked ids, apply to all picked; otherwise single
@@ -71,7 +81,7 @@ export const AttendanceTableProvider: React.FC<{ children: React.ReactNode }> = 
   };
 
   return (
-    <AttendanceTableContext.Provider value={{ pickedIds, setContextPos, togglePick, clearPicks, handleLocationChange, isPending }}>
+    <AttendanceTableContext.Provider value={{ pickedIds, setContextPos, togglePick, clearPicks, handleLocationChange, isPending, openAttendanceForm }}>
       <ContextMenu  >
         {children}
         <ContextMenuContent style={{
@@ -96,6 +106,15 @@ export const AttendanceTableProvider: React.FC<{ children: React.ReactNode }> = 
         </ContextMenuContent>
       </ContextMenu>
 
+      {/* Attendance Form Popover */}
+      {selectedAttendance && (
+        <AttendancePopover
+          attendance={selectedAttendance}
+          fighterName={selectedFighterName}
+          open={isPopoverOpen}
+          onOpenChange={setIsPopoverOpen}
+        />
+      )}
     </AttendanceTableContext.Provider>
   );
 };

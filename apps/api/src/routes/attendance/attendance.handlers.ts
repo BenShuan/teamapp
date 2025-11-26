@@ -55,7 +55,7 @@ export const patch: AppRouteHandler<PatchRoute> = async (c) => {
   const db = createDb(c.env);
   const { id } = c.req.valid("param");
   const updates = c.req.valid("json");
-
+  console.log('updates', updates)
   if (Object.keys(updates).length === 0) {
     return c.json(
       {

@@ -89,7 +89,9 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
         },
         cell: (ctx) => {
           const att = ctx.getValue<Attendance | undefined>();
-          return <AttendanceCell attendance={att} />;
+          const row = ctx.row.original as Fighter;
+          const fighterName = `${row.firstName} ${row.lastName}`.trim();
+          return <AttendanceCell attendance={att} fighterName={fighterName} />;
         },
       })
     }

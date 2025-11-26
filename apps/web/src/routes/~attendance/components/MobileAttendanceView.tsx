@@ -10,6 +10,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatDateHeader, getDatesByRange } from '@/web/lib/date-formatter';
 import { DragDropManager, DraggableItem, DragItem, DroppableContainer, DroppableContainerConfig } from '@/web/lib/drag-drop/DragDropManager';
 import { useAttendanceDragDrop, AttendanceDragItem } from '@/web/lib/drag-drop/useAttendanceDragDrop';
+import { AttendancePopover } from './AttendancePopover';
 
 interface MobileAttendanceViewProps {
   startDate: string;
@@ -22,10 +23,16 @@ interface MobileAttendanceViewProps {
 const FighterCard: React.FC<{
   item: AttendanceDragItem;
   location: string;
-}> = ({ item, location }) => {
+  onOpenAttendanceForm?: (attendance: any, fighterName: string) => void;
+}> = ({ item, location, onOpenAttendanceForm }) => {
 
   const timeDay = item.attendance?.checkIn? new Date(item.attendance.checkIn).getHours() + ':' + new Date(item.attendance.checkIn).getMinutes() : '';
 
+  const handleDoubleClick = () => {
+    if (item.attendance && onOpenAttendanceForm) {
+      onOpenAttendanceForm(item.attendance, item.fighterName);
+    }
+  };
 
   return (
     <DraggableItem item={item} id={item.id}>
@@ -36,6 +43,8 @@ const FighterCard: React.FC<{
           'hover:shadow-md active:opacity-75',
           attendnanceColorMap[location] + ' bg-opacity-20'
         )}
+        onDoubleClick={handleDoubleClick}
+        
       >
         <div className="font-semibold">{`${item.fighterName} ${timeDay}` } </div>
         <div className="text-xs text-muted-foreground">{item.personalNumber}</div>
@@ -76,6 +85,10 @@ export const MobileAttendanceView: React.FC<MobileAttendanceViewProps> = ({
   const { data: fighterArray = [] } = useFighters();
 
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedAttendance, setSelectedAttendance] = useState<any>(null);
+  const [selectedFighterName, setSelectedFighterName] = useState('');
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
   const { buildContainers } = useAttendanceDragDrop(
     Array.isArray(attendanceRecords) ? attendanceRecords.flatMap((record: any) => record.attendances) : [],
     Array.isArray(fighterArray) ? fighterArray : [],
@@ -96,6 +109,12 @@ export const MobileAttendanceView: React.FC<MobileAttendanceViewProps> = ({
   const goToNextDate = () => {
     const nextDate = getDatesByRange(new Date(selectedDate), 0, 1).endDate;
     setSelectedDate(nextDate);
+  };
+
+  const handleOpenAttendanceForm = (attendance: any, fighterName: string) => {
+    setSelectedAttendance(attendance);
+    setSelectedFighterName(fighterName);
+    setIsPopoverOpen(true);
   };
 
   if (isLoading) {
@@ -138,6 +157,7 @@ export const MobileAttendanceView: React.FC<MobileAttendanceViewProps> = ({
           <FighterCard
             item={item as AttendanceDragItem}
             location={containerId}
+            onOpenAttendanceForm={handleOpenAttendanceForm}
           />
         )}
         renderContainer={(config: DroppableContainerConfig, children: React.ReactNode) => (
@@ -160,6 +180,16 @@ export const MobileAttendanceView: React.FC<MobileAttendanceViewProps> = ({
       <div className="rounded-md bg-muted p-4 text-center text-sm text-muted-foreground">
         <p>👆 גרור שם לוחם לעמודה חדשה לעדכון המיקום</p>
       </div>
+
+      {/* Attendance Form Popover */}
+      {selectedAttendance && (
+        <AttendancePopover
+          attendance={selectedAttendance}
+          fighterName={selectedFighterName}
+          open={isPopoverOpen}
+          onOpenChange={setIsPopoverOpen}
+        />
+      )}
     </div>
   );
 };

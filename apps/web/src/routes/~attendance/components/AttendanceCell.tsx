@@ -17,6 +17,7 @@ import { useAttendanceTable } from './AttendanceTableContext';
 
 interface AttendanceCellProps {
   attendance: Attendance | undefined;
+  fighterName?: string;
 }
 
 export const attendnanceColorMap: Record<string, string> = {
@@ -26,8 +27,8 @@ export const attendnanceColorMap: Record<string, string> = {
   [statusLocations[3]]: 'bg-gray-500',
 }
 
-export const AttendanceCell: React.FC<AttendanceCellProps> = ({ attendance }) => {
-  const { pickedIds, togglePick, handleLocationChange, isPending,setContextPos } = useAttendanceTable();
+export const AttendanceCell: React.FC<AttendanceCellProps> = ({ attendance, fighterName = 'לוחם' }) => {
+  const { pickedIds, togglePick, handleLocationChange, isPending, setContextPos, openAttendanceForm } = useAttendanceTable();
 
   const attendanceId = attendance?.id ?? "";
   const isPicked = attendanceId ? pickedIds.has(attendanceId) : false;
@@ -45,8 +46,9 @@ export const AttendanceCell: React.FC<AttendanceCellProps> = ({ attendance }) =>
   };
 
   const onDoubleClick: React.MouseEventHandler = () => {
-    if (!attendanceId) return;
-    togglePick(attendanceId);
+    console.log('attendance', attendance)
+    if (!attendance) return;
+    openAttendanceForm(attendance, fighterName);
   };
 
 

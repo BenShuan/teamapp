@@ -54,7 +54,18 @@ export const AttendanceSchema = createSelectSchema(attendance);
 
 
 // Select validator (useful for output shaping)
-export const UpdateAttendanceSchema = createUpdateSchema(attendance).partial();
+export const UpdateAttendanceSchema = createUpdateSchema(attendance,{
+  checkIn: z.union([z.string(), z.number(), z.null()]).transform((val) => {
+    if (val === null || val === undefined) return null;
+     return new Date(val); 
+  }).optional(),
+  checkOut: z.union([z.string(), z.number(), z.null()]).transform((val) => {
+    if (val === null || val === undefined) return null;
+    if (typeof val === 'number') return new Date(val) ; // already a timestamp
+    if (typeof val === 'string') return new Date(val).getTime(); // convert ISO string to timestamp
+    return null;
+  }).optional()
+}).partial();
 
 // Build a minimal fighter-with-attendances schema here to avoid a circular
 // runtime dependency on `fighterSchema` (which can be undefined due to
