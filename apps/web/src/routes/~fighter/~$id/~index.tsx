@@ -4,12 +4,13 @@ import { useFighters } from '@/web/hooks/useFighter'
 import queryClient from '@/web/lib/query-client'
 import RoutePending from '@/web/components/route-pending'
 import { fighterItemQueryOptions } from '../../../services/fighter.api'
+import { Fighter } from '@teamapp/api/schema'
 
 function FighterItemPage() {
   const { id } = useParams({ from: "/fighter/$id/" })
-  const { data } = useFighters(id)
+  const { data  } = useFighters(id)
   return <div>
-    <FighterForm fighter={data} />
+    <FighterForm fighter={data as Fighter} />
   </div>
 }
 

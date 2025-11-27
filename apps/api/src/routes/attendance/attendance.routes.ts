@@ -4,7 +4,7 @@ import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
 import { createErrorSchema, IdUUIDParamsSchema } from "stoker/openapi/schemas";
 
 import { notFoundSchema } from "@/api/lib/constants";
-import { AttendanceSchema, FightersAttendanceSchema, NewAttendanceSchema, UpdateAttendanceSchema } from "@/api/db/schema";
+import { AttendanceSchema, FighterAttendanceSchema, NewAttendanceSchema, UpdateAttendanceSchema } from "@/api/db/schema";
 
 
 const tags = ["attendance"];
@@ -15,7 +15,7 @@ export const list = createRoute({
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      FightersAttendanceSchema,
+      z.array(FighterAttendanceSchema),
       "The list of attendance rows",
     ),
   },

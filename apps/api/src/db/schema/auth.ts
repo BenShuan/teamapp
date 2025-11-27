@@ -1,4 +1,4 @@
-import { ID_FIELD, INTEGER_TIMESTEMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "@/api/utils/schemeHelper";
+import { ID_FIELD, INTEGER_TIMESTEMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "../../utils/schemeHelper";
 import type { AdapterAccountType } from "@auth/core/adapters";
 
 import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";

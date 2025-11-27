@@ -2,7 +2,7 @@
 
 import { TextField, NumberField, AutocompleteField } from "@/web/components/forms";
 import { useTeams } from "@/web/hooks/useTeams";
-import type { Fighter, NewFighter, Team } from "@teamapp/api/schema";
+import type { Fighter, Team } from "@teamapp/api/schema";
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { Card, CardContent } from "@/web/components/ui/card";
 import { Button } from "@/web/components/ui/button";
@@ -32,14 +32,14 @@ const defaultFighter = {
   class: "",
   kit: "",
   address: undefined,
-} satisfies Partial<Fighter> as Fighter
+} as unknown as Fighter
 
 const FighterForm: React.FC<FighterFormProps> = ({ fighter }) => {
 
   const isNew = !fighter?.id
 
   // Use NewFighter for creation to match API type
-  const methods = useForm<Partial<Fighter>>({
+  const methods = useForm<Fighter>({
     defaultValues: isNew ? defaultFighter : fighter,
   });
 
@@ -50,7 +50,7 @@ const FighterForm: React.FC<FighterFormProps> = ({ fighter }) => {
 
 
 
-  const onSubmit: SubmitHandler<NewFighter> = async (values) => {
+  const onSubmit: SubmitHandler<Fighter> = async (values) => {
     await mutateAsync(values);
 
     methods.reset();

@@ -7,7 +7,7 @@ import { AttendanceTableProvider } from './AttendanceTableContext';
 import { SelectionIndicator } from './SelectionIndicator';
 import { DataTable, DataTableSearch } from '@/web/components/dataTable/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
-import { Attendance, Fighter, NewAttendance, statusLocations } from '@teamapp/api/schema';
+import { Attendance, Fighter, FightersAttendance, NewAttendance, statusLocations } from '@teamapp/api/schema';
 import { dateRangeBuilder, formatDateHeader } from '@/web/lib/date-formatter';
 import { Button } from '@/web/components/ui/button';
 import { cn } from '@/web/lib/utils';
@@ -54,7 +54,7 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
         enableSorting: true
 
       }
-    ] as ColumnDef<Fighter>[])
+    ] as ColumnDef<FightersAttendance>[])
 
     for (const day of dateRange) {
       columns.push({
@@ -89,7 +89,7 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
         },
         cell: (ctx) => {
           const att = ctx.getValue<Attendance | undefined>();
-          const row = ctx.row.original as Fighter;
+          const row = ctx.row.original as Partial<Fighter>;
           const fighterName = `${row.firstName} ${row.lastName}`.trim();
           return <AttendanceCell attendance={att} fighterName={fighterName} />;
         },

@@ -6,14 +6,11 @@ import {
   DragEndEvent,
   DragOverlay,
   closestCenter,
-  PointerSensor,
   TouchSensor,
   useSensor,
   useSensors,
   useDroppable,
   DragStartEvent,
-  useDraggable,
-  MouseSensor,
 } from '@dnd-kit/core';
 import {
   SortableContext,

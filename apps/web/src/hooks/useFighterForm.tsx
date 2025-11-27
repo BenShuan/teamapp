@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import {  NewFighter, UpdateFighter } from '@teamapp/api/schema';
+import {  Fighter } from '@teamapp/api/schema';
 import { createFighter, updateFighter } from '../services/fighter.api';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
@@ -8,9 +8,9 @@ const useFighterForm = (isNew: boolean,id?:string|null) => {
   const qc = useQueryClient();
 
 
-  const action = isNew ? (variables: Partial<NewFighter>) => createFighter(variables) : (variables: Partial<UpdateFighter>) => updateFighter({ id: variables.id, fighter: variables })
+  const action = isNew ? (variables: Fighter) => createFighter(variables) : (variables: Fighter) => updateFighter({ id: variables.id, fighter: variables })
 
-  const mutate= useMutation<unknown, Error, NewFighter | UpdateFighter>({
+  const mutate= useMutation<unknown, Error, Fighter>({
     mutationFn:action,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["fighters",id] });

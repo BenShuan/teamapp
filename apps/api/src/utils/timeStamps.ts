@@ -1,9 +1,9 @@
-import { integer } from "drizzle-orm/sqlite-core";
+import {  text } from "drizzle-orm/sqlite-core";
 
 export const timestamps = {
   // columns.helpers.ts
-  updatedAt: integer("updated_at", { mode: "timestamp" }),
-  createdAt: integer("created_at", { mode: "timestamp" }).$default(() => new Date()).notNull(),
-  deletedAt: integer("deleted_at", { mode: "timestamp" }),
+  updatedAt: text("updated_at"),
+  createdAt: text("created_at").$default(() => new Date().toISOString()).notNull(),
+  deletedAt: text("deleted_at"),
 };
 

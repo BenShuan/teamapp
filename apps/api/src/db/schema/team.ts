@@ -2,7 +2,7 @@ import { timestamps } from "../../utils/timeStamps";
 import { platoon } from "./platoon";
 import { relations } from "drizzle-orm";
 import { fighter } from "./fighter";
-import { ID_FIELD, TEXT_REQUIERD_FIELD, TEXT_OPTIONAL_FIELD } from "@/api/utils/schemeHelper";
+import { ID_FIELD, TEXT_REQUIERD_FIELD, TEXT_OPTIONAL_FIELD } from "../../utils/schemeHelper";
 import { sqliteTable } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -21,15 +21,17 @@ export const teamRelations = relations(team, ({ many }) => ({
 
 
 // Insert validator (runtime)
-export const NewTeamSchema = createInsertSchema(team, {
-}).omit({id: true, createdAt: true, updatedAt: true});
+export const NewTeamSchema = createInsertSchema(team);
 
 // Select validator (useful for output shaping)
-export const teamSchema = createSelectSchema(team);
+export const teamSchema = createSelectSchema(team).required({id:true});
 
 
 // Select validator (useful for output shaping)
-export const UpdateTeamSchema = createUpdateSchema(team);
+export const UpdateTeamSchema = createUpdateSchema(team).omit({
+  createdAt: true,
+  updatedAt: true,
+}).partial();
 
 
 export type NewTeam = z.infer<typeof NewTeamSchema>;

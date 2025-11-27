@@ -57,6 +57,13 @@
       "when": 1763217553028,
       "tag": "0007_bizarre_hulk",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1764258305069,
+      "tag": "0008_magical_tarantula",
+      "breakpoints": true
     }
   ]
 }

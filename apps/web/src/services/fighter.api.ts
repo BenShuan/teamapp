@@ -2,7 +2,7 @@ import apiClient from "@/web/lib/api-client";
 import formatApiError from "@/web/lib/format-api-error";
 import {  queryKeys } from "@/web/lib/queries";
 import { queryOptions } from "@tanstack/react-query";
-import { NewFighter, UpdateFighter } from "@teamapp/api/schema";
+import { Fighter, NewFighter } from "@teamapp/api/schema";
 
 
 export const fighterQueryOptions = queryOptions({
@@ -49,7 +49,7 @@ export const createFighter = async (fighter:NewFighter ) => {
     const message = formatApiError(json);
     throw new Error(message);
   }
-  return json;
+  return json ;
 };
 
 export const deleteFighter = async (id: string) => {
@@ -68,7 +68,7 @@ export const deleteFighter = async (id: string) => {
   }
 };
 
-export const updateFighter = async ({ id, fighter }: { id: string; fighter: UpdateFighter }) => {
+export const updateFighter = async ({ id, fighter }: { id: string; fighter: Fighter }) => {
   const response = await apiClient.api.fighters[":id"].$patch({
     param: {
       id,
@@ -83,4 +83,6 @@ export const updateFighter = async ({ id, fighter }: { id: string; fighter: Upda
     const message = formatApiError(json);
     throw new Error(message);
   }
+  const json = await response.json();
+  return json 
 };

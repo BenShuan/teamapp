@@ -1,6 +1,6 @@
 import { sqliteTable } from "drizzle-orm/sqlite-core";
 import { timestamps } from "../../utils/timeStamps";
-import { ID_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "@/api/utils/schemeHelper";
+import { ID_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "../../utils/schemeHelper";
 
 export const platoon = sqliteTable("platoons", {
     id: ID_FIELD("id"),

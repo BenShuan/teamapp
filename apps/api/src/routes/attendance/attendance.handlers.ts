@@ -5,7 +5,7 @@ import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import type { AppRouteHandler } from "@/api/lib/types";
 
 import { createDb } from "@/api/db";
-import { attendance, NewAttendance } from "@/api/db/schema";
+import { attendance } from "@/api/db/schema";
 import { ZOD_ERROR_CODES, ZOD_ERROR_MESSAGES } from "@/api/lib/constants";
 
 import type { CreateRoute, GetOneRoute, ListRoute, PatchRoute, RemoveRoute } from "./attendance.routes";
@@ -55,7 +55,6 @@ export const patch: AppRouteHandler<PatchRoute> = async (c) => {
   const db = createDb(c.env);
   const { id } = c.req.valid("param");
   const updates = c.req.valid("json");
-  console.log('updates', updates)
   if (Object.keys(updates).length === 0) {
     return c.json(
       {
@@ -75,12 +74,12 @@ export const patch: AppRouteHandler<PatchRoute> = async (c) => {
     );
   }
 
-  const [row] = await db.update(attendance)
+  const rows = await db.update(attendance)
     .set(updates)
     .where(eq(attendance.id, id))
     .returning();
 
-  if (!row) {
+  if (!rows || rows.length === 0) {
     return c.json(
       {
         message: HttpStatusPhrases.NOT_FOUND,
@@ -89,7 +88,7 @@ export const patch: AppRouteHandler<PatchRoute> = async (c) => {
     );
   }
 
-  return c.json(row, HttpStatusCodes.OK);
+  return c.json(rows[0], HttpStatusCodes.OK);
 };
 
 export const remove: AppRouteHandler<RemoveRoute> = async (c) => {

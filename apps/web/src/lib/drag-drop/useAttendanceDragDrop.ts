@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 import { Attendance, statusLocations } from '@teamapp/api/schema';
-import { useUpdateAttendance } from '@/web/hooks/useAttendance';
+import { useCreateAttendance, useUpdateAttendance } from '@/web/hooks/useAttendance';
 import { DragItem, DroppableContainerConfig } from './DragDropManager';
 
 export interface AttendanceDragItem extends DragItem {
@@ -22,6 +22,7 @@ export const useAttendanceDragDrop = (
   selectedDate: string
 ) => {
   const { mutate: updateAttendance } = useUpdateAttendance();
+  const { mutate: createAttendance } = useCreateAttendance();
 
  
 
@@ -111,14 +112,11 @@ export const useAttendanceDragDrop = (
         });
       } else {
         // Create new attendance record
-        updateAttendance({
-          id: '',
-          attendance: {
+        createAttendance([{
             location: newLocation,
             fighterId: item.fighterId,
             workDate: selectedDate,
-          } as any,
-        });
+        }]);
       }
     },
     [updateAttendance, selectedDate]

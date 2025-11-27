@@ -1,10 +1,10 @@
 import { sqliteTable, unique } from "drizzle-orm/sqlite-core";
 import { timestamps } from "../../utils/timeStamps";
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
-import type { z } from "zod";
+import { z } from "zod";
 import { team } from "./team";
 import { relations } from "drizzle-orm";
-import { ID_FIELD, INTEGER_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "@/api/utils/schemeHelper";
+import { ID_FIELD, INTEGER_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "../../utils/schemeHelper";
 import { attendance } from "./attendance";
 
 // Fighters table based on the FighterSchema fields
@@ -12,7 +12,7 @@ export const fighter = sqliteTable(
   "fighters",
   {
     id: ID_FIELD("id"), // uuid
-    idNumber: TEXT_REQUIERD_FIELD("id_number"), // char(10)
+    idNumber: TEXT_OPTIONAL_FIELD("id_number").unique(), // char(10)
     firstName: TEXT_REQUIERD_FIELD("first_name"), // varchar(50)
     lastName: TEXT_REQUIERD_FIELD("last_name"), // varchar(50)
     email: TEXT_OPTIONAL_FIELD("email"), // varchar(100)
@@ -61,6 +61,8 @@ export const UpdateFighterSchema = createUpdateSchema(fighter,{
 }).omit({
   createdAt: true,
   updatedAt: true,
+}).required({
+  id:true
 });
 
 

@@ -47,32 +47,21 @@ export const attendaceRelations = relations(attendance, ({ one }) => ({
 
 
 // Insert validator (runtime)
-export const NewAttendanceSchema = createInsertSchema(attendance, {});
+export const NewAttendanceSchema = createInsertSchema(attendance);
 
 // Select validator (useful for output shaping)
 export const AttendanceSchema = createSelectSchema(attendance);
 
 
 // Select validator (useful for output shaping)
-export const UpdateAttendanceSchema = createUpdateSchema(attendance,{
-  checkIn: z.union([z.string(), z.number(), z.null()]).transform((val) => {
-    if (val === null || val === undefined) return null;
-     return new Date(val); 
-  }).optional(),
-  checkOut: z.union([z.string(), z.number(), z.null()]).transform((val) => {
-    if (val === null || val === undefined) return null;
-    if (typeof val === 'number') return new Date(val) ; // already a timestamp
-    if (typeof val === 'string') return new Date(val).getTime(); // convert ISO string to timestamp
-    return null;
-  }).optional()
-}).partial();
+export const UpdateAttendanceSchema = createUpdateSchema(attendance).partial();
 
 // Build a minimal fighter-with-attendances schema here to avoid a circular
 // runtime dependency on `fighterSchema` (which can be undefined due to
 // module init order). We only need a few fields from the fighter plus the
 // attendances array, so construct the Zod schema directly.
 
-export const FightersAttendanceSchema = z.object({
+export const FighterAttendanceSchema = z.object({
   id: z.string().uuid(),
   firstName: z.string(),
   lastName: z.string(),
@@ -81,7 +70,7 @@ export const FightersAttendanceSchema = z.object({
 });
 
 
-export type FightersAttendance = z.infer<typeof FightersAttendanceSchema>;
+export type FightersAttendance = z.infer<typeof FighterAttendanceSchema>;
 export type NewAttendance = z.infer<typeof NewAttendanceSchema>;
 export type UpdateAttendance = z.infer<typeof UpdateAttendanceSchema>;
 export type Attendance = z.infer<typeof AttendanceSchema>;
