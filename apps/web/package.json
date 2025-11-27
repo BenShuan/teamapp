@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "deploy": "wrangler pages publish dist"
+    "deploy": "wrangler pages deploy dist"
   },
   "dependencies": {
     "@auth/core": "^0.37.4",
