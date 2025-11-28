@@ -1,8 +1,9 @@
 import apiClient from "@/web/lib/api-client";
 import formatApiError from "@/web/lib/format-api-error";
-import {  queryKeys } from "@/web/lib/queries";
+import { queryKeys } from "@/web/lib/queries";
 import { queryOptions } from "@tanstack/react-query";
 import { Fighter, NewFighter } from "@teamapp/api/schema";
+import { toast } from "sonner";
 
 
 export const fighterQueryOptions = queryOptions({
@@ -12,12 +13,13 @@ export const fighterQueryOptions = queryOptions({
     return response.json();
   },
 });
-export const fighterItemQueryOptions = (id:string)=>queryOptions({
+export const fighterItemQueryOptions = (id: string) => queryOptions({
   ...queryKeys.fighterItem(id),
   queryFn: async () => {
-    const response = await apiClient.api.fighters[":id"].$get({param:{id}});
+    const response = await apiClient.api.fighters[":id"].$get({ param: { id } });
     return response.json();
   },
+
 });
 
 export const createFighterQueryOptions = (id: string) => queryOptions({
@@ -33,23 +35,25 @@ export const createFighterQueryOptions = (id: string) => queryOptions({
       throw new Error(json.message);
     }
     if ("success" in json) {
-      const message = formatApiError(json);
-      throw new Error(message);
+      toast.success("לוחם נוצר בהצלחה")
     }
     return json;
   },
 });
 
-export const createFighter = async (fighter:NewFighter ) => {
+export const createFighter = async (fighter: NewFighter) => {
   const response = await apiClient.api.fighters.$post({
     json: fighter as any,
   });
   const json = await response.json();
-  if ("success" in json) {
+  if ("error" in json) {
     const message = formatApiError(json);
     throw new Error(message);
   }
-  return json ;
+  if ("success" in json) {
+    toast.success("לוחם נוצר בהצלחה")
+  }
+  return json;
 };
 
 export const deleteFighter = async (id: string) => {
@@ -66,6 +70,8 @@ export const deleteFighter = async (id: string) => {
     const message = formatApiError(json);
     throw new Error(message);
   }
+  toast.success("לוחם נמחק בהצלחה")
+
 };
 
 export const updateFighter = async ({ id, fighter }: { id: string; fighter: Fighter }) => {
@@ -84,5 +90,7 @@ export const updateFighter = async ({ id, fighter }: { id: string; fighter: Figh
     throw new Error(message);
   }
   const json = await response.json();
-  return json 
+  toast.success("לוחם עודכן בהצלחה")
+
+  return json
 };

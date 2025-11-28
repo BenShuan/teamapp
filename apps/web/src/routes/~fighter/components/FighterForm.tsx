@@ -7,6 +7,7 @@ import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { Card, CardContent } from "@/web/components/ui/card";
 import { Button } from "@/web/components/ui/button";
 import useFighterForm from "@/web/hooks/useFighterForm";
+import { useNavigate } from "@tanstack/react-router";
 
 
 
@@ -43,7 +44,7 @@ const FighterForm: React.FC<FighterFormProps> = ({ fighter }) => {
     defaultValues: isNew ? defaultFighter : fighter,
   });
 
-
+  const navigate = useNavigate()
   const teamsData = useTeams();
 
   const { mutateAsync, isPending } = useFighterForm(isNew, fighter?.id)
@@ -54,6 +55,8 @@ const FighterForm: React.FC<FighterFormProps> = ({ fighter }) => {
     await mutateAsync(values);
 
     methods.reset();
+
+    navigate({to:".."})
   };
 
   return (

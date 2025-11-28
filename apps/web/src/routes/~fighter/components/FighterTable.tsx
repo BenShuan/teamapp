@@ -85,7 +85,7 @@ function FighterTable() {
       cell: ({ getValue }) => getValue<string | null>() ?? '-',
     },
     {
-      id: "actions",
+      id: "פעולות",
       cell: ({ row }) => <><Link to={`/fighter/${row.original.id}`}><Edit2></Edit2></Link></>
     }
 

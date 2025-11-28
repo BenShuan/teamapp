@@ -1,10 +1,11 @@
 import { useSession } from "@hono/auth-js/react";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { createHashHistory, createRouter, RouterProvider } from "@tanstack/react-router";
 
 import { routeTree } from "@/web/route-tree.gen";
 
 const router = createRouter({
   routeTree,
+  history: createHashHistory(),
   context: {
     session: undefined,
   },

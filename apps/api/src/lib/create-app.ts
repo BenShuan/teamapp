@@ -9,13 +9,21 @@ import createRouter from "./create-router";
 
 export default function createApp() {
   const app = createRouter()
-    .use("*", (c, next) => {
+    .use("*", async (c, next) => {
       if (c.req.path.startsWith(BASE_PATH)) {
         return next();
       }
       // SPA redirect to /index.html
       const requestUrl = new URL(c.req.raw.url);
-      return c.env.ASSETS.fetch(new URL("/index.html", requestUrl.origin));
+
+      let response =await c.env.ASSETS.fetch(new URL("/index.html", requestUrl.origin));
+
+
+      // If not found, fallback to index.html
+      if (response.status === 404) {
+        response = await c.env.ASSETS.fetch(new Request('http://dummy/index.html'))
+      }
+      return response
     })
     .basePath(BASE_PATH) as AppOpenAPI;
 
