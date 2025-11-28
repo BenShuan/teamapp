@@ -3,7 +3,7 @@
 import React from 'react';
 import { DatePicker } from '@/web/components/ui/date-picker';
 import { RefreshCwIcon } from 'lucide-react';
-import { getDatesByRange } from '@/web/lib/date-formatter';
+import { getDatesByRange } from '@teamapp/shared';
 
 interface DateRangePickerProps {
   startDate: string;

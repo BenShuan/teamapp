@@ -37,6 +37,9 @@ importers:
       '@teamapp/eslint-config':
         specifier: workspace:^
         version: link:../../packages/eslint-config
+      '@teamapp/shared':
+        specifier: workspace:^
+        version: link:../../packages/shared
       drizzle-orm:
         specifier: ^0.38.2
         version: 0.38.2(@cloudflare/workers-types@4.20241205.0)(@libsql/client-wasm@0.14.0)(@libsql/client@0.14.0)(@types/react@19.0.1)(react@19.0.0)
@@ -270,9 +273,6 @@ importers:
       vite-tsconfig-paths:
         specifier: ^5.1.4
         version: 5.1.4(typescript@5.7.2)(vite@6.0.3(@types/node@22.10.2)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.19.2)(yaml@2.6.1))
-      wrangler:
-        specifier: ^3.95.0
-        version: 3.95.0(@cloudflare/workers-types@4.20241205.0)
 
   packages/api-client:
     dependencies:

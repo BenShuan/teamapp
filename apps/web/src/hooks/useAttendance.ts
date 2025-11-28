@@ -5,8 +5,8 @@ import { attendanceQueryOptions, createAttendance, updateAttendance, deleteAtten
 import { NewAttendance, UpdateAttendance } from '@teamapp/api/schema';
 import { toast } from 'sonner';
 
-export const useAttendance = () => {
-  return useQuery(attendanceQueryOptions);
+export const useAttendance = (startDate:Date,endDate:Date ) => {
+  return useQuery(attendanceQueryOptions(startDate,endDate));
 };
 
 export const useCreateAttendance = () => {

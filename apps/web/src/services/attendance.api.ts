@@ -3,11 +3,12 @@ import formatApiError from "@/web/lib/format-api-error";
 import { queryKeys } from "@/web/lib/queries";
 import { queryOptions } from "@tanstack/react-query";
 import { NewAttendance, UpdateAttendance } from "@teamapp/api/schema";
+import { formatShortDate } from "@teamapp/shared";
 
-export const attendanceQueryOptions = queryOptions({
-  ...queryKeys.attendance,
+export const attendanceQueryOptions = (startDate: Date, endDate: Date) => queryOptions({
+  ...queryKeys.attendance(startDate, endDate),
   queryFn: async () => {
-    const response = await apiClient.api.attendance.$get();
+    const response = await apiClient.api.attendance.$get({ query: { startDate:formatShortDate(startDate), endDate:formatShortDate(endDate) } });
     return response.json();
   },
 });
@@ -52,7 +53,7 @@ export const updateAttendance = async ({
 
   const payload = {
     ...attendanceUpdate,
-   
+
   };
   const response = await apiClient.api.attendance[":id"].$patch({
     param: { id },

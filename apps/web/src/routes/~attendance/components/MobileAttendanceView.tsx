@@ -7,10 +7,10 @@ import { Button } from '@/web/components/ui/button';
 import { cn } from '@/web/lib/utils';
 import { attendnanceColorMap } from './AttendanceCell';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { formatDateHeader, getDatesByRange } from '@/web/lib/date-formatter';
 import { DragDropManager, DraggableItem, DragItem, DroppableContainer, DroppableContainerConfig } from '@/web/lib/drag-drop/DragDropManager';
 import { useAttendanceDragDrop, AttendanceDragItem } from '@/web/lib/drag-drop/useAttendanceDragDrop';
 import { AttendancePopover } from './AttendancePopover';
+import { formatDateHeader, getDatesByRange } from '@teamapp/shared';
 
 interface MobileAttendanceViewProps {
   startDate: string;
@@ -81,13 +81,13 @@ const LocationContainer: React.FC<{
 export const MobileAttendanceView: React.FC<MobileAttendanceViewProps> = ({
 
 }) => {
-  const { data: attendanceRecords = [], isLoading } = useAttendance();
   const { data: fighterArray = [] } = useFighters();
-
+  
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [selectedAttendance, setSelectedAttendance] = useState<any>(null);
   const [selectedFighterName, setSelectedFighterName] = useState('');
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const { data: attendanceRecords = [], isLoading } = useAttendance(new Date(selectedDate),new Date(selectedDate));
 
   const { buildContainers } = useAttendanceDragDrop(
     Array.isArray(attendanceRecords) ? attendanceRecords.flatMap((record: any) => record.attendances) : [],

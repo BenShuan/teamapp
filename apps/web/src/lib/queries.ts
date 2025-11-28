@@ -13,7 +13,7 @@ export const queryKeys = {
     queryKey: ["team"] as const
   },
   teamItem: (userId: string) => ({ queryKey: ["team", userId] as const }) as const,
-  attendance: { queryKey: ["attendance"] as const },
+  attendance: (startDate: Date, endDate: Date) => ({ queryKey: ["attendance", startDate,endDate] as const }),
   attendanceItem: (id: string) => ({ queryKey: ["attendance", id] as const }),
 };
 

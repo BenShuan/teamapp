@@ -11,5 +11,5 @@
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
-  "include": ["src", "trash/~task"]
+  "include": ["src", "trash/~task", "../../packages/shared/src/utils/date-formatter.ts"]
 }

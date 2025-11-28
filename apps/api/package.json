@@ -28,6 +28,7 @@
     "@logtape/logtape": "^0.8.0",
     "@scalar/hono-api-reference": "^0.5.164",
     "@teamapp/eslint-config": "workspace:^",
+    "@teamapp/shared": "workspace:^",
     "drizzle-orm": "^0.38.2",
     "drizzle-zod": "^0.6.0",
     "hono": "^4.6.13",

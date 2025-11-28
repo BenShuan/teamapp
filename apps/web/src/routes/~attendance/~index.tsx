@@ -5,7 +5,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { DateRangePicker } from './components/DateRangePicker';
 import { AttendanceTable } from './components/AttendanceTable';
 import { MobileAttendanceView } from './components/MobileAttendanceView';
-import { getDatesByRange } from '@/web/lib/date-formatter';
+import { getDatesByRange } from '@teamapp/shared';
 import { ErrorPage } from '@/web/components/ErrorPage';
 
 const AttendancePage = () => {

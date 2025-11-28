@@ -1,6 +1,7 @@
-import { eq } from "drizzle-orm";
+import {  between, eq } from "drizzle-orm";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
+import { formatShortDate } from "@teamapp/shared"
 
 import type { AppRouteHandler } from "@/api/lib/types";
 
@@ -12,9 +13,22 @@ import type { CreateRoute, GetOneRoute, ListRoute, PatchRoute, RemoveRoute } fro
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const db = createDb(c.env);
+
+  const { startDate, endDate } = c.req.valid("query");
+
+  const query = {
+    where: between(
+      attendance.workDate,
+      formatShortDate( startDate??""),
+      formatShortDate( endDate??"")
+    ),
+  }
+  
   const rows = await db.query.fighter.findMany({
-    columns: { id: true, firstName: true, lastName: true, personalNumber : true },
-    with: { attendances: true },
+    columns: { id: true, firstName: true, lastName: true, personalNumber: true },
+    with: {
+      attendances: query
+    },
     orderBy(fields, operators) {
       return operators.desc(fields.firstName);
     },

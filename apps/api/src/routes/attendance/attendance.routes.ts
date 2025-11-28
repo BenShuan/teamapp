@@ -13,6 +13,12 @@ export const list = createRoute({
   path: "/attendance",
   method: "get",
   tags,
+  request: {
+    query: z.object({
+      startDate:z.string().optional(),
+      endDate:z.string().optional(),
+    })
+  },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       z.array(FighterAttendanceSchema),

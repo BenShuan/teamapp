@@ -8,7 +8,7 @@ import { SelectionIndicator } from './SelectionIndicator';
 import { DataTable, DataTableSearch } from '@/web/components/dataTable/DataTable';
 import { ColumnDef } from '@tanstack/react-table';
 import { Attendance, Fighter, FightersAttendance, NewAttendance, statusLocations } from '@teamapp/api/schema';
-import { dateRangeBuilder, formatDateHeader } from '@/web/lib/date-formatter';
+import { dateRangeBuilder, formatDateHeader } from '@teamapp/shared';
 import { Button } from '@/web/components/ui/button';
 import { cn } from '@/web/lib/utils';
 import { Input } from '@/web/components/ui/input';
@@ -26,19 +26,18 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
   startDate,
   endDate,
 }) => {
-  const { data: attendanceRecords = [], isLoading, error } = useAttendance();
   const { mutate, isPending } = useCreateAttendance()
   const { data: fighterArray } = useFighters()
-
+  
   const [datesRangeToCreate, setdatesRangeToCreate] = useState<string[]>([])
   // Generate array of dates between startDate and endDate
   const dateRange = useMemo(() => {
     const start = new Date(startDate);
     const end = new Date(endDate);
     return dateRangeBuilder(start, end);
-
+    
   }, [startDate, endDate]);
-
+  const { data: attendanceRecords = [], isLoading, error } = useAttendance(new Date(startDate),new Date(endDate));
   const attendanceColumns: ColumnDef<any>[] = useMemo(() => {
     const columns = ([
       {
