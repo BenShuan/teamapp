@@ -6,18 +6,13 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 // Import Routes
 
 import { Route as rootRoute } from './routes/~__root'
 import { Route as IndexImport } from './routes/~index'
-import { Route as FighterIndexImport } from './routes/~fighter/~$id/~index.y
+import { Route as FighterIndexImport } from './routes/~fighter/~index'
 import { Route as AttendanceIndexImport } from './routes/~attendance/~index'
-
-// Create Virtual Routes
-
-const FighterIdIndexLazyImport = createFileRoute('/fighter/$id/')()
+import { Route as FighterIdIndexImport } from './routes/~fighter/~$id/~index'
 
 // Create/Update Routes
 
@@ -39,13 +34,11 @@ const AttendanceIndexRoute = AttendanceIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const FighterIdIndexLazyRoute = FighterIdIndexLazyImport.update({
+const FighterIdIndexRoute = FighterIdIndexImport.update({
   id: '/fighter/$id/',
   path: '/fighter/$id/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/~fighter/~$id/~index').then((d) => d.Route),
-)
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -76,7 +69,7 @@ declare module '@tanstack/react-router' {
       id: '/fighter/$id/'
       path: '/fighter/$id'
       fullPath: '/fighter/$id'
-      preLoaderRoute: typeof FighterIdIndexLazyImport
+      preLoaderRoute: typeof FighterIdIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -88,14 +81,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/attendance': typeof AttendanceIndexRoute
   '/fighter': typeof FighterIndexRoute
-  '/fighter/$id': typeof FighterIdIndexLazyRoute
+  '/fighter/$id': typeof FighterIdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/attendance': typeof AttendanceIndexRoute
   '/fighter': typeof FighterIndexRoute
-  '/fighter/$id': typeof FighterIdIndexLazyRoute
+  '/fighter/$id': typeof FighterIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -103,7 +96,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/attendance/': typeof AttendanceIndexRoute
   '/fighter/': typeof FighterIndexRoute
-  '/fighter/$id/': typeof FighterIdIndexLazyRoute
+  '/fighter/$id/': typeof FighterIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -119,14 +112,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AttendanceIndexRoute: typeof AttendanceIndexRoute
   FighterIndexRoute: typeof FighterIndexRoute
-  FighterIdIndexLazyRoute: typeof FighterIdIndexLazyRoute
+  FighterIdIndexRoute: typeof FighterIdIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AttendanceIndexRoute: AttendanceIndexRoute,
   FighterIndexRoute: FighterIndexRoute,
-  FighterIdIndexLazyRoute: FighterIdIndexLazyRoute,
+  FighterIdIndexRoute: FighterIdIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -155,7 +148,7 @@ export const routeTree = rootRoute
       "filePath": "~fighter/~index.tsx"
     },
     "/fighter/$id/": {
-      "filePath": "~fighter/~$id/~index.lazy.tsx"
+      "filePath": "~fighter/~$id/~index.tsx"
     }
   }
 }
