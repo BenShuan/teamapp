@@ -7,6 +7,9 @@
 
 export const queryKeys = {
   me: ["me"] as const,
+  auth: {
+    register: { queryKey: ["auth", "register"] as const },
+  },
   fighters: { queryKey: ["fighter"] as const },
   fighterItem: (userId: string) => ({ queryKey: ["fighter", userId] as const }),
   teams: {

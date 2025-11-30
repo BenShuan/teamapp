@@ -11,7 +11,7 @@ import { teamSchema, NewTeamSchema, UpdateTeamSchema } from "@/api/db/schema";
 const tags = ["teams"];
 
 export const list = createRoute({
-  path: "/teams",
+  path: "/",
   method: "get",
   tags,
   responses: {
@@ -23,7 +23,7 @@ export const list = createRoute({
 });
 
 export const create = createRoute({
-  path: "/teams",
+  path: "/",
   method: "post",
   request: {
     body: jsonContentRequired(
@@ -45,7 +45,7 @@ export const create = createRoute({
 });
 
 export const getOne = createRoute({
-  path: "/teams/{id}",
+  path: "/{id}",
   method: "get",
   request: {
     params: IdUUIDParamsSchema,
@@ -68,7 +68,7 @@ export const getOne = createRoute({
 });
 
 export const patch = createRoute({
-  path: "/teams/{id}",
+  path: "/{id}",
   method: "patch",
   request: {
     params: IdUUIDParamsSchema,
@@ -96,7 +96,7 @@ export const patch = createRoute({
 });
 
 export const remove = createRoute({
-  path: "/teams/{id}",
+  path: "/{id}",
   method: "delete",
   request: {
     params: IdUUIDParamsSchema,

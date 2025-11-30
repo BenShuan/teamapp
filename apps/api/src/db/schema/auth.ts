@@ -2,6 +2,19 @@ import { ID_FIELD, INTEGER_TIMESTEMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_R
 import type { AdapterAccountType } from "@auth/core/adapters";
 
 import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import {  z } from "zod";
+
+
+export enum UserRole {
+  FIGHTER = 'fighter',
+  COMMANDER = 'commander',
+  CAPTAIN = 'captain',
+  ADMIN = 'admin'
+}
+
+export const usersRoles = Object.values(UserRole);
+
 
 export const users = sqliteTable("user", {
   id: ID_FIELD('id'),
@@ -9,7 +22,22 @@ export const users = sqliteTable("user", {
   email: TEXT_REQUIERD_FIELD("email").unique(),
   emailVerified: INTEGER_TIMESTEMP_OPTIONAL_FIELD("emailVerified"),
   image: TEXT_OPTIONAL_FIELD("image"),
+  password: TEXT_REQUIERD_FIELD("password"),
+  role: TEXT_REQUIERD_FIELD('role', { enum: usersRoles }),
+  
 });
+
+
+export const loginSchema = z.object({
+  name:z.string(),
+  password:z.string()
+})
+export const userSchema = createSelectSchema(users).omit({
+  password:true
+})
+export const createUserSchema = createInsertSchema(users)
+export type NewUser = z.infer<typeof createUserSchema>;
+export type User = z.infer<typeof userSchema>;
 
 export const accounts = sqliteTable(
   "account",

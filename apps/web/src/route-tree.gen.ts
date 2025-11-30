@@ -6,38 +6,63 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/~__root'
-import { Route as IndexImport } from './routes/~index'
-import { Route as FighterIndexImport } from './routes/~fighter/~index'
-import { Route as AttendanceIndexImport } from './routes/~attendance/~index'
-import { Route as FighterIdIndexImport } from './routes/~fighter/~$id/~index'
+import { Route as appRouteImport } from './routes/~(app)/~route'
+import { Route as AuthRegisterImport } from './routes/~auth/~register'
+import { Route as appIndexImport } from './routes/~(app)/~(home)'
+import { Route as appFighterIndexImport } from './routes/~(app)/~fighter/~index'
+import { Route as appAttendanceIndexImport } from './routes/~(app)/~attendance/~index'
+import { Route as appFighterIdIndexImport } from './routes/~(app)/~fighter/~$id/~index'
+
+// Create Virtual Routes
+
+const Import = createFileRoute('/')()
 
 // Create/Update Routes
 
-const IndexRoute = IndexImport.update({
+const appRouteRoute = appRouteImport.update({
+  id: '/(app)',
+  getParentRoute: () => Route,
+} as any)
+
+const Route = Import.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const FighterIndexRoute = FighterIndexImport.update({
+const AuthRegisterRoute = AuthRegisterImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const appIndexRoute = appIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appFighterIndexRoute = appFighterIndexImport.update({
   id: '/fighter/',
   path: '/fighter/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => appRouteRoute,
 } as any)
 
-const AttendanceIndexRoute = AttendanceIndexImport.update({
+const appAttendanceIndexRoute = appAttendanceIndexImport.update({
   id: '/attendance/',
   path: '/attendance/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => appRouteRoute,
 } as any)
 
-const FighterIdIndexRoute = FighterIdIndexImport.update({
+const appFighterIdIndexRoute = appFighterIdIndexImport.update({
   id: '/fighter/$id/',
   path: '/fighter/$id/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => appRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -48,78 +73,141 @@ declare module '@tanstack/react-router' {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+      preLoaderRoute: typeof Import
       parentRoute: typeof rootRoute
     }
-    '/attendance/': {
-      id: '/attendance/'
+    '/(app)': {
+      id: '/(app)'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof appRouteImport
+      parentRoute: typeof Route
+    }
+    '/(app)/': {
+      id: '/(app)/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof appIndexImport
+      parentRoute: typeof appRouteImport
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterImport
+      parentRoute: typeof rootRoute
+    }
+    '/(app)/attendance/': {
+      id: '/(app)/attendance/'
       path: '/attendance'
       fullPath: '/attendance'
-      preLoaderRoute: typeof AttendanceIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof appAttendanceIndexImport
+      parentRoute: typeof appRouteImport
     }
-    '/fighter/': {
-      id: '/fighter/'
+    '/(app)/fighter/': {
+      id: '/(app)/fighter/'
       path: '/fighter'
       fullPath: '/fighter'
-      preLoaderRoute: typeof FighterIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof appFighterIndexImport
+      parentRoute: typeof appRouteImport
     }
-    '/fighter/$id/': {
-      id: '/fighter/$id/'
+    '/(app)/fighter/$id/': {
+      id: '/(app)/fighter/$id/'
       path: '/fighter/$id'
       fullPath: '/fighter/$id'
-      preLoaderRoute: typeof FighterIdIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof appFighterIdIndexImport
+      parentRoute: typeof appRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface appRouteRouteChildren {
+  appIndexRoute: typeof appIndexRoute
+  appAttendanceIndexRoute: typeof appAttendanceIndexRoute
+  appFighterIndexRoute: typeof appFighterIndexRoute
+  appFighterIdIndexRoute: typeof appFighterIdIndexRoute
+}
+
+const appRouteRouteChildren: appRouteRouteChildren = {
+  appIndexRoute: appIndexRoute,
+  appAttendanceIndexRoute: appAttendanceIndexRoute,
+  appFighterIndexRoute: appFighterIndexRoute,
+  appFighterIdIndexRoute: appFighterIdIndexRoute,
+}
+
+const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
+  appRouteRouteChildren,
+)
+
+interface RouteChildren {
+  appRouteRoute: typeof appRouteRouteWithChildren
+}
+
+const RouteChildren: RouteChildren = {
+  appRouteRoute: appRouteRouteWithChildren,
+}
+
+const RouteWithChildren = Route._addFileChildren(RouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/attendance': typeof AttendanceIndexRoute
-  '/fighter': typeof FighterIndexRoute
-  '/fighter/$id': typeof FighterIdIndexRoute
+  '/': typeof appIndexRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/attendance': typeof appAttendanceIndexRoute
+  '/fighter': typeof appFighterIndexRoute
+  '/fighter/$id': typeof appFighterIdIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/attendance': typeof AttendanceIndexRoute
-  '/fighter': typeof FighterIndexRoute
-  '/fighter/$id': typeof FighterIdIndexRoute
+  '/': typeof appIndexRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/attendance': typeof appAttendanceIndexRoute
+  '/fighter': typeof appFighterIndexRoute
+  '/fighter/$id': typeof appFighterIdIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/attendance/': typeof AttendanceIndexRoute
-  '/fighter/': typeof FighterIndexRoute
-  '/fighter/$id/': typeof FighterIdIndexRoute
+  '/': typeof RouteWithChildren
+  '/(app)': typeof appRouteRouteWithChildren
+  '/(app)/': typeof appIndexRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/(app)/attendance/': typeof appAttendanceIndexRoute
+  '/(app)/fighter/': typeof appFighterIndexRoute
+  '/(app)/fighter/$id/': typeof appFighterIdIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/attendance' | '/fighter' | '/fighter/$id'
+  fullPaths:
+    | '/'
+    | '/auth/register'
+    | '/attendance'
+    | '/fighter'
+    | '/fighter/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/attendance' | '/fighter' | '/fighter/$id'
-  id: '__root__' | '/' | '/attendance/' | '/fighter/' | '/fighter/$id/'
+  to: '/' | '/auth/register' | '/attendance' | '/fighter' | '/fighter/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/(app)'
+    | '/(app)/'
+    | '/auth/register'
+    | '/(app)/attendance/'
+    | '/(app)/fighter/'
+    | '/(app)/fighter/$id/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AttendanceIndexRoute: typeof AttendanceIndexRoute
-  FighterIndexRoute: typeof FighterIndexRoute
-  FighterIdIndexRoute: typeof FighterIdIndexRoute
+  Route: typeof RouteWithChildren
+  AuthRegisterRoute: typeof AuthRegisterRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AttendanceIndexRoute: AttendanceIndexRoute,
-  FighterIndexRoute: FighterIndexRoute,
-  FighterIdIndexRoute: FighterIdIndexRoute,
+  Route: RouteWithChildren,
+  AuthRegisterRoute: AuthRegisterRoute,
 }
 
 export const routeTree = rootRoute
@@ -133,22 +221,43 @@ export const routeTree = rootRoute
       "filePath": "~__root.tsx",
       "children": [
         "/",
-        "/attendance/",
-        "/fighter/",
-        "/fighter/$id/"
+        "/auth/register"
       ]
     },
     "/": {
-      "filePath": "~index.tsx"
+      "filePath": "~(app)",
+      "children": [
+        "/(app)"
+      ]
     },
-    "/attendance/": {
-      "filePath": "~attendance/~index.tsx"
+    "/(app)": {
+      "filePath": "~(app)/~route.tsx",
+      "parent": "/",
+      "children": [
+        "/(app)/",
+        "/(app)/attendance/",
+        "/(app)/fighter/",
+        "/(app)/fighter/$id/"
+      ]
     },
-    "/fighter/": {
-      "filePath": "~fighter/~index.tsx"
+    "/(app)/": {
+      "filePath": "~(app)/~index.tsx",
+      "parent": "/(app)"
     },
-    "/fighter/$id/": {
-      "filePath": "~fighter/~$id/~index.tsx"
+    "/auth/register": {
+      "filePath": "~auth/~register.tsx"
+    },
+    "/(app)/attendance/": {
+      "filePath": "~(app)/~attendance/~index.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/fighter/": {
+      "filePath": "~(app)/~fighter/~index.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/fighter/$id/": {
+      "filePath": "~(app)/~fighter/~$id/~index.tsx",
+      "parent": "/(app)"
     }
   }
 }

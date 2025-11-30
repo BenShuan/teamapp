@@ -8,13 +8,15 @@ import index from "./index.route";
 import fighter from "./fighters/fighters.index"
 import team from "./teams/teams.index"
 import attendance from "./attendance/attendance.index"
+import authRouter from "./auth/auth.index"
 
 export function registerRoutes(app: AppOpenAPI) {
   return app
     .route("/", index)
-    .route("/", fighter)
-    .route("/", team)
-    .route("/", attendance)
+    .route("/fighters", fighter)
+    .route("/teams", team)
+    .route("/attendance", attendance)
+    .route("/auth",authRouter)
 }
 
 // stand alone router type used for api client

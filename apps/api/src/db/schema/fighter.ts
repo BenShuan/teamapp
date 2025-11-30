@@ -12,7 +12,7 @@ export const fighter = sqliteTable(
   "fighters",
   {
     id: ID_FIELD("id"), // uuid
-    idNumber: TEXT_OPTIONAL_FIELD("id_number").unique(), // char(10)
+    idNumber: TEXT_OPTIONAL_FIELD("id_number"), // char(10)
     firstName: TEXT_REQUIERD_FIELD("first_name"), // varchar(50)
     lastName: TEXT_REQUIERD_FIELD("last_name"), // varchar(50)
     email: TEXT_OPTIONAL_FIELD("email"), // varchar(100)

@@ -10,7 +10,7 @@ import { AttendanceSchema, FighterAttendanceSchema, NewAttendanceSchema, UpdateA
 const tags = ["attendance"];
 
 export const list = createRoute({
-  path: "/attendance",
+  path: "/",
   method: "get",
   tags,
   request: {
@@ -28,7 +28,7 @@ export const list = createRoute({
 });
 
 export const create = createRoute({
-  path: "/attendance",
+  path: "/",
   method: "post",
   request: {
     body: jsonContentRequired(
@@ -50,7 +50,7 @@ export const create = createRoute({
 });
 
 export const getOne = createRoute({
-  path: "/attendance/{id}",
+  path: "/{id}",
   method: "get",
   request: {
     params: IdUUIDParamsSchema,
@@ -73,7 +73,7 @@ export const getOne = createRoute({
 });
 
 export const patch = createRoute({
-  path: "/attendance/{id}",
+  path: "/{id}",
   method: "patch",
   request: {
     params: IdUUIDParamsSchema,
@@ -101,7 +101,7 @@ export const patch = createRoute({
 });
 
 export const remove = createRoute({
-  path: "/attendance/{id}",
+  path: "/{id}",
   method: "delete",
   request: {
     params: IdUUIDParamsSchema,

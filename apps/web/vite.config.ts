@@ -19,6 +19,7 @@ export default defineConfig({
         "/* eslint-disable eslint-comments/no-unlimited-disable */",
         "/* eslint-disable */",
       ],
+      autoCodeSplitting:true,
       generatedRouteTree: "./src/route-tree.gen.ts",
 
     }),

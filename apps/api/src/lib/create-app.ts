@@ -6,6 +6,7 @@ import type { AppOpenAPI } from "./types";
 import { BASE_PATH } from "./constants";
 import createAuthConfig from "./create-auth-config";
 import createRouter from "./create-router";
+import  authRouter from "../routes/auth/auth.index";
 
 export default function createApp() {
   const app = createRouter()
@@ -16,7 +17,7 @@ export default function createApp() {
       // SPA redirect to /index.html
       const requestUrl = new URL(c.req.raw.url);
 
-      let response =await c.env.ASSETS.fetch(new URL("/index.html", requestUrl.origin));
+      let response = await c.env.ASSETS.fetch(new URL("/index.html", requestUrl.origin));
 
 
       // If not found, fallback to index.html
@@ -26,16 +27,18 @@ export default function createApp() {
       return response
     })
     .basePath(BASE_PATH) as AppOpenAPI;
-
+``  
   app
     .use(
       "*",
       async (c, next) => {
+        console.log('c.url', c.req.url)
         c.set("authConfig", createAuthConfig(c.env));
         return next();
       },
     )
     .use("/auth/*", authHandler())
+    .route('auth',authRouter)
     .notFound(notFound)
     .onError(onError);
 

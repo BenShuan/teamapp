@@ -3,11 +3,11 @@ import FighterForm from '../components/FighterForm'
 import { useFighters } from '@/web/hooks/useFighter'
 import queryClient from '@/web/lib/query-client'
 import RoutePending from '@/web/components/route-pending'
-import { fighterItemQueryOptions } from '../../../services/fighter.api'
+import { fighterItemQueryOptions } from '../../../../services/fighter.api'
 import { Fighter } from '@teamapp/api/schema'
 
 function FighterItemPage() {
-  const { id } = useParams({ from: '/fighter/$id/' })
+  const { id } = useParams({ from: '/(application)/fighter/$id/' })
   const { data } = useFighters(id)
   return (
     <div>
@@ -16,7 +16,7 @@ function FighterItemPage() {
   )
 }
 
-export const Route = createFileRoute('/fighter/$id/')({
+export const Route = createFileRoute('/(app)/fighter/$id/')({
   component: FighterItemPage,
   loader: ({ params: { id } }) =>
     queryClient.ensureQueryData(fighterItemQueryOptions(id)),

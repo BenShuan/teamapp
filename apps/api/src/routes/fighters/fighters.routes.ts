@@ -3,27 +3,29 @@ import * as HttpStatusCodes from "stoker/http-status-codes";
 import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
 import { createErrorSchema, IdUUIDParamsSchema } from "stoker/openapi/schemas";
 
-import { notFoundSchema } from "@/api/lib/constants";
+import {  notFoundSchema } from "@/api/lib/constants";
 import { fighterSchema, NewFighterSchema, UpdateFighterSchema } from "@/api/db/schema";
+import { requireAuth } from "@/api/middleware/auth";
 
 
 
 const tags = ["fighters"];
 
 export const list = createRoute({
-  path: "/fighters",
+  path: "/",
   method: "get",
   tags,
+  middleware: [requireAuth()] as const,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       z.array(fighterSchema),
       "The list of tasks",
-    ),
+    )
   },
 });
 
 export const create = createRoute({
-  path: "/fighters",
+  path: "/",
   method: "post",
   request: {
     body: jsonContentRequired(
@@ -45,7 +47,7 @@ export const create = createRoute({
 });
 
 export const getOne = createRoute({
-  path: "/fighters/{id}",
+  path: "/{id}",
   method: "get",
   request: {
     params: IdUUIDParamsSchema,
@@ -68,7 +70,7 @@ export const getOne = createRoute({
 });
 
 export const patch = createRoute({
-  path: "/fighters/{id}",
+  path: "/{id}",
   method: "patch",
   request: {
     params: IdUUIDParamsSchema,
@@ -96,12 +98,13 @@ export const patch = createRoute({
 });
 
 export const remove = createRoute({
-  path: "/fighters/{id}",
+  path: "/{id}",
   method: "delete",
   request: {
     params: IdUUIDParamsSchema,
   },
   tags,
+  middleware: [requireAuth()] as const,
   responses: {
     [HttpStatusCodes.NO_CONTENT]: {
       description: "Task deleted",

@@ -4,7 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import RoutePending from '@/web/components/route-pending'
 import queryClient from '@/web/lib/query-client'
-import { fighterQueryOptions } from '../../services/fighter.api'
+import { fighterQueryOptions } from '../../../services/fighter.api'
 import {
   Dialog,
   DialogTrigger,
@@ -15,27 +15,26 @@ import FighterTable from './components/FighterTable'
 import FightersList from './components/FightersList'
 import { Button } from '@/web/components/ui/button'
 
-const FightersPage =  () => {
+const FightersPage = () => {
   return (
-    <div className='mx-4 flex flex-col gap-4 '>
-      <div className='hidden md:block'>
-
+    <div className="mx-4 flex flex-col gap-4 ">
+      <div className="hidden md:block">
         <FighterTable />
       </div>
-      <div className='block md:hidden'>
-
+      <div className="block md:hidden">
         <FightersList />
       </div>
       <div className="mt-4">
-        <Dialog  >
-          <DialogTrigger asChild  >
-            <Button>
-              הוסף חייל
-            </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>הוסף חייל</Button>
           </DialogTrigger>
 
-          <DialogContent dir='rtl' className="w-5/6 max-w-[800px] max-h-[80vh] overflow-y-scroll flex flex-col text-right  ">
-            <DialogTitle  >הוסף חייל</DialogTitle>
+          <DialogContent
+            dir="rtl"
+            className="w-5/6 max-w-[800px] max-h-[80vh] overflow-y-scroll flex flex-col text-right  "
+          >
+            <DialogTitle>הוסף חייל</DialogTitle>
             <FighterForm />
           </DialogContent>
         </Dialog>
@@ -46,7 +45,7 @@ const FightersPage =  () => {
 
 export default FightersPage
 
-export const Route = createFileRoute('/fighter/')({
+export const Route = createFileRoute('/(app)/fighter/')({
   component: FightersPage,
   loader: () => queryClient.ensureQueryData(fighterQueryOptions),
   pendingComponent: RoutePending,
