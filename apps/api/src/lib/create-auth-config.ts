@@ -32,6 +32,7 @@ export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
           email: { label: 'Email', type: 'email' },
           password: { label: 'Password', type: 'password' },
         },
+
         async authorize(credentials) {
           // Your authentication logic here
 

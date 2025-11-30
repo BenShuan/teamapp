@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/web/components/ui/card";
 import { toast } from 'sonner';
 import { NewUser, UserRole } from "@teamapp/api/schema";
 import { signIn } from "@hono/auth-js/react";
+import { URL } from "url";
 
 type RegisterForm = NewUser;
 
@@ -91,9 +92,7 @@ function RegisterPage() {
               </div>
               <div>
                 <Button type="button" variant={"ghost"} onClick={async () => {
-                  await signIn()
-                  navigate({ to: "/" });
-
+                  await signIn("simplelogin", { callbackUrl: window.location.origin + "/#/home" });
                 }}>
                   התחבר
                 </Button>

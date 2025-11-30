@@ -23,7 +23,7 @@ export const users = sqliteTable("user", {
   emailVerified: INTEGER_TIMESTEMP_OPTIONAL_FIELD("emailVerified"),
   image: TEXT_OPTIONAL_FIELD("image"),
   password: TEXT_REQUIERD_FIELD("password"),
-  role: TEXT_REQUIERD_FIELD('role', { enum: usersRoles }),
+  role: TEXT_REQUIERD_FIELD('role', { enum: usersRoles }).default(UserRole.FIGHTER),
   
 });
 

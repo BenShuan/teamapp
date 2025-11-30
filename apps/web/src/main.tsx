@@ -14,7 +14,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
-        <App />
+          <App />
       </QueryClientProvider>
     </SessionProvider>
   </StrictMode>,

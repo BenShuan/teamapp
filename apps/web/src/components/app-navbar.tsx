@@ -1,6 +1,7 @@
 import {  signOut, useSession } from "@hono/auth-js/react";
 import { Link } from "@tanstack/react-router";
 import appNavRoutes from "@/web/lib/router";
+import { Button } from "./ui/button";
 
 export default function AppNavbar() {
   const session = useSession();
@@ -18,7 +19,7 @@ export default function AppNavbar() {
             </li>
           );
         })}
-        <li className="ml-auto flex items-center gap-3">
+        <li className="mr-auto flex items-center gap-3">
           {user && (
             <>
               {user.image ? (
@@ -29,7 +30,7 @@ export default function AppNavbar() {
                 </div>
               )}
               <span className="text-sm">{user.name ?? user.email}</span>
-              <button type="button" className="px-3 py-1.5 text-sm border rounded" onClick={() => signOut()}>התנתק</button>
+              <Button variant={"secondary"} type="button" className="px-3 py-1.5 text-sm border rounded" onClick={() => signOut({callbackUrl:"/"})}>התנתק</Button>
             </>
           ) }
         </li>

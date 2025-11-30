@@ -1,24 +1,22 @@
 import AppNavbar from '@/web/components/app-navbar'
-import { useSession } from '@hono/auth-js/react'
 
-import { createFileRoute, Outlet, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { Loader } from 'lucide-react'
+import useAuth from '@/web/hooks/useAuth'
 
 const AppLayout = () => {
-  const sesseion = useSession()
 
-  const navigate = useNavigate()
-  console.log('session', sesseion)
+  const { status, isAuthenticated, redirectToSignIn } = useAuth()
 
-  if (sesseion.status === 'loading') {
+  if (status === "loading") {
     return <Loader className="animate-spin mx-auto mt-20" />
   }
 
-  if (!sesseion.data?.user) {
-    navigate({ to: '/auth/register' })
-    return null
+  if (!isAuthenticated) {
+    redirectToSignIn()
+    return null;
   }
-
+  
   return (
     <div>
       <AppNavbar />
@@ -33,4 +31,5 @@ export default AppLayout
 
 export const Route = createFileRoute('/(app)')({
   component: AppLayout,
+
 })

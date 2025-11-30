@@ -15,7 +15,6 @@ export const list = createRoute({
   path: "/",
   method: "get",
   tags,
-  middleware: [requireAuth()] as const,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       z.array(fighterSchema),
