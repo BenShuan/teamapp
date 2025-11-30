@@ -9,11 +9,12 @@ import fighter from "./fighters/fighters.index"
 import team from "./teams/teams.index"
 import attendance from "./attendance/attendance.index"
 import authRouter from "./auth/auth.index"
+import { assertRole } from "../middleware/scope";
 
 export function registerRoutes(app: AppOpenAPI) {
   return app
     .route("/", index)
-    .route("/fighters", fighter)
+    .route("/fighters",fighter)
     .route("/teams", team)
     .route("/attendance", attendance)
     .route("/auth",authRouter)

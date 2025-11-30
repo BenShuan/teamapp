@@ -3,9 +3,9 @@ import * as HttpStatusCodes from "stoker/http-status-codes";
 import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
 import { createErrorSchema, IdUUIDParamsSchema } from "stoker/openapi/schemas";
 
-import {  notFoundSchema } from "@/api/lib/constants";
+import { notFoundSchema } from "@/api/lib/constants";
 import { fighterSchema, NewFighterSchema, UpdateFighterSchema } from "@/api/db/schema";
-import { requireAuth } from "@/api/middleware/auth";
+import { requireRole, requireScope } from "@/api/middleware/scope";
 
 
 
@@ -26,6 +26,7 @@ export const list = createRoute({
 export const create = createRoute({
   path: "/",
   method: "post",
+  middleware: [requireScope(),requireRole('COMMANDER')] as const, // TODO: Add requireRole('admin', 'commander', 'captain') if needed
   request: {
     body: jsonContentRequired(
       NewFighterSchema,
@@ -71,6 +72,7 @@ export const getOne = createRoute({
 export const patch = createRoute({
   path: "/{id}",
   method: "patch",
+  middleware: [requireScope()] as const, // TODO: Add requireRole('admin', 'commander', 'captain') if needed
   request: {
     params: IdUUIDParamsSchema,
     body: jsonContentRequired(
@@ -103,7 +105,7 @@ export const remove = createRoute({
     params: IdUUIDParamsSchema,
   },
   tags,
-  middleware: [requireAuth()] as const,
+  middleware: [requireScope()] as const, // TODO: Add requireRole('admin', 'commander') if needed
   responses: {
     [HttpStatusCodes.NO_CONTENT]: {
       description: "Task deleted",

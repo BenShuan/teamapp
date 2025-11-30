@@ -2,6 +2,7 @@ import type { OpenAPIHono, RouteConfig, RouteHandler } from "@hono/zod-openapi";
 
 import type { BASE_PATH } from "./constants";
 import { models } from "../db";
+import { UserScope } from "./auth-scope";
 
 export type AppEnv = {
   Bindings: {
@@ -13,6 +14,11 @@ export type AppEnv = {
     ASSETS: Fetcher;
     DB: D1Database;
   };
+  Variables: {
+    authToken: string;
+    scope: UserScope | null;
+  }
+
 };
 
 // eslint-disable-next-line ts/no-empty-object-type

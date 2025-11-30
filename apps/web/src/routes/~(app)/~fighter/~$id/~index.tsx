@@ -7,7 +7,7 @@ import { fighterItemQueryOptions } from '../../../../services/fighter.api'
 import { Fighter } from '@teamapp/api/schema'
 
 function FighterItemPage() {
-  const { id } = useParams({ from: '/(application)/fighter/$id/' })
+  const { id } = useParams({ from: '/(app)/fighter/$id/' })
   const { data } = useFighters(id)
   return (
     <div>

@@ -1,5 +1,6 @@
-import type { register } from "./auth.routes";
+import type { register, meScope } from "./auth.routes";
 import { users } from "@/api/db/schema/auth";
+import { getUserScope } from "@/api/lib/auth-scope";
 import { eq } from "drizzle-orm";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import { AppRouteHandler } from "@/api/lib/types";
@@ -33,7 +34,7 @@ export const registerHandler: AppRouteHandler<typeof register> = async (c) => {
     return c.json({ message: "Email already exists" }, HttpStatusCodes.CONFLICT);
   }
   const passwordHash = await hashPassword(password);
-  const [{ password: hashedPassword, ...inserted }] = await db.insert(users).values({  name, email, role, password: passwordHash }).returning();
+  const [{ password: hashedPassword, ...inserted }] = await db.insert(users).values({ name, email, role, password: passwordHash }).returning();
   console.log('inserted', inserted)
   if (!inserted) {
     return c.json({
@@ -52,6 +53,21 @@ export const registerHandler: AppRouteHandler<typeof register> = async (c) => {
   }
 
   return c.json(inserted, HttpStatusCodes.CREATED);
+};
+
+export const meScopeHandler: AppRouteHandler<typeof meScope> = async (c) => {
+  // Attempt to derive user id from auth context
+  const authUser: any = c.get("authUser");
+  const authToken: any = c.get("authToken");
+  const userId = authUser?.id || authToken?.sub || authToken?.id;
+  if (!userId) {
+    return c.json({ message: "Unauthorized" }, HttpStatusCodes.UNAUTHORIZED);
+  }
+  const scope = await getUserScope(c.env, userId);
+  if (!scope) {
+    return c.json({ message: "Unauthorized" }, HttpStatusCodes.UNAUTHORIZED);
+  }
+  return c.json(scope, HttpStatusCodes.OK);
 };
 
 

@@ -11,7 +11,6 @@ import { Card, CardContent } from "@/web/components/ui/card";
 import { toast } from 'sonner';
 import { NewUser, UserRole } from "@teamapp/api/schema";
 import { signIn } from "@hono/auth-js/react";
-import { URL } from "url";
 
 type RegisterForm = NewUser;
 
@@ -19,10 +18,10 @@ type RegisterForm = NewUser;
 function RegisterPage() {
   const navigate = useNavigate();
   const methods = useForm<RegisterForm>({
-    defaultValues: { name: "", email: "", password: "", role: UserRole.FIGHTER },
+    defaultValues: { name: "", email: "", password: "", role: UserRole[0] },
   });
 
-  const { handleSubmit, formState: { isSubmitting } } = methods;
+  const { handleSubmit, formState: { isSubmitting } } = methods; 
 
   const mutation = useMutation({
     mutationKey: queryKeys.auth.register.queryKey,

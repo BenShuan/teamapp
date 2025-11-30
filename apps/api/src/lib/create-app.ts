@@ -6,7 +6,9 @@ import type { AppOpenAPI } from "./types";
 import { BASE_PATH } from "./constants";
 import createAuthConfig from "./create-auth-config";
 import createRouter from "./create-router";
-import  authRouter from "../routes/auth/auth.index";
+import authRouter from "../routes/auth/auth.index";
+import { attachScope } from "../middleware/scope";
+import { createAuthErrorHandler } from "../middleware/auth-errors";
 
 export default function createApp() {
   const app = createRouter()
@@ -27,7 +29,7 @@ export default function createApp() {
       return response
     })
     .basePath(BASE_PATH) as AppOpenAPI;
-``  
+  ``
   app
     .use(
       "*",
@@ -38,9 +40,10 @@ export default function createApp() {
       },
     )
     .use("/auth/*", authHandler())
-    .route('auth',authRouter)
+    .use("*", attachScope())
+    .route('auth', authRouter)
     .notFound(notFound)
-    .onError(onError);
+    .onError(createAuthErrorHandler());
 
   return app;
 }

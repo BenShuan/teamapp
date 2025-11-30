@@ -34,3 +34,27 @@ export const register = createRoute({
 });
 
 export type RegisterRoute = typeof register;
+
+// User scope route (requires authenticated user) - returns resolved authorization scope
+export const meScope = createRoute({
+  path: "/scope",
+  method: "get",
+  tags,
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      z.object({
+        role: z.string(),
+        unrestricted: z.boolean(),
+        teamIds: z.array(z.string()),
+        platoonIds: z.array(z.string()),
+      }),
+      "User authorization scope",
+    ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      z.object({ message: z.string() }),
+      "Unauthorized",
+    ),
+  },
+});
+
+export type MeScopeRoute = typeof meScope;

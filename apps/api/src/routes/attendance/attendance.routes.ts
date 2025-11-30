@@ -5,6 +5,7 @@ import { createErrorSchema, IdUUIDParamsSchema } from "stoker/openapi/schemas";
 
 import { notFoundSchema } from "@/api/lib/constants";
 import { AttendanceSchema, FighterAttendanceSchema, NewAttendanceSchema, UpdateAttendanceSchema } from "@/api/db/schema";
+import { requireScope } from "@/api/middleware/scope";
 
 
 const tags = ["attendance"];
@@ -15,8 +16,8 @@ export const list = createRoute({
   tags,
   request: {
     query: z.object({
-      startDate:z.string().optional(),
-      endDate:z.string().optional(),
+      startDate: z.string().optional(),
+      endDate: z.string().optional(),
     })
   },
   responses: {
@@ -30,6 +31,7 @@ export const list = createRoute({
 export const create = createRoute({
   path: "/",
   method: "post",
+  middleware: [requireScope()] as const, // TODO: Add requireRole('admin', 'commander', 'captain') if needed
   request: {
     body: jsonContentRequired(
       z.array(NewAttendanceSchema),
@@ -75,6 +77,7 @@ export const getOne = createRoute({
 export const patch = createRoute({
   path: "/{id}",
   method: "patch",
+  middleware: [requireScope()] as const, // TODO: Add requireRole('admin', 'commander', 'captain') if needed
   request: {
     params: IdUUIDParamsSchema,
     body: jsonContentRequired(
@@ -103,6 +106,7 @@ export const patch = createRoute({
 export const remove = createRoute({
   path: "/{id}",
   method: "delete",
+  middleware: [requireScope()] as const, // TODO: Add requireRole('admin', 'commander') if needed
   request: {
     params: IdUUIDParamsSchema,
   },

@@ -5,6 +5,7 @@ import { createErrorSchema, IdUUIDParamsSchema } from "stoker/openapi/schemas";
 
 import { notFoundSchema } from "@/api/lib/constants";
 import { teamSchema, NewTeamSchema, UpdateTeamSchema } from "@/api/db/schema";
+import { requireScope } from "@/api/middleware/scope";
 
 
 
@@ -25,6 +26,7 @@ export const list = createRoute({
 export const create = createRoute({
   path: "/",
   method: "post",
+  middleware: [requireScope()] as const, // TODO: Add requireRole('admin', 'commander') if needed
   request: {
     body: jsonContentRequired(
       NewTeamSchema,
@@ -70,6 +72,7 @@ export const getOne = createRoute({
 export const patch = createRoute({
   path: "/{id}",
   method: "patch",
+  middleware: [requireScope()] as const, // TODO: Add requireRole('admin', 'commander') if needed
   request: {
     params: IdUUIDParamsSchema,
     body: jsonContentRequired(
@@ -98,6 +101,7 @@ export const patch = createRoute({
 export const remove = createRoute({
   path: "/{id}",
   method: "delete",
+  middleware: [requireScope()] as const, // TODO: Add requireRole('admin', 'commander') if needed
   request: {
     params: IdUUIDParamsSchema,
   },

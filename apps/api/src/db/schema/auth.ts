@@ -3,14 +3,14 @@ import type { AdapterAccountType } from "@auth/core/adapters";
 
 import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import {  z } from "zod";
+import { z } from "zod";
 
 
 export enum UserRole {
-  FIGHTER = 'fighter',
-  COMMANDER = 'commander',
-  CAPTAIN = 'captain',
-  ADMIN = 'admin'
+  "FIGHTER" ,
+  "COMMANDER" ,
+  "CAPTAIN" ,
+  "ADMIN" 
 }
 
 export const usersRoles = Object.values(UserRole);
@@ -23,17 +23,17 @@ export const users = sqliteTable("user", {
   emailVerified: INTEGER_TIMESTEMP_OPTIONAL_FIELD("emailVerified"),
   image: TEXT_OPTIONAL_FIELD("image"),
   password: TEXT_REQUIERD_FIELD("password"),
-  role: TEXT_REQUIERD_FIELD('role', { enum: usersRoles }).default(UserRole.FIGHTER),
-  
+  role: TEXT_REQUIERD_FIELD('role', { enum: usersRoles }).default(UserRole[0]),
+
 });
 
 
 export const loginSchema = z.object({
-  name:z.string(),
-  password:z.string()
+  name: z.string(),
+  password: z.string()
 })
 export const userSchema = createSelectSchema(users).omit({
-  password:true
+  password: true
 })
 export const createUserSchema = createInsertSchema(users)
 export type NewUser = z.infer<typeof createUserSchema>;

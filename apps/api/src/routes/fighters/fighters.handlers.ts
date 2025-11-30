@@ -6,23 +6,34 @@ import type { AppRouteHandler } from "@/api/lib/types";
 
 import { createDb } from "@/api/db";
 import { fighter } from "@/api/db/schema";
+import { getScope } from "@/api/middleware/scope";
+import {  teamScopeWhere } from "@/api/lib/auth-scope";
 import { ZOD_ERROR_CODES, ZOD_ERROR_MESSAGES } from "@/api/lib/constants";
 
 import type { CreateRoute, GetOneRoute, ListRoute, PatchRoute, RemoveRoute } from "./fighters.routes";
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const db = createDb(c.env);
-  const fighter = await db.query.fighter.findMany({
+  const scope = getScope(c);
+
+  // Build conditional where clause based on scope
+  const fighters = await db.query.fighter.findMany({
+    where: teamScopeWhere(scope),
     orderBy(fields, operators) {
       return operators.desc(fields.createdAt);
     },
   });
-  return c.json(fighter);
+  // If scoped and no memberships, return empty array
+  if (scope && !scope.unrestricted && scope.teamIds.length === 0) {
+    return c.json([]);
+  }
+  return c.json(fighters);
 };
 
 export const create: AppRouteHandler<CreateRoute> = async (c) => {
   const db = createDb(c.env);
-  const task = c.req.valid("json");
+  const task = c.req.valid("json")
+  
   const [inserted] = await db.insert(fighter).values(task).returning();
   return c.json(inserted, HttpStatusCodes.OK);
 };
@@ -32,7 +43,7 @@ export const getOne: AppRouteHandler<GetOneRoute> = async (c) => {
   const { id } = c.req.valid("param");
   const task = await db.query.fighter.findFirst({
     where(fields, operators) {
-      return operators.eq(fields.id, id);
+      return operators.eq(fields.id, id) && teamScopeWhere(getScope(c))?.(fields, operators);
     },
   });
 
