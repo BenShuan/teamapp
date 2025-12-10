@@ -9,15 +9,19 @@ import fighter from "./fighters/fighters.index"
 import team from "./teams/teams.index"
 import attendance from "./attendance/attendance.index"
 import authRouter from "./auth/auth.index"
-import { assertRole } from "../middleware/scope";
+import usersRouter from "./users/users.index"
+import platoonsRouter from "./platoons/platoons.index"
+
 
 export function registerRoutes(app: AppOpenAPI) {
   return app
     .route("/", index)
-    .route("/fighters",fighter)
+    .route("/fighters", fighter)
     .route("/teams", team)
     .route("/attendance", attendance)
-    .route("/auth",authRouter)
+    .route("/users", usersRouter)
+    .route("/auth", authRouter)
+    .route("/platoons", platoonsRouter)
 }
 
 // stand alone router type used for api client

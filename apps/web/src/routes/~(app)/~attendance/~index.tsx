@@ -9,7 +9,7 @@ import { getDatesByRange } from '@teamapp/shared'
 import { ErrorPage } from '@/web/components/ErrorPage'
 
 const AttendancePage = () => {
-  const { startDate, endDate } = getDatesByRange(new Date(), 7, 0)
+  const { startDate, endDate } = getDatesByRange(new Date(), 0, 7)
 
   const [startDateState, setStartDate] = useState(startDate)
   const [endDateState, setEndDate] = useState(endDate)

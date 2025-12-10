@@ -5,49 +5,38 @@ import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import type { AppRouteHandler } from "@/api/lib/types";
 
 import { createDb } from "@/api/db";
-import { fighter } from "@/api/db/schema";
-import { getScope } from "@/api/middleware/scope";
-import {  teamScopeWhere } from "@/api/lib/auth-scope";
+import { platoon } from "@/api/db/schema";
 import { ZOD_ERROR_CODES, ZOD_ERROR_MESSAGES } from "@/api/lib/constants";
 
-import type { CreateRoute, GetOneRoute, ListRoute, PatchRoute, RemoveRoute } from "./fighters.routes";
+import type { CreateRoute, GetOneRoute, ListRoute, PatchRoute, RemoveRoute } from "./platoons.routes";
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const db = createDb(c.env);
-  const scope = getScope(c);
-
-  // Build conditional where clause based on scope
-  const fighters = await db.query.fighter.findMany({
-    where: teamScopeWhere(scope),
+  const platoons = await db.query.platoon.findMany({
     orderBy(fields, operators) {
       return operators.desc(fields.createdAt);
     },
   });
-  // If scoped and no memberships, return empty array
-  if (scope && !scope.unrestricted && scope.teamIds.length === 0) {
-    return c.json([]);
-  }
-  return c.json(fighters);
+  return c.json(platoons);
 };
 
 export const create: AppRouteHandler<CreateRoute> = async (c) => {
   const db = createDb(c.env);
-  const task = c.req.valid("json")
-  
-  const [inserted] = await db.insert(fighter).values(task).returning();
+  const payload = c.req.valid("json");
+  const [inserted] = await db.insert(platoon).values(payload).returning();
   return c.json(inserted, HttpStatusCodes.OK);
 };
 
 export const getOne: AppRouteHandler<GetOneRoute> = async (c) => {
   const db = createDb(c.env);
   const { id } = c.req.valid("param");
-  const task = await db.query.fighter.findFirst({
+  const result = await db.query.platoon.findFirst({
     where(fields, operators) {
-      return operators.and(operators.eq(fields.id, id), teamScopeWhere(getScope(c))?.(fields, operators));
+      return operators.eq(fields.id, id);
     },
   });
 
-  if (!task) {
+  if (!result) {
     return c.json(
       {
         message: HttpStatusPhrases.NOT_FOUND,
@@ -56,7 +45,7 @@ export const getOne: AppRouteHandler<GetOneRoute> = async (c) => {
     );
   }
 
-  return c.json(task, HttpStatusCodes.OK);
+  return c.json(result, HttpStatusCodes.OK);
 };
 
 export const patch: AppRouteHandler<PatchRoute> = async (c) => {
@@ -83,12 +72,12 @@ export const patch: AppRouteHandler<PatchRoute> = async (c) => {
     );
   }
 
-  const [task] = await db.update(fighter)
+  const [result] = await db.update(platoon)
     .set(updates)
-    .where(eq(fighter.id, id))
+    .where(eq(platoon.id, id))
     .returning();
 
-  if (!task) {
+  if (!result) {
     return c.json(
       {
         message: HttpStatusPhrases.NOT_FOUND,
@@ -97,14 +86,14 @@ export const patch: AppRouteHandler<PatchRoute> = async (c) => {
     );
   }
 
-  return c.json(task, HttpStatusCodes.OK);
+  return c.json(result, HttpStatusCodes.OK);
 };
 
 export const remove: AppRouteHandler<RemoveRoute> = async (c) => {
   const db = createDb(c.env);
   const { id } = c.req.valid("param");
-  const result: D1Response = await db.delete(fighter)
-    .where(eq(fighter.id, id));
+  const result: D1Response = await db.delete(platoon)
+    .where(eq(platoon.id, id));
 
   if (result.meta.changes === 0) {
     return c.json(

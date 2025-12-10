@@ -7,7 +7,6 @@ import { Link } from '@tanstack/react-router';
 import { ColumnDef } from '@tanstack/react-table'
 import type { Fighter } from '@teamapp/api/schema'
 import { Edit2 } from 'lucide-react';
-import { useMemo } from 'react';
 
 
 const initHiddenCols = ['מידת מכנס', 'מידת חולצה', 'מידת נעליים', 'מקצוע', 'כיתה']
@@ -16,7 +15,7 @@ function FighterTable() {
 
   const { data, isLoading, isError, error } = useFighters();
   const { teamsMap } = useTeams()
-  const fightersColumns: ColumnDef<Fighter>[] = useMemo(()=>([
+  const fightersColumns: ColumnDef<Fighter>[] = ([
     {
       id: 'שם',
       accessorFn: (row) => `${row.firstName} ${row.lastName}`.trim(),
@@ -95,7 +94,7 @@ function FighterTable() {
       header: ({ column }) => <DataTableColumnHeader column={column} title={column.id} />,
       enableHiding: true,
       enableSorting: true
-    })) as ColumnDef<Fighter>[], [data])
+    })) as ColumnDef<Fighter>[]
 
   if (isLoading) return <div>Loading fighters…</div>;
   if (isError) return <div>Failed to load: {(error as Error)?.message}</div>;

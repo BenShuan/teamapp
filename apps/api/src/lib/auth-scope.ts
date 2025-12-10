@@ -58,7 +58,9 @@ export function canAccessPlatoon(scope: UserScope, platoonId: string) {
 
 // Helper to build a Drizzle where predicate restricting by teamIds from scope
 export function teamScopeWhere(scope: UserScope | null | undefined) {
-  if (!scope || scope.unrestricted) return undefined;
+  console.log('scope', scope)
+  if (!scope) return undefined;
+  if (scope.unrestricted) return (_: any, operators: any)=>operators.eq(1, 1);
   if (scope.teamIds.length === 0) return undefined;
   return (fields: any, operators: any) => operators.inArray(fields.teamId, scope.teamIds);
 }

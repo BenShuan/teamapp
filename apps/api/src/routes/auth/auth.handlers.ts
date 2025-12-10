@@ -18,7 +18,8 @@ export async function verifyUser(email: string, password: string, db = createDb(
   const hash = await hashPassword(password);
   const rows = await db.select().from(users).where(() => eq(users.email, email)).limit(1);
   const user = rows[0];
-  if (!user) return null;
+  console.log('user', user)
+  if (!user || user.deletedAt) return null; // Exclude soft-deleted users
   if (user.password !== hash) return null;
   const { password: _pw, ...safeUser } = user as any;
   return safeUser;

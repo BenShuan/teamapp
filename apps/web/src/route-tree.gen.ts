@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/~__root'
 import { Route as appRouteImport } from './routes/~(app)/~route'
 import { Route as AuthRegisterImport } from './routes/~auth/~register'
 import { Route as appHomeImport } from './routes/~(app)/~home'
+import { Route as AdminIndexImport } from './routes/~admin/~index'
 import { Route as appFighterIndexImport } from './routes/~(app)/~fighter/~index'
 import { Route as appAttendanceIndexImport } from './routes/~(app)/~attendance/~index'
 import { Route as appFighterIdIndexImport } from './routes/~(app)/~fighter/~$id/~index'
@@ -45,6 +46,12 @@ const appHomeRoute = appHomeImport.update({
   id: '/home',
   path: '/home',
   getParentRoute: () => appRouteRoute,
+} as any)
+
+const AdminIndexRoute = AdminIndexImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const appFighterIndexRoute = appFighterIndexImport.update({
@@ -82,6 +89,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof appRouteImport
       parentRoute: typeof Route
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexImport
+      parentRoute: typeof rootRoute
     }
     '/(app)/home': {
       id: '/(app)/home'
@@ -153,6 +167,7 @@ const RouteWithChildren = Route._addFileChildren(RouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof appRouteRouteWithChildren
+  '/admin': typeof AdminIndexRoute
   '/home': typeof appHomeRoute
   '/auth/register': typeof AuthRegisterRoute
   '/attendance': typeof appAttendanceIndexRoute
@@ -162,6 +177,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof appRouteRouteWithChildren
+  '/admin': typeof AdminIndexRoute
   '/home': typeof appHomeRoute
   '/auth/register': typeof AuthRegisterRoute
   '/attendance': typeof appAttendanceIndexRoute
@@ -173,6 +189,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof RouteWithChildren
   '/(app)': typeof appRouteRouteWithChildren
+  '/admin/': typeof AdminIndexRoute
   '/(app)/home': typeof appHomeRoute
   '/auth/register': typeof AuthRegisterRoute
   '/(app)/attendance/': typeof appAttendanceIndexRoute
@@ -184,6 +201,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/home'
     | '/auth/register'
     | '/attendance'
@@ -192,6 +210,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/home'
     | '/auth/register'
     | '/attendance'
@@ -201,6 +220,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/(app)'
+    | '/admin/'
     | '/(app)/home'
     | '/auth/register'
     | '/(app)/attendance/'
@@ -211,11 +231,13 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   Route: typeof RouteWithChildren
+  AdminIndexRoute: typeof AdminIndexRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   Route: RouteWithChildren,
+  AdminIndexRoute: AdminIndexRoute,
   AuthRegisterRoute: AuthRegisterRoute,
 }
 
@@ -230,6 +252,7 @@ export const routeTree = rootRoute
       "filePath": "~__root.tsx",
       "children": [
         "/",
+        "/admin/",
         "/auth/register"
       ]
     },
@@ -248,6 +271,9 @@ export const routeTree = rootRoute
         "/(app)/fighter/",
         "/(app)/fighter/$id/"
       ]
+    },
+    "/admin/": {
+      "filePath": "~admin/~index.tsx"
     },
     "/(app)/home": {
       "filePath": "~(app)/~home.tsx",

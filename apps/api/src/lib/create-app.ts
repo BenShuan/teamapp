@@ -1,5 +1,5 @@
-import { authHandler } from "@hono/auth-js";
-import { notFound, onError } from "stoker/middlewares";
+import { authHandler, verifyAuth } from "@hono/auth-js";
+import { notFound } from "stoker/middlewares";
 
 import type { AppOpenAPI } from "./types";
 
@@ -40,8 +40,9 @@ export default function createApp() {
       },
     )
     .use("/auth/*", authHandler())
-    .use("*", attachScope())
+    .use("*", verifyAuth())
     .route('auth', authRouter)
+    .use("*", attachScope())
     .notFound(notFound)
     .onError(createAuthErrorHandler());
 

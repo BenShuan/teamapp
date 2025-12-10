@@ -17,6 +17,7 @@ export type AppEnv = {
   Variables: {
     authToken: string;
     scope: UserScope | null;
+    userId: string | null;
   }
 
 };

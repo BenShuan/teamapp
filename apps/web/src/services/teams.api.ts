@@ -2,7 +2,7 @@ import { queryOptions } from "@tanstack/react-query";
 import apiClient from "../lib/api-client";
 import { queryKeys } from "../lib/queries";
 import formatApiError from "../lib/format-api-error";
-import {  Team, UpdateTeam } from "@teamapp/api/schema";
+import { UpdateTeam } from "@teamapp/api/schema";
 
 export const teamQueryOptions = queryOptions({
   ...queryKeys.teams,
@@ -39,12 +39,12 @@ export const createTeamQueryOptions = (id: string) => queryOptions({
   },
 });
 
-export const createTeam = async (team:Team) => {
+export const createTeam = async (team: { name: string; teamNumber: string; description?: string; platoonId?: string }) => {
   const response = await apiClient.api.teams.$post({
     json: team as any,
   });
   const json = await response.json();
-  if ("success" in json) {
+  if ("success" in json && !json.success) {
     const message = formatApiError(json);
     throw new Error(message);
   }
@@ -67,7 +67,7 @@ export const deleteTeam = async (id: string) => {
   }
 };
 
-export const updateFighter = async ({ id, team }: { id: string;team:UpdateTeam }) => {
+export const updateFighter = async ({ id, team }: { id: string; team: UpdateTeam }) => {
   const response = await apiClient.api.fighters[":id"].$patch({
     param: {
       id,

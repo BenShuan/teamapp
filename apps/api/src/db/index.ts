@@ -11,6 +11,7 @@ export const models = {
   team:schema.team,
   platoon:schema.platoon,
   attendance:schema.attendance
+  
 }
 
 export function createDb(env: AppEnv["Bindings"]) {

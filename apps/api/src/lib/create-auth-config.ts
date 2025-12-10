@@ -47,8 +47,8 @@ export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
     secret: env.AUTH_SECRET,
     trustHost: true,
     callbacks: {
-      async session({ session, token }) {
-        console.log('session callback fired', { token, sessionUser: session.user });
+      async session({ session, token}) {
+        
         // Add user data from token to session
         if (token?.sub) {
           session.user.id = token.sub;
@@ -63,10 +63,10 @@ export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
           (session.user as any).role = token.role;
         }
         return session;
+
       },
 
       async jwt({ token, user }) {
-        console.log('jwt callback fired', { user, token });
         // Persist user data to token on sign in
         if (user) {
           token.id = user.id;
