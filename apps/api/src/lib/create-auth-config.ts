@@ -8,6 +8,7 @@ import type { AuthConfig } from '@auth/core';
 import { AppEnv } from './types';
 import { verifyUser } from '../routes/auth/auth.handlers';
 import { createDb } from '../db';
+import { getUserScope } from './auth-scope';
 
 export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
   const db = drizzle(env.DB);
@@ -16,6 +17,7 @@ export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
     adapter: DrizzleAdapter(db),
     session: {
       strategy: "jwt",
+
     },
     providers: [
       GitHub({
@@ -47,8 +49,7 @@ export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
     secret: env.AUTH_SECRET,
     trustHost: true,
     callbacks: {
-      async session({ session, token}) {
-        
+      async session({ session, token }) {
         // Add user data from token to session
         if (token?.sub) {
           session.user.id = token.sub;
@@ -59,20 +60,43 @@ export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
         if (token?.name) {
           session.user.name = token.name as string;
         }
-        if (token?.role) {
-          (session.user as any).role = token.role;
+        if ((token as any)?.role) {
+          (session.user as any).role = (token as any).role;
+        }
+        if ((token as any)?.unrestricted !== undefined) {
+          (session.user as any).unrestricted = (token as any).unrestricted;
+        }
+        if ((token as any)?.teamIds) {
+          (session.user as any).teamIds = (token as any).teamIds as string[];
+        }
+        if ((token as any)?.platoonIds) {
+          (session.user as any).platoonIds = (token as any).platoonIds as string[];
         }
         return session;
-
       },
 
       async jwt({ token, user }) {
         // Persist user data to token on sign in
         if (user) {
-          token.id = user.id;
-          token.email = user.email;
-          token.name = user.name;
-          token.role = (user as any).role;
+          token.id = (user as any).id;
+          token.email = (user as any).email;
+          token.name = (user as any).name;
+          (token as any).role = (user as any).role;
+
+          // Enrich token with authorization scope (role/teamIds/platoonIds)
+          try {
+            const userId = (user as any).id ?? token.sub;
+            if (userId) {
+              const scope = await getUserScope(env, userId);
+              if (scope) {
+                (token as any).unrestricted = scope.unrestricted;
+                (token as any).teamIds = scope.teamIds;
+                (token as any).platoonIds = scope.platoonIds;
+              }
+            }
+          } catch (_) {
+            // noop: keep token minimal on scope fetch failure
+          }
         }
         return token;
       },

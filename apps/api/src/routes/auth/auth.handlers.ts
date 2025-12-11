@@ -64,7 +64,7 @@ export const meScopeHandler: AppRouteHandler<typeof meScope> = async (c) => {
   if (!userId) {
     return c.json({ message: "Unauthorized" }, HttpStatusCodes.UNAUTHORIZED);
   }
-  const scope = await getUserScope(c.env, userId);
+  const scope = await getUserScope(c.env, userId);  
   if (!scope) {
     return c.json({ message: "Unauthorized" }, HttpStatusCodes.UNAUTHORIZED);
   }

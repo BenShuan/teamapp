@@ -42,8 +42,11 @@ export const updateUser = async ({
     if ("message" in json) {
       throw new Error(json.message);
     }
-    const message = formatApiError(json);
-    throw new Error(message);
+    if ("error" in json) {
+      const message = formatApiError(json);
+      throw new Error(message);
+    }
+    throw new Error("Failed to update user");
   }
   return response.json();
 };
@@ -61,8 +64,14 @@ export const setUserTeams = async ({
   });
   if (response.status !== 200) {
     const json = await response.json();
-    const message = formatApiError(json);
-    throw new Error(message);
+    if ("message" in json) {
+      throw new Error(json.message);
+    }
+    if ("error" in json) {
+      const message = formatApiError(json);
+      throw new Error(message);
+    }
+    throw new Error("Failed to set user teams");
   }
   return response.json();
 };
@@ -80,8 +89,14 @@ export const setUserPlatoons = async ({
   });
   if (response.status !== 200) {
     const json = await response.json();
-    const message = formatApiError(json);
-    throw new Error(message);
+    if ("message" in json) {
+      throw new Error(json.message);
+    }
+    if ("error" in json) {
+      const message = formatApiError(json);
+      throw new Error(message);
+    }
+    throw new Error("Failed to set user platoons");
   }
   return response.json();
 };
@@ -95,8 +110,11 @@ export const softDeleteUser = async (id: string) => {
     if ("message" in json) {
       throw new Error(json.message);
     }
-    const message = formatApiError(json);
-    throw new Error(message);
+    if ("error" in json) {
+      const message = formatApiError(json);
+      throw new Error(message);
+    }
+    throw new Error("Failed to delete user");
   }
 };
 
@@ -110,8 +128,11 @@ export const reactivateUser = async (id: string) => {
     if ("message" in json) {
       throw new Error(json.message);
     }
-    const message = formatApiError(json);
-    throw new Error(message);
+    if ("error" in json) {
+      const message = formatApiError(json);
+      throw new Error(message);
+    }
+    throw new Error("Failed to reactivate user");
   }
   return response.json();
 };

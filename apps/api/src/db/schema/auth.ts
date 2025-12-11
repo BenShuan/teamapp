@@ -9,10 +9,10 @@ import { userPlatoonMembership, UserPlatoonMembershipSchema, userTeamMembership,
 
 
 export enum UserRole {
-  "FIGHTER",
-  "COMMANDER",
-  "CAPTAIN",
-  "ADMIN"
+  FIGHTER="FIGHTER",
+  COMMANDER="COMMANDER",
+  CAPTAIN="CAPTAIN",
+  ADMIN="ADMIN"
 }
 
 export const usersRoles = Object.values(UserRole);
@@ -25,7 +25,7 @@ export const users = sqliteTable("user", {
   emailVerified: INTEGER_TIMESTEMP_OPTIONAL_FIELD("emailVerified"),
   image: TEXT_OPTIONAL_FIELD("image"),
   password: TEXT_REQUIERD_FIELD("password"),
-  role: TEXT_REQUIERD_FIELD('role', { enum: usersRoles }).default(UserRole[0]),
+  role: TEXT_REQUIERD_FIELD('role', { enum: usersRoles }).default(UserRole.FIGHTER),
   deletedAt: TEXT_OPTIONAL_FIELD('deleted_at'),
 });
 

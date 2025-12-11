@@ -14,7 +14,7 @@ export default function AppNavbar({ children }: PropsWithChildren) {
       <SidebarInset>
 
         <div className="flex  flex-col lg:mr-60 gap-4 p-4 transition-[margin,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:mr-20">
-          <SidebarTrigger  className="absolute top-4 right-3 ml-1 rotate-180 " />
+          <SidebarTrigger  className=" top-4 right-3 ml-1 rotate-180 " />
 
           {children}
         </div>

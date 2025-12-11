@@ -39,9 +39,9 @@ export default function createApp() {
         return next();
       },
     )
+    .route('auth', authRouter)
     .use("/auth/*", authHandler())
     .use("*", verifyAuth())
-    .route('auth', authRouter)
     .use("*", attachScope())
     .notFound(notFound)
     .onError(createAuthErrorHandler());

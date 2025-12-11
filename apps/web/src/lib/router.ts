@@ -1,6 +1,7 @@
 // Centralized list of top-level routes for the app navbar
 // Keep this in sync with files under `apps/web/src/routes`
 
+import { UserRole } from "@teamapp/api/schema";
 import { LucideIcon, Home, Users, Clock, Shield } from "lucide-react";
 
 export type NavMainItem = {
@@ -8,9 +9,11 @@ export type NavMainItem = {
   url: string
   icon?: LucideIcon
   isActive?: boolean
+  requiresRole?: UserRole[]
   items?: {
     title: string
     url: string
+    requiresRole?: UserRole[]
   }[]
 }
 
@@ -26,6 +29,7 @@ const navMainItems: NavMainItem[] = [
     title: "לוחמים",
     url: "/fighter",
     icon: Users,
+    requiresRole: [UserRole.ADMIN, UserRole.COMMANDER],
   },
   {
     title: "נוכחות",
@@ -43,6 +47,7 @@ const navMainItems: NavMainItem[] = [
       {
         title: "דוחות נוכחות",
         url: "/attendance/reports",
+        requiresRole: [UserRole.ADMIN, UserRole.COMMANDER],
       },
     ],
   },
@@ -50,6 +55,7 @@ const navMainItems: NavMainItem[] = [
     title: "מנהל",
     url: "/admin",
     icon: Shield,
+    requiresRole: [UserRole.ADMIN],
   },
 ]
 

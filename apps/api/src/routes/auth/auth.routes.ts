@@ -45,8 +45,8 @@ export const meScope = createRoute({
       z.object({
         role: z.string(),
         unrestricted: z.boolean(),
-        teamIds: z.array(z.string()),
-        platoonIds: z.array(z.string()),
+        teamIds: z.array(z.string()).nullable(),
+        platoonIds: z.array(z.string()).nullable(),
       }),
       "User authorization scope",
     ),
