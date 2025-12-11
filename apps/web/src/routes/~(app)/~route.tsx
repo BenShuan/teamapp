@@ -16,14 +16,17 @@ const AppLayout = () => {
     redirectToSignIn()
     return null;
   }
-  
+
   return (
-    <div>
-      <AppNavbar />
-      <main className="container my-4 ">
+
+    <AppNavbar >
+
+
+      <main className="container my-4 flex-1 ">
         <Outlet />
       </main>
-    </div>
+    </AppNavbar>
+
   )
 }
 

@@ -18,6 +18,8 @@ import { Route as AdminIndexImport } from './routes/~admin/~index'
 import { Route as appFighterIndexImport } from './routes/~(app)/~fighter/~index'
 import { Route as appAttendanceIndexImport } from './routes/~(app)/~attendance/~index'
 import { Route as appFighterIdIndexImport } from './routes/~(app)/~fighter/~$id/~index'
+import { Route as appAttendanceReportsIndexImport } from './routes/~(app)/~attendance/~reports/~index'
+import { Route as appAttendanceDailyIndexImport } from './routes/~(app)/~attendance/~daily/~index'
 
 // Create Virtual Routes
 
@@ -69,6 +71,18 @@ const appAttendanceIndexRoute = appAttendanceIndexImport.update({
 const appFighterIdIndexRoute = appFighterIdIndexImport.update({
   id: '/fighter/$id/',
   path: '/fighter/$id/',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appAttendanceReportsIndexRoute = appAttendanceReportsIndexImport.update({
+  id: '/attendance/reports/',
+  path: '/attendance/reports/',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appAttendanceDailyIndexRoute = appAttendanceDailyIndexImport.update({
+  id: '/attendance/daily/',
+  path: '/attendance/daily/',
   getParentRoute: () => appRouteRoute,
 } as any)
 
@@ -125,6 +139,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appFighterIndexImport
       parentRoute: typeof appRouteImport
     }
+    '/(app)/attendance/daily/': {
+      id: '/(app)/attendance/daily/'
+      path: '/attendance/daily'
+      fullPath: '/attendance/daily'
+      preLoaderRoute: typeof appAttendanceDailyIndexImport
+      parentRoute: typeof appRouteImport
+    }
+    '/(app)/attendance/reports/': {
+      id: '/(app)/attendance/reports/'
+      path: '/attendance/reports'
+      fullPath: '/attendance/reports'
+      preLoaderRoute: typeof appAttendanceReportsIndexImport
+      parentRoute: typeof appRouteImport
+    }
     '/(app)/fighter/$id/': {
       id: '/(app)/fighter/$id/'
       path: '/fighter/$id'
@@ -141,6 +169,8 @@ interface appRouteRouteChildren {
   appHomeRoute: typeof appHomeRoute
   appAttendanceIndexRoute: typeof appAttendanceIndexRoute
   appFighterIndexRoute: typeof appFighterIndexRoute
+  appAttendanceDailyIndexRoute: typeof appAttendanceDailyIndexRoute
+  appAttendanceReportsIndexRoute: typeof appAttendanceReportsIndexRoute
   appFighterIdIndexRoute: typeof appFighterIdIndexRoute
 }
 
@@ -148,6 +178,8 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appHomeRoute: appHomeRoute,
   appAttendanceIndexRoute: appAttendanceIndexRoute,
   appFighterIndexRoute: appFighterIndexRoute,
+  appAttendanceDailyIndexRoute: appAttendanceDailyIndexRoute,
+  appAttendanceReportsIndexRoute: appAttendanceReportsIndexRoute,
   appFighterIdIndexRoute: appFighterIdIndexRoute,
 }
 
@@ -172,6 +204,8 @@ export interface FileRoutesByFullPath {
   '/auth/register': typeof AuthRegisterRoute
   '/attendance': typeof appAttendanceIndexRoute
   '/fighter': typeof appFighterIndexRoute
+  '/attendance/daily': typeof appAttendanceDailyIndexRoute
+  '/attendance/reports': typeof appAttendanceReportsIndexRoute
   '/fighter/$id': typeof appFighterIdIndexRoute
 }
 
@@ -182,6 +216,8 @@ export interface FileRoutesByTo {
   '/auth/register': typeof AuthRegisterRoute
   '/attendance': typeof appAttendanceIndexRoute
   '/fighter': typeof appFighterIndexRoute
+  '/attendance/daily': typeof appAttendanceDailyIndexRoute
+  '/attendance/reports': typeof appAttendanceReportsIndexRoute
   '/fighter/$id': typeof appFighterIdIndexRoute
 }
 
@@ -194,6 +230,8 @@ export interface FileRoutesById {
   '/auth/register': typeof AuthRegisterRoute
   '/(app)/attendance/': typeof appAttendanceIndexRoute
   '/(app)/fighter/': typeof appFighterIndexRoute
+  '/(app)/attendance/daily/': typeof appAttendanceDailyIndexRoute
+  '/(app)/attendance/reports/': typeof appAttendanceReportsIndexRoute
   '/(app)/fighter/$id/': typeof appFighterIdIndexRoute
 }
 
@@ -206,6 +244,8 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/attendance'
     | '/fighter'
+    | '/attendance/daily'
+    | '/attendance/reports'
     | '/fighter/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -215,6 +255,8 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/attendance'
     | '/fighter'
+    | '/attendance/daily'
+    | '/attendance/reports'
     | '/fighter/$id'
   id:
     | '__root__'
@@ -225,6 +267,8 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/(app)/attendance/'
     | '/(app)/fighter/'
+    | '/(app)/attendance/daily/'
+    | '/(app)/attendance/reports/'
     | '/(app)/fighter/$id/'
   fileRoutesById: FileRoutesById
 }
@@ -269,6 +313,8 @@ export const routeTree = rootRoute
         "/(app)/home",
         "/(app)/attendance/",
         "/(app)/fighter/",
+        "/(app)/attendance/daily/",
+        "/(app)/attendance/reports/",
         "/(app)/fighter/$id/"
       ]
     },
@@ -288,6 +334,14 @@ export const routeTree = rootRoute
     },
     "/(app)/fighter/": {
       "filePath": "~(app)/~fighter/~index.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/attendance/daily/": {
+      "filePath": "~(app)/~attendance/~daily/~index.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/attendance/reports/": {
+      "filePath": "~(app)/~attendance/~reports/~index.tsx",
       "parent": "/(app)"
     },
     "/(app)/fighter/$id/": {

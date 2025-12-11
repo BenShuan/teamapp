@@ -1,4 +1,4 @@
-import {  type SessionContext } from "@hono/auth-js/react";
+import { type SessionContext } from "@hono/auth-js/react";
 
 import { createRootRouteWithContext, Outlet, redirect } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
@@ -19,10 +19,11 @@ export const Route = createRootRouteWithContext<{
   component: () => {
 
     return (
-      
+
       <div className="h-dvh overflow-scroll bg-background flex flex-col items-center-safe ">
         <main className="container " >
-          <Outlet />
+
+            <Outlet />
           <TanStackRouterDevtools />
         </main>
         <Toaster />
