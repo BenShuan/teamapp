@@ -90,7 +90,7 @@ function SerializedGearTable() {
         const { mutate } = useDeleteSerializedGear(row.original.id);
         return (
           <div className="flex items-center gap-2">
-            <Link to={`/serialized-gear/${row.original.id}`}>
+            <Link to={`/gear/serialized-gear/${row.original.id}`}>
               <Edit2 />
             </Link>
             <Button variant={"ghost"} onClick={() => mutate(row.original.id)}>

@@ -7,6 +7,8 @@ import { relations } from "drizzle-orm";
 import { z } from "zod";
 
 export const statusLocations = ['נוכח', 'בבית', 'יוצא', 'מגיע'] as const;
+export type StatusLocation = typeof statusLocations[number];
+export const StatusLocationEnum = Object.fromEntries(statusLocations.map(loc => [loc, loc])) as {[key in StatusLocation]: key};
 
 
 // Attendance table (uses fighter instead of employee)
@@ -50,11 +52,17 @@ export const attendaceRelations = relations(attendance, ({ one }) => ({
 export const NewAttendanceSchema = createInsertSchema(attendance);
 
 // Select validator (useful for output shaping)
-export const AttendanceSchema = createSelectSchema(attendance);
+export const AttendanceSchema = createSelectSchema(attendance).extend({
+  checkIn: z.string().nullable(),
+  checkOut: z.string().nullable(),
+});
 
 
 // Select validator (useful for output shaping)
-export const UpdateAttendanceSchema = createUpdateSchema(attendance).partial();
+export const UpdateAttendanceSchema = createUpdateSchema(attendance).extend({
+  checkIn: z.string().nullable().optional(),
+  checkOut: z.string().nullable().optional(),
+});
 
 // Build a minimal fighter-with-attendances schema here to avoid a circular
 // runtime dependency on `fighterSchema` (which can be undefined due to

@@ -2,11 +2,42 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { attendanceQueryOptions, createAttendance, updateAttendance, deleteAttendance } from '@/web/services/attendance.api';
-import { NewAttendance, UpdateAttendance } from '@teamapp/api/schema';
+import { Attendance, FightersAttendance, NewAttendance, UpdateAttendance } from '@teamapp/api/schema';
 import { toast } from 'sonner';
+import { dateRangeBuilder } from '@teamapp/shared';
+import { queriesMap } from '../lib/queries';
 
-export const useAttendance = (startDate:Date,endDate:Date ) => {
-  return useQuery(attendanceQueryOptions(startDate,endDate));
+export const useAttendance = (startDate: Date, endDate: Date) => {
+  const query = useQuery(attendanceQueryOptions(startDate, endDate));
+
+  const dateRange = dateRangeBuilder(startDate, endDate);
+  const attendanceMapByDate: queriesMap<Record<string, Attendance[]>> = {};
+  for (const date of dateRange) {
+    attendanceMapByDate[date] = {
+      label: date,
+      value: {}
+    };
+  }
+
+  if (Array.isArray(query.data)) {
+    query.data.forEach((attendanceRecord: FightersAttendance ) => {
+      for (const attendance of attendanceRecord.attendances) {
+        const dateKey = new Date(attendance.workDate).toISOString().split('T')[0];
+        if (attendanceMapByDate[dateKey]) {
+          if (!attendanceMapByDate[dateKey].value[attendance.location]) {
+            attendanceMapByDate[dateKey].value[attendance.location] = [];
+          }
+          attendanceMapByDate[dateKey].value[attendance.location].push(attendance);
+        }
+      }
+
+
+    })
+  }
+
+
+
+  return { ...query,attendanceMapByDate };
 };
 
 export const useCreateAttendance = () => {

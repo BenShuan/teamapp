@@ -18,7 +18,7 @@ type RegisterForm = NewUser;
 function RegisterPage() {
   const navigate = useNavigate();
   const methods = useForm<RegisterForm>({
-    defaultValues: { name: "", email: "", password: "", role: UserRole[0] },
+    defaultValues: { name: "", email: "", password: "", role: UserRole.FIGHTER },
   });
 
   const { handleSubmit, formState: { isSubmitting } } = methods; 

@@ -1,7 +1,7 @@
 
 
 
-export type queriesMap<T> = Record<string,{ label: string;value: T;}>;
+export type queriesMap<T> = Record<string, { label: string; value: T; }>;
 
 export const queryKeys = {
   me: ["me"] as const,
@@ -19,4 +19,6 @@ export const queryKeys = {
   gearCatalog: { queryKey: ["gear-catalog"] as const },
   serializedGear: { queryKey: ["serialized-gear"] as const },
   serializedGearItem: (id: string) => ({ queryKey: ["serialized-gear", id] as const }),
+  logisticGear: { queryKey: ["logistic-gear"] as const },
+  logisticGearItem: (id: string) => ({ queryKey: ["logistic-gear", id] as const }),
 };

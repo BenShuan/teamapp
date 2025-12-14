@@ -1,18 +1,18 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router'
 
-import RoutePending from "@/web/components/route-pending";
-import queryClient from "@/web/lib/query-client";
-import { serializedGearQueryOptions } from "../../../services/serializedGear.api";
+import RoutePending from '@/web/components/route-pending'
+import queryClient from '@/web/lib/query-client'
+import { serializedGearQueryOptions } from '../../../../services/serializedGear.api'
 import {
   Dialog,
   DialogTrigger,
   DialogContent,
   DialogTitle,
-} from "@/web/components/ui/dialog";
-import SerializedGearTable from "./components/SerializedGearTable";
-import SerializedGearForm from "./components/SerializedGearForm";
-import { Button } from "@/web/components/ui/button";
-import { useState } from "react";
+} from '@/web/components/ui/dialog'
+import SerializedGearTable from './components/SerializedGearTable'
+import SerializedGearForm from './components/SerializedGearForm'
+import { Button } from '@/web/components/ui/button'
+import { useState } from 'react'
 
 const SerializedGearPage = () => {
   const [openForm, setOpenForm] = useState(false)
@@ -35,13 +35,13 @@ const SerializedGearPage = () => {
       </div>
       <SerializedGearTable />
     </div>
-  );
-};
+  )
+}
 
-export default SerializedGearPage;
+export default SerializedGearPage
 
-export const Route = createFileRoute("/(app)/serialized-gear/")({
+export const Route = createFileRoute('/(app)/gear/serialized-gear/')({
   component: SerializedGearPage,
   loader: () => queryClient.ensureQueryData(serializedGearQueryOptions),
   pendingComponent: RoutePending,
-});
+})

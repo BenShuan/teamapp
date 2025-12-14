@@ -45,8 +45,8 @@ export const AttendanceForm: React.FC<AttendanceFormProps> = ({
 
     const saveData={
       ...data,
-      checkIn: data.checkIn ? new Date(data.checkIn):null,
-      checkOut:data.checkOut? new Date(data.checkOut) :null,
+      checkIn: data.checkIn ? new Date(data.checkIn).toISOString().split('T')[1] : null,
+      checkOut:data.checkOut? new Date(data.checkOut).toISOString().split('T')[1] :null,
     }
 
     updateAttendance(

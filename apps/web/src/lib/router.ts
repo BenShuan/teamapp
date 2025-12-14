@@ -51,15 +51,21 @@ const navMainItems: NavMainItem[] = [
     ],
   },
   {
-    title: "ציוד סדרתי",
-    url: "/serialized-gear",
+    title: "ציוד",
+    url: "/gear",
     icon: Package,
     requiresRole: [UserRole.ADMIN, UserRole.COMMANDER, UserRole.FIGHTER],
-    items: [
-      {
-        title: "בדיקת ציוד",
-        url: "/serialized-gear/check",
-      },
+    items: [{
+      title: 'ציוד לוגיסטי',
+      url: "/gear/logistic-gear/",
+    },{
+      title: 'דו"ח צל"ם',
+      url: "/gear/serialized-gear/",
+    },
+    {
+      title: 'בדיקת צל"ם',
+      url: "/gear/serialized-gear/check",
+    },
     ],
   },
   {

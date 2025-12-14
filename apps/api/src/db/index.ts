@@ -15,6 +15,7 @@ export const models = {
   user: schema.users,
   serializedGearFighter: schema.serializedGearFighter,
   serializedGearCheck: schema.serializedGearCheck,
+  logisticGear: schema.logisticGear,
   userTeamMembership: schema.userTeamMembership,
   userPlatoonMembership: schema.userPlatoonMembership,
 };

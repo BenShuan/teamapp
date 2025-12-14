@@ -15,10 +15,13 @@ import { Route as appRouteImport } from './routes/~(app)/~route'
 import { Route as AuthRegisterImport } from './routes/~auth/~register'
 import { Route as appHomeImport } from './routes/~(app)/~home'
 import { Route as AdminIndexImport } from './routes/~admin/~index'
-import { Route as appSerializedGearCheckImport } from './routes/~(app)/~serialized-gear/~check'
-import { Route as appSerializedGearIndexImport } from './routes/~(app)/~serialized-gear/~index'
+import { Route as appGearIndexImport } from './routes/~(app)/~gear/~index'
 import { Route as appFighterIndexImport } from './routes/~(app)/~fighter/~index'
 import { Route as appAttendanceIndexImport } from './routes/~(app)/~attendance/~index'
+import { Route as appGearSerializedGearCheckImport } from './routes/~(app)/~gear/~serialized-gear/~check'
+import { Route as appGearSerializedGearIdImport } from './routes/~(app)/~gear/~serialized-gear/~$id'
+import { Route as appGearSerializedGearIndexImport } from './routes/~(app)/~gear/~serialized-gear/~index'
+import { Route as appGearLogisticGearIndexImport } from './routes/~(app)/~gear/~logistic-gear/~index'
 import { Route as appFighterIdIndexImport } from './routes/~(app)/~fighter/~$id/~index'
 import { Route as appAttendanceReportsIndexImport } from './routes/~(app)/~attendance/~reports/~index'
 import { Route as appAttendanceDailyIndexImport } from './routes/~(app)/~attendance/~daily/~index'
@@ -58,15 +61,9 @@ const AdminIndexRoute = AdminIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const appSerializedGearCheckRoute = appSerializedGearCheckImport.update({
-  id: '/serialized-gear/check',
-  path: '/serialized-gear/check',
-  getParentRoute: () => appRouteRoute,
-} as any)
-
-const appSerializedGearIndexRoute = appSerializedGearIndexImport.update({
-  id: '/serialized-gear/',
-  path: '/serialized-gear/',
+const appGearIndexRoute = appGearIndexImport.update({
+  id: '/gear/',
+  path: '/gear/',
   getParentRoute: () => appRouteRoute,
 } as any)
 
@@ -79,6 +76,34 @@ const appFighterIndexRoute = appFighterIndexImport.update({
 const appAttendanceIndexRoute = appAttendanceIndexImport.update({
   id: '/attendance/',
   path: '/attendance/',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appGearSerializedGearCheckRoute = appGearSerializedGearCheckImport.update(
+  {
+    id: '/gear/serialized-gear/check',
+    path: '/gear/serialized-gear/check',
+    getParentRoute: () => appRouteRoute,
+  } as any,
+)
+
+const appGearSerializedGearIdRoute = appGearSerializedGearIdImport.update({
+  id: '/gear/serialized-gear/$id',
+  path: '/gear/serialized-gear/$id',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appGearSerializedGearIndexRoute = appGearSerializedGearIndexImport.update(
+  {
+    id: '/gear/serialized-gear/',
+    path: '/gear/serialized-gear/',
+    getParentRoute: () => appRouteRoute,
+  } as any,
+)
+
+const appGearLogisticGearIndexRoute = appGearLogisticGearIndexImport.update({
+  id: '/gear/logistic-gear/',
+  path: '/gear/logistic-gear/',
   getParentRoute: () => appRouteRoute,
 } as any)
 
@@ -153,18 +178,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appFighterIndexImport
       parentRoute: typeof appRouteImport
     }
-    '/(app)/serialized-gear/': {
-      id: '/(app)/serialized-gear/'
-      path: '/serialized-gear'
-      fullPath: '/serialized-gear'
-      preLoaderRoute: typeof appSerializedGearIndexImport
-      parentRoute: typeof appRouteImport
-    }
-    '/(app)/serialized-gear/check': {
-      id: '/(app)/serialized-gear/check'
-      path: '/serialized-gear/check'
-      fullPath: '/serialized-gear/check'
-      preLoaderRoute: typeof appSerializedGearCheckImport
+    '/(app)/gear/': {
+      id: '/(app)/gear/'
+      path: '/gear'
+      fullPath: '/gear'
+      preLoaderRoute: typeof appGearIndexImport
       parentRoute: typeof appRouteImport
     }
     '/(app)/attendance/daily/': {
@@ -188,6 +206,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appFighterIdIndexImport
       parentRoute: typeof appRouteImport
     }
+    '/(app)/gear/logistic-gear/': {
+      id: '/(app)/gear/logistic-gear/'
+      path: '/gear/logistic-gear'
+      fullPath: '/gear/logistic-gear'
+      preLoaderRoute: typeof appGearLogisticGearIndexImport
+      parentRoute: typeof appRouteImport
+    }
+    '/(app)/gear/serialized-gear/': {
+      id: '/(app)/gear/serialized-gear/'
+      path: '/gear/serialized-gear'
+      fullPath: '/gear/serialized-gear'
+      preLoaderRoute: typeof appGearSerializedGearIndexImport
+      parentRoute: typeof appRouteImport
+    }
+    '/(app)/gear/serialized-gear/$id': {
+      id: '/(app)/gear/serialized-gear/$id'
+      path: '/gear/serialized-gear/$id'
+      fullPath: '/gear/serialized-gear/$id'
+      preLoaderRoute: typeof appGearSerializedGearIdImport
+      parentRoute: typeof appRouteImport
+    }
+    '/(app)/gear/serialized-gear/check': {
+      id: '/(app)/gear/serialized-gear/check'
+      path: '/gear/serialized-gear/check'
+      fullPath: '/gear/serialized-gear/check'
+      preLoaderRoute: typeof appGearSerializedGearCheckImport
+      parentRoute: typeof appRouteImport
+    }
   }
 }
 
@@ -197,22 +243,28 @@ interface appRouteRouteChildren {
   appHomeRoute: typeof appHomeRoute
   appAttendanceIndexRoute: typeof appAttendanceIndexRoute
   appFighterIndexRoute: typeof appFighterIndexRoute
-  appSerializedGearIndexRoute: typeof appSerializedGearIndexRoute
-  appSerializedGearCheckRoute: typeof appSerializedGearCheckRoute
+  appGearIndexRoute: typeof appGearIndexRoute
   appAttendanceDailyIndexRoute: typeof appAttendanceDailyIndexRoute
   appAttendanceReportsIndexRoute: typeof appAttendanceReportsIndexRoute
   appFighterIdIndexRoute: typeof appFighterIdIndexRoute
+  appGearLogisticGearIndexRoute: typeof appGearLogisticGearIndexRoute
+  appGearSerializedGearIndexRoute: typeof appGearSerializedGearIndexRoute
+  appGearSerializedGearIdRoute: typeof appGearSerializedGearIdRoute
+  appGearSerializedGearCheckRoute: typeof appGearSerializedGearCheckRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
   appHomeRoute: appHomeRoute,
   appAttendanceIndexRoute: appAttendanceIndexRoute,
   appFighterIndexRoute: appFighterIndexRoute,
-  appSerializedGearIndexRoute: appSerializedGearIndexRoute,
-  appSerializedGearCheckRoute: appSerializedGearCheckRoute,
+  appGearIndexRoute: appGearIndexRoute,
   appAttendanceDailyIndexRoute: appAttendanceDailyIndexRoute,
   appAttendanceReportsIndexRoute: appAttendanceReportsIndexRoute,
   appFighterIdIndexRoute: appFighterIdIndexRoute,
+  appGearLogisticGearIndexRoute: appGearLogisticGearIndexRoute,
+  appGearSerializedGearIndexRoute: appGearSerializedGearIndexRoute,
+  appGearSerializedGearIdRoute: appGearSerializedGearIdRoute,
+  appGearSerializedGearCheckRoute: appGearSerializedGearCheckRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
@@ -236,11 +288,14 @@ export interface FileRoutesByFullPath {
   '/auth/register': typeof AuthRegisterRoute
   '/attendance': typeof appAttendanceIndexRoute
   '/fighter': typeof appFighterIndexRoute
-  '/serialized-gear': typeof appSerializedGearIndexRoute
-  '/serialized-gear/check': typeof appSerializedGearCheckRoute
+  '/gear': typeof appGearIndexRoute
   '/attendance/daily': typeof appAttendanceDailyIndexRoute
   '/attendance/reports': typeof appAttendanceReportsIndexRoute
   '/fighter/$id': typeof appFighterIdIndexRoute
+  '/gear/logistic-gear': typeof appGearLogisticGearIndexRoute
+  '/gear/serialized-gear': typeof appGearSerializedGearIndexRoute
+  '/gear/serialized-gear/$id': typeof appGearSerializedGearIdRoute
+  '/gear/serialized-gear/check': typeof appGearSerializedGearCheckRoute
 }
 
 export interface FileRoutesByTo {
@@ -250,11 +305,14 @@ export interface FileRoutesByTo {
   '/auth/register': typeof AuthRegisterRoute
   '/attendance': typeof appAttendanceIndexRoute
   '/fighter': typeof appFighterIndexRoute
-  '/serialized-gear': typeof appSerializedGearIndexRoute
-  '/serialized-gear/check': typeof appSerializedGearCheckRoute
+  '/gear': typeof appGearIndexRoute
   '/attendance/daily': typeof appAttendanceDailyIndexRoute
   '/attendance/reports': typeof appAttendanceReportsIndexRoute
   '/fighter/$id': typeof appFighterIdIndexRoute
+  '/gear/logistic-gear': typeof appGearLogisticGearIndexRoute
+  '/gear/serialized-gear': typeof appGearSerializedGearIndexRoute
+  '/gear/serialized-gear/$id': typeof appGearSerializedGearIdRoute
+  '/gear/serialized-gear/check': typeof appGearSerializedGearCheckRoute
 }
 
 export interface FileRoutesById {
@@ -266,11 +324,14 @@ export interface FileRoutesById {
   '/auth/register': typeof AuthRegisterRoute
   '/(app)/attendance/': typeof appAttendanceIndexRoute
   '/(app)/fighter/': typeof appFighterIndexRoute
-  '/(app)/serialized-gear/': typeof appSerializedGearIndexRoute
-  '/(app)/serialized-gear/check': typeof appSerializedGearCheckRoute
+  '/(app)/gear/': typeof appGearIndexRoute
   '/(app)/attendance/daily/': typeof appAttendanceDailyIndexRoute
   '/(app)/attendance/reports/': typeof appAttendanceReportsIndexRoute
   '/(app)/fighter/$id/': typeof appFighterIdIndexRoute
+  '/(app)/gear/logistic-gear/': typeof appGearLogisticGearIndexRoute
+  '/(app)/gear/serialized-gear/': typeof appGearSerializedGearIndexRoute
+  '/(app)/gear/serialized-gear/$id': typeof appGearSerializedGearIdRoute
+  '/(app)/gear/serialized-gear/check': typeof appGearSerializedGearCheckRoute
 }
 
 export interface FileRouteTypes {
@@ -282,11 +343,14 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/attendance'
     | '/fighter'
-    | '/serialized-gear'
-    | '/serialized-gear/check'
+    | '/gear'
     | '/attendance/daily'
     | '/attendance/reports'
     | '/fighter/$id'
+    | '/gear/logistic-gear'
+    | '/gear/serialized-gear'
+    | '/gear/serialized-gear/$id'
+    | '/gear/serialized-gear/check'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -295,11 +359,14 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/attendance'
     | '/fighter'
-    | '/serialized-gear'
-    | '/serialized-gear/check'
+    | '/gear'
     | '/attendance/daily'
     | '/attendance/reports'
     | '/fighter/$id'
+    | '/gear/logistic-gear'
+    | '/gear/serialized-gear'
+    | '/gear/serialized-gear/$id'
+    | '/gear/serialized-gear/check'
   id:
     | '__root__'
     | '/'
@@ -309,11 +376,14 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/(app)/attendance/'
     | '/(app)/fighter/'
-    | '/(app)/serialized-gear/'
-    | '/(app)/serialized-gear/check'
+    | '/(app)/gear/'
     | '/(app)/attendance/daily/'
     | '/(app)/attendance/reports/'
     | '/(app)/fighter/$id/'
+    | '/(app)/gear/logistic-gear/'
+    | '/(app)/gear/serialized-gear/'
+    | '/(app)/gear/serialized-gear/$id'
+    | '/(app)/gear/serialized-gear/check'
   fileRoutesById: FileRoutesById
 }
 
@@ -357,11 +427,14 @@ export const routeTree = rootRoute
         "/(app)/home",
         "/(app)/attendance/",
         "/(app)/fighter/",
-        "/(app)/serialized-gear/",
-        "/(app)/serialized-gear/check",
+        "/(app)/gear/",
         "/(app)/attendance/daily/",
         "/(app)/attendance/reports/",
-        "/(app)/fighter/$id/"
+        "/(app)/fighter/$id/",
+        "/(app)/gear/logistic-gear/",
+        "/(app)/gear/serialized-gear/",
+        "/(app)/gear/serialized-gear/$id",
+        "/(app)/gear/serialized-gear/check"
       ]
     },
     "/admin/": {
@@ -382,12 +455,8 @@ export const routeTree = rootRoute
       "filePath": "~(app)/~fighter/~index.tsx",
       "parent": "/(app)"
     },
-    "/(app)/serialized-gear/": {
-      "filePath": "~(app)/~serialized-gear/~index.tsx",
-      "parent": "/(app)"
-    },
-    "/(app)/serialized-gear/check": {
-      "filePath": "~(app)/~serialized-gear/~check.tsx",
+    "/(app)/gear/": {
+      "filePath": "~(app)/~gear/~index.tsx",
       "parent": "/(app)"
     },
     "/(app)/attendance/daily/": {
@@ -400,6 +469,22 @@ export const routeTree = rootRoute
     },
     "/(app)/fighter/$id/": {
       "filePath": "~(app)/~fighter/~$id/~index.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/gear/logistic-gear/": {
+      "filePath": "~(app)/~gear/~logistic-gear/~index.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/gear/serialized-gear/": {
+      "filePath": "~(app)/~gear/~serialized-gear/~index.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/gear/serialized-gear/$id": {
+      "filePath": "~(app)/~gear/~serialized-gear/~$id.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/gear/serialized-gear/check": {
+      "filePath": "~(app)/~gear/~serialized-gear/~check.tsx",
       "parent": "/(app)"
     }
   }

@@ -12,6 +12,7 @@ import authRouter from "./auth/auth.index"
 import usersRouter from "./users/users.index"
 import platoonsRouter from "./platoons/platoons.index"
 import serializedGearRouter from "./serializedGear/serializedGear.index"
+import logisticGearRouter from "./logisticGear/logisticGear.index"
 
 
 export function registerRoutes(app: AppOpenAPI) {
@@ -24,6 +25,7 @@ export function registerRoutes(app: AppOpenAPI) {
     .route("/auth", authRouter)
     .route("/platoons", platoonsRouter)
     .route("/serialized-gear", serializedGearRouter)
+    .route("/logistic-gear", logisticGearRouter)
 }
 
 // stand alone router type used for api client

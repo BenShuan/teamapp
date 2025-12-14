@@ -1,5 +1,4 @@
 import { redirect } from '@tanstack/react-router';
-import { User } from '@teamapp/api/schema';
 // types/auth.d.ts
 
 
