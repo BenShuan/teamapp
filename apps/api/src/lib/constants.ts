@@ -15,4 +15,5 @@ export const ZOD_ERROR_CODES = {
 
 export const notFoundSchema = createMessageObjectSchema(HttpStatusPhrases.NOT_FOUND);
 export const forbiddenSchema = createMessageObjectSchema(HttpStatusPhrases.FORBIDDEN);
+export const unauthorizedSchema = createMessageObjectSchema(HttpStatusPhrases.UNAUTHORIZED);
 export const internalServerErrorSchema = createMessageObjectSchema(HttpStatusPhrases.INTERNAL_SERVER_ERROR);

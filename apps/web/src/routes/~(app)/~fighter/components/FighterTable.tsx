@@ -1,18 +1,19 @@
 import { DataTableColumnHeader } from '@/web/components/dataTable/columnHeader';
 import { DataTableViewOptions } from '@/web/components/dataTable/columnToggle';
 import { DataTable, DataTableSearch } from '@/web/components/dataTable/DataTable'
+import useAuth from '@/web/hooks/useAuth';
 import { useFighters } from '@/web/hooks/useFighter';
 import { useTeams } from '@/web/hooks/useTeams';
 import { Link } from '@tanstack/react-router';
 import { ColumnDef } from '@tanstack/react-table'
-import type { Fighter } from '@teamapp/api/schema'
+import { UserRole, type Fighter } from '@teamapp/api/schema'
 import { Edit2 } from 'lucide-react';
 
 
 const initHiddenCols = ['מידת מכנס', 'מידת חולצה', 'מידת נעליים', 'מקצוע', 'כיתה']
 
 function FighterTable() {
-
+  const { isAuthorized } = useAuth()
   const { data, isLoading, isError, error } = useFighters();
   const { teamsMap } = useTeams()
   const fightersColumns: ColumnDef<Fighter>[] = ([
@@ -33,7 +34,7 @@ function FighterTable() {
     {
       accessorKey: 'teamId',
       id: 'צוות',
-      cell: ({ getValue }) => teamsMap?.[getValue<string | null>() ?? '']?.name ?? '-',
+      cell: ({ getValue }) => teamsMap?.[getValue<string | null>() ?? '']?.label ?? '-',
 
     },
     {
@@ -83,12 +84,13 @@ function FighterTable() {
       id: 'מידת מכנס',
       cell: ({ getValue }) => getValue<string | null>() ?? '-',
     },
-    {
+    isAuthorized(UserRole.ADMIN) && {
       id: "פעולות",
       cell: ({ row }) => <><Link to={`/fighter/${row.original.id}`}><Edit2></Edit2></Link></>
+
     }
 
-  ] as ColumnDef<Fighter>[])
+  ] as ColumnDef<Fighter>[]).filter(Boolean)
     .map((col) => ({
       ...col,
       header: ({ column }) => <DataTableColumnHeader column={column} title={column.id} />,

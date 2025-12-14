@@ -1,6 +1,5 @@
 import type { register, meScope } from "./auth.routes";
 import { users } from "@/api/db/schema/auth";
-import { getUserScope } from "@/api/lib/auth-scope";
 import { eq } from "drizzle-orm";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import { AppRouteHandler } from "@/api/lib/types";
@@ -58,14 +57,9 @@ export const registerHandler: AppRouteHandler<typeof register> = async (c) => {
 
 export const meScopeHandler: AppRouteHandler<typeof meScope> = async (c) => {
   // Attempt to derive user id from auth context
-  const authUser: any = c.get("authUser");
-  const authToken: any = c.get("authToken");
-  const userId = authUser?.id || authToken?.sub || authToken?.id;
-  if (!userId) {
-    return c.json({ message: "Unauthorized" }, HttpStatusCodes.UNAUTHORIZED);
-  }
-  const scope = await getUserScope(c.env, userId);  
-  if (!scope) {
+  const scope: any = c.get("scope");
+ 
+  if (!scope ) {
     return c.json({ message: "Unauthorized" }, HttpStatusCodes.UNAUTHORIZED);
   }
   return c.json(scope, HttpStatusCodes.OK);

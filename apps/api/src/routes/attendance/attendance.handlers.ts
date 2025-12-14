@@ -1,4 +1,4 @@
-import {  between, eq } from "drizzle-orm";
+import { between, eq } from "drizzle-orm";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import { formatShortDate } from "@teamapp/shared"
@@ -10,25 +10,27 @@ import { attendance } from "@/api/db/schema";
 import { ZOD_ERROR_CODES, ZOD_ERROR_MESSAGES } from "@/api/lib/constants";
 
 import type { CreateRoute, GetOneRoute, ListRoute, PatchRoute, RemoveRoute } from "./attendance.routes";
+import { teamScopeWhere } from "@/api/lib/auth-scope";
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const db = createDb(c.env);
-
+  const scope = c.get("scope")
   const { startDate, endDate } = c.req.valid("query");
 
   const query = {
     where: between(
       attendance.workDate,
-      formatShortDate( startDate??""),
-      formatShortDate( endDate??"")
+      formatShortDate(startDate ?? ""),
+      formatShortDate(endDate ?? "")
     ),
   }
-  
+
   const rows = await db.query.fighter.findMany({
     columns: { id: true, firstName: true, lastName: true, personalNumber: true },
     with: {
       attendances: query
     },
+    where: teamScopeWhere(scope),
     orderBy(fields, operators) {
       return operators.desc(fields.firstName);
     },

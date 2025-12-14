@@ -9,12 +9,18 @@ import { AppEnv } from './types';
 import { verifyUser } from '../routes/auth/auth.handlers';
 import { createDb } from '../db';
 import { getUserScope } from './auth-scope';
+import { accounts, sessions, users, verificationTokens } from '../db/schema';
 
 export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
   const db = drizzle(env.DB);
 
   return {
-    adapter: DrizzleAdapter(db),
+    adapter: DrizzleAdapter(db,{
+      usersTable: users,
+      accountsTable: accounts,
+      sessionsTable: sessions,
+      verificationTokensTable: verificationTokens,
+    }),
     session: {
       strategy: "jwt",
 

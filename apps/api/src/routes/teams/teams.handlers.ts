@@ -9,15 +9,20 @@ import { team } from "@/api/db/schema";
 import { ZOD_ERROR_CODES, ZOD_ERROR_MESSAGES } from "@/api/lib/constants";
 
 import type { CreateRoute, GetOneRoute, ListRoute, PatchRoute, RemoveRoute } from "./teams.routes";
+import { teamScopeWhere } from "@/api/lib/auth-scope";
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const db = createDb(c.env);
+  const scope = c.get("scope");
+
+
   const team = await db.query.team.findMany({
+    where: teamScopeWhere(scope,"id"),
     orderBy(fields, operators) {
       return operators.desc(fields.createdAt);
     },
   });
-  return c.json(team);
+return c.json(team);
 };
 
 export const create: AppRouteHandler<CreateRoute> = async (c) => {

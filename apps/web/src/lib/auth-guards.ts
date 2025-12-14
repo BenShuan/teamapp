@@ -1,4 +1,7 @@
 import { redirect } from '@tanstack/react-router';
+import { User } from '@teamapp/api/schema';
+// types/auth.d.ts
+
 
 export async function requireAuth({ context }: any) {
   const session = context.session;

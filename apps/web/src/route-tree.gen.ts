@@ -15,6 +15,8 @@ import { Route as appRouteImport } from './routes/~(app)/~route'
 import { Route as AuthRegisterImport } from './routes/~auth/~register'
 import { Route as appHomeImport } from './routes/~(app)/~home'
 import { Route as AdminIndexImport } from './routes/~admin/~index'
+import { Route as appSerializedGearCheckImport } from './routes/~(app)/~serialized-gear/~check'
+import { Route as appSerializedGearIndexImport } from './routes/~(app)/~serialized-gear/~index'
 import { Route as appFighterIndexImport } from './routes/~(app)/~fighter/~index'
 import { Route as appAttendanceIndexImport } from './routes/~(app)/~attendance/~index'
 import { Route as appFighterIdIndexImport } from './routes/~(app)/~fighter/~$id/~index'
@@ -54,6 +56,18 @@ const AdminIndexRoute = AdminIndexImport.update({
   id: '/admin/',
   path: '/admin/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const appSerializedGearCheckRoute = appSerializedGearCheckImport.update({
+  id: '/serialized-gear/check',
+  path: '/serialized-gear/check',
+  getParentRoute: () => appRouteRoute,
+} as any)
+
+const appSerializedGearIndexRoute = appSerializedGearIndexImport.update({
+  id: '/serialized-gear/',
+  path: '/serialized-gear/',
+  getParentRoute: () => appRouteRoute,
 } as any)
 
 const appFighterIndexRoute = appFighterIndexImport.update({
@@ -139,6 +153,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appFighterIndexImport
       parentRoute: typeof appRouteImport
     }
+    '/(app)/serialized-gear/': {
+      id: '/(app)/serialized-gear/'
+      path: '/serialized-gear'
+      fullPath: '/serialized-gear'
+      preLoaderRoute: typeof appSerializedGearIndexImport
+      parentRoute: typeof appRouteImport
+    }
+    '/(app)/serialized-gear/check': {
+      id: '/(app)/serialized-gear/check'
+      path: '/serialized-gear/check'
+      fullPath: '/serialized-gear/check'
+      preLoaderRoute: typeof appSerializedGearCheckImport
+      parentRoute: typeof appRouteImport
+    }
     '/(app)/attendance/daily/': {
       id: '/(app)/attendance/daily/'
       path: '/attendance/daily'
@@ -169,6 +197,8 @@ interface appRouteRouteChildren {
   appHomeRoute: typeof appHomeRoute
   appAttendanceIndexRoute: typeof appAttendanceIndexRoute
   appFighterIndexRoute: typeof appFighterIndexRoute
+  appSerializedGearIndexRoute: typeof appSerializedGearIndexRoute
+  appSerializedGearCheckRoute: typeof appSerializedGearCheckRoute
   appAttendanceDailyIndexRoute: typeof appAttendanceDailyIndexRoute
   appAttendanceReportsIndexRoute: typeof appAttendanceReportsIndexRoute
   appFighterIdIndexRoute: typeof appFighterIdIndexRoute
@@ -178,6 +208,8 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appHomeRoute: appHomeRoute,
   appAttendanceIndexRoute: appAttendanceIndexRoute,
   appFighterIndexRoute: appFighterIndexRoute,
+  appSerializedGearIndexRoute: appSerializedGearIndexRoute,
+  appSerializedGearCheckRoute: appSerializedGearCheckRoute,
   appAttendanceDailyIndexRoute: appAttendanceDailyIndexRoute,
   appAttendanceReportsIndexRoute: appAttendanceReportsIndexRoute,
   appFighterIdIndexRoute: appFighterIdIndexRoute,
@@ -204,6 +236,8 @@ export interface FileRoutesByFullPath {
   '/auth/register': typeof AuthRegisterRoute
   '/attendance': typeof appAttendanceIndexRoute
   '/fighter': typeof appFighterIndexRoute
+  '/serialized-gear': typeof appSerializedGearIndexRoute
+  '/serialized-gear/check': typeof appSerializedGearCheckRoute
   '/attendance/daily': typeof appAttendanceDailyIndexRoute
   '/attendance/reports': typeof appAttendanceReportsIndexRoute
   '/fighter/$id': typeof appFighterIdIndexRoute
@@ -216,6 +250,8 @@ export interface FileRoutesByTo {
   '/auth/register': typeof AuthRegisterRoute
   '/attendance': typeof appAttendanceIndexRoute
   '/fighter': typeof appFighterIndexRoute
+  '/serialized-gear': typeof appSerializedGearIndexRoute
+  '/serialized-gear/check': typeof appSerializedGearCheckRoute
   '/attendance/daily': typeof appAttendanceDailyIndexRoute
   '/attendance/reports': typeof appAttendanceReportsIndexRoute
   '/fighter/$id': typeof appFighterIdIndexRoute
@@ -230,6 +266,8 @@ export interface FileRoutesById {
   '/auth/register': typeof AuthRegisterRoute
   '/(app)/attendance/': typeof appAttendanceIndexRoute
   '/(app)/fighter/': typeof appFighterIndexRoute
+  '/(app)/serialized-gear/': typeof appSerializedGearIndexRoute
+  '/(app)/serialized-gear/check': typeof appSerializedGearCheckRoute
   '/(app)/attendance/daily/': typeof appAttendanceDailyIndexRoute
   '/(app)/attendance/reports/': typeof appAttendanceReportsIndexRoute
   '/(app)/fighter/$id/': typeof appFighterIdIndexRoute
@@ -244,6 +282,8 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/attendance'
     | '/fighter'
+    | '/serialized-gear'
+    | '/serialized-gear/check'
     | '/attendance/daily'
     | '/attendance/reports'
     | '/fighter/$id'
@@ -255,6 +295,8 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/attendance'
     | '/fighter'
+    | '/serialized-gear'
+    | '/serialized-gear/check'
     | '/attendance/daily'
     | '/attendance/reports'
     | '/fighter/$id'
@@ -267,6 +309,8 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/(app)/attendance/'
     | '/(app)/fighter/'
+    | '/(app)/serialized-gear/'
+    | '/(app)/serialized-gear/check'
     | '/(app)/attendance/daily/'
     | '/(app)/attendance/reports/'
     | '/(app)/fighter/$id/'
@@ -313,6 +357,8 @@ export const routeTree = rootRoute
         "/(app)/home",
         "/(app)/attendance/",
         "/(app)/fighter/",
+        "/(app)/serialized-gear/",
+        "/(app)/serialized-gear/check",
         "/(app)/attendance/daily/",
         "/(app)/attendance/reports/",
         "/(app)/fighter/$id/"
@@ -334,6 +380,14 @@ export const routeTree = rootRoute
     },
     "/(app)/fighter/": {
       "filePath": "~(app)/~fighter/~index.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/serialized-gear/": {
+      "filePath": "~(app)/~serialized-gear/~index.tsx",
+      "parent": "/(app)"
+    },
+    "/(app)/serialized-gear/check": {
+      "filePath": "~(app)/~serialized-gear/~check.tsx",
       "parent": "/(app)"
     },
     "/(app)/attendance/daily/": {

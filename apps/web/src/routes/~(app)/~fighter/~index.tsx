@@ -14,6 +14,8 @@ import {
 import FighterTable from './components/FighterTable'
 import FightersList from './components/FightersList'
 import { Button } from '@/web/components/ui/button'
+import AuthContainer from '@/web/components/auth-container'
+import { UserRole } from '@teamapp/api/schema'
 
 const FightersPage = () => {
   return (
@@ -24,7 +26,9 @@ const FightersPage = () => {
       <div className="block md:hidden">
         <FightersList />
       </div>
-      <div className="mt-4">
+      <AuthContainer requiredRole={UserRole.COMMANDER}>
+
+       <div className="mt-4">
         <Dialog>
           <DialogTrigger asChild>
             <Button>הוסף חייל</Button>
@@ -39,6 +43,8 @@ const FightersPage = () => {
           </DialogContent>
         </Dialog>
       </div>
+      </AuthContainer>
+
     </div>
   )
 }

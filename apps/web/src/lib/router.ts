@@ -2,7 +2,7 @@
 // Keep this in sync with files under `apps/web/src/routes`
 
 import { UserRole } from "@teamapp/api/schema";
-import { LucideIcon, Home, Users, Clock, Shield } from "lucide-react";
+import { LucideIcon, Home, Users, Clock, Shield, Package } from "lucide-react";
 
 export type NavMainItem = {
   title: string
@@ -29,7 +29,6 @@ const navMainItems: NavMainItem[] = [
     title: "לוחמים",
     url: "/fighter",
     icon: Users,
-    requiresRole: [UserRole.ADMIN, UserRole.COMMANDER],
   },
   {
     title: "נוכחות",
@@ -48,6 +47,18 @@ const navMainItems: NavMainItem[] = [
         title: "דוחות נוכחות",
         url: "/attendance/reports",
         requiresRole: [UserRole.ADMIN, UserRole.COMMANDER],
+      },
+    ],
+  },
+  {
+    title: "ציוד סדרתי",
+    url: "/serialized-gear",
+    icon: Package,
+    requiresRole: [UserRole.ADMIN, UserRole.COMMANDER, UserRole.FIGHTER],
+    items: [
+      {
+        title: "בדיקת ציוד",
+        url: "/serialized-gear/check",
       },
     ],
   },

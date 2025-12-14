@@ -4,6 +4,7 @@ import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
 import { createErrorSchema } from "stoker/openapi/schemas";
 
 import { createUserSchema, userSchema } from "@/api/db/schema/auth";
+import { attachScope } from "@/api/middleware/scope";
 
 const tags = ["auth"];
 
@@ -40,6 +41,7 @@ export const meScope = createRoute({
   path: "/scope",
   method: "get",
   tags,
+  middleware: [attachScope()] as const,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       z.object({

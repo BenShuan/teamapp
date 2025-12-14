@@ -2,6 +2,7 @@ import useAuth from '@/web/hooks/useAuth'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { AdminUsersTable } from '@/web/components/admin-users-table'
 import { AdminPlatoonsTeamsManager } from '@/web/components/admin-platoons-teams'
+import { AdminSerializedGearManager } from '@/web/components/admin-serialized-gear'
 import AppNavbar from '@/web/components/app-navbar'
 
 export const Route = createFileRoute('/admin/')({
@@ -31,17 +32,23 @@ function AdminPage() {
 
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
 
-            <section>
-              {/* Platoons & Teams Management */}
-              <h2 className="text-2xl font-semibold mb-4">פלוגות וצוותים</h2>
-              <AdminPlatoonsTeamsManager />
-            </section>
+          <section>
+            {/* Platoons & Teams Management */}
+            <h2 className="text-2xl font-semibold mb-4">פלוגות וצוותים</h2>
+            <AdminPlatoonsTeamsManager />
+          </section>
 
-            {/* Users Management */}
-            <section>
-              <h2 className="text-2xl font-semibold mb-4">משתמשים</h2>
-              <AdminUsersTable />
-            </section>
+          {/* Serialized Gear Catalog Management */}
+          <section>
+            <h2 className="text-2xl font-semibold mb-4">קטלוג ציוד סדרתי</h2>
+            <AdminSerializedGearManager />
+          </section>
+
+          {/* Users Management */}
+          <section>
+            <h2 className="text-2xl font-semibold mb-4">משתמשים</h2>
+            <AdminUsersTable />
+          </section>
         </div>
       </AppNavbar>
     </div>

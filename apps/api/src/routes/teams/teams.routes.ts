@@ -14,6 +14,7 @@ const tags = ["teams"];
 export const list = createRoute({
   path: "/",
   method: "get",
+  middleware: [requireScope()] as const,
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
