@@ -7,8 +7,8 @@ import { timestamps } from "../../utils/timeStamps";
 import {
   ID_FIELD,
   TEXT_OPTIONAL_FIELD,
-  TEXT_REQUIERD_FIELD,
-} from "../../utils/schemeHelper";
+  TEXT_REQUIRED_FIELD,
+} from "../../utils/schemaHelper";
 
 export const gearTypes = ["אמרל", "קשר", "נשק", "כללי", "נפיצה", "חבלה"] as const;
 
@@ -17,8 +17,8 @@ export const serializedGear = sqliteTable(
   "serialized_gear",
   {
     id: ID_FIELD("id"),
-    name: TEXT_REQUIERD_FIELD("name"),
-    type: TEXT_REQUIERD_FIELD("type", { enum: gearTypes }),
+    name: TEXT_REQUIRED_FIELD("name"),
+    type: TEXT_REQUIRED_FIELD("type", { enum: gearTypes }),
     ...timestamps,
   },
   (table) => [unique("gear_name_un").on(table.name)],
@@ -29,14 +29,14 @@ export const serializedGearFighter = sqliteTable(
   "serialized_gear_fighter",
   {
     id: ID_FIELD("id"),
-    serializedGearId: TEXT_REQUIERD_FIELD("serialized_gear_id").references(
+    serializedGearId: TEXT_REQUIRED_FIELD("serialized_gear_id").references(
       () => serializedGear.id,
       { onDelete: "cascade" },
     ),
-    fighterId: TEXT_REQUIERD_FIELD("fighter_id").references(() => fighter.id, {
+    fighterId: TEXT_REQUIRED_FIELD("fighter_id").references(() => fighter.id, {
       onDelete: "cascade",
     }),
-    fightersTeamId: TEXT_REQUIERD_FIELD("fighters_team_id").references(() => fighter.teamId, { onDelete: "cascade" }),
+    fightersTeamId: TEXT_REQUIRED_FIELD("fighters_team_id").references(() => fighter.teamId, { onDelete: "cascade" }),
     serialNumber: TEXT_OPTIONAL_FIELD("serial_number"),
     issuedDate: TEXT_OPTIONAL_FIELD("issued_date"),
     lastCheckDate: TEXT_OPTIONAL_FIELD("last_check_date"),
@@ -52,11 +52,11 @@ export const serializedGearCheck = sqliteTable(
   "serialized_gear_check",
   {
     id: ID_FIELD("id"),
-    serializedGearFighterId: TEXT_REQUIERD_FIELD("serialized_gear_fighter_id").references(
+    serializedGearFighterId: TEXT_REQUIRED_FIELD("serialized_gear_fighter_id").references(
       () => serializedGearFighter.id,
       { onDelete: "cascade" },
     ),
-    date: TEXT_REQUIERD_FIELD("date"),
+    date: TEXT_REQUIRED_FIELD("date"),
     isCheck: integer("is_check", { mode: "boolean" }).notNull().default(false),
     ...timestamps,
   },

@@ -4,7 +4,6 @@ export * from "./fighter";
 export * from "./platoon";
 export * from "./team";
 export * from "./attendance";
-export * from "./platoon";
 export * from "./membership";
 export * from "./serializedGear";
 export * from "./logisticGear";

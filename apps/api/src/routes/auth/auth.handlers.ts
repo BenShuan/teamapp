@@ -17,7 +17,6 @@ export async function verifyUser(email: string, password: string, db = createDb(
   const hash = await hashPassword(password);
   const rows = await db.select().from(users).where(() => eq(users.email, email)).limit(1);
   const user = rows[0];
-  console.log('user', user)
   if (!user || user.deletedAt) return null; // Exclude soft-deleted users
   if (user.password !== hash) return null;
   const { password: _pw, ...safeUser } = user as any;
@@ -35,7 +34,6 @@ export const registerHandler: AppRouteHandler<typeof register> = async (c) => {
   }
   const passwordHash = await hashPassword(password);
   const [{ password: hashedPassword, ...inserted }] = await db.insert(users).values({ name, email, role, password: passwordHash }).returning();
-  console.log('inserted', inserted)
   if (!inserted) {
     return c.json({
       success: false,

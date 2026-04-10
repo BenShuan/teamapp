@@ -5,15 +5,15 @@ import { z } from "zod";
 
 import { team } from "./team";
 import { timestamps } from "../../utils/timeStamps";
-import { ID_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "../../utils/schemeHelper";
+import { ID_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD } from "../../utils/schemaHelper";
 
 export const logisticGear = sqliteTable("logistic_gear", {
   id: ID_FIELD("id"),
-  name: TEXT_REQUIERD_FIELD("name"),
+  name: TEXT_REQUIRED_FIELD("name"),
   description: TEXT_OPTIONAL_FIELD("description"),
   quantity: integer("quantity").notNull().default(0),
   location: TEXT_OPTIONAL_FIELD("location"),
-  teamId: TEXT_REQUIERD_FIELD("team_id").references(() => team.id, { onDelete: "cascade" }),
+  teamId: TEXT_REQUIRED_FIELD("team_id").references(() => team.id, { onDelete: "cascade" }),
   timeOfIssue: TEXT_OPTIONAL_FIELD("time_of_issue"),
   ...timestamps,
 });

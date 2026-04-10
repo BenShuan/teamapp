@@ -39,7 +39,6 @@ export function requireScope(): MiddlewareHandler<AppEnv> {
 export function requireRole(minRole: keyof typeof UserRole): MiddlewareHandler<AppEnv> {
   return async (c, next) => {
     const scope = c.get("scope") as UserScope | null;
-    console.log('scope', scope)
     if (scope?.unrestricted) {
       return next()
     }

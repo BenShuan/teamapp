@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { ID_FIELD, INTEGER_TIMESTEMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "../../utils/schemeHelper";
+import { ID_FIELD, INTEGER_TIMESTAMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD } from "../../utils/schemaHelper";
 import type { AdapterAccountType } from "@auth/core/adapters";
 
 import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
@@ -20,12 +20,12 @@ export const usersRoles = Object.values(UserRole);
 
 export const users = sqliteTable("user", {
   id: ID_FIELD('id'),
-  name: TEXT_REQUIERD_FIELD("name"),
-  email: TEXT_REQUIERD_FIELD("email").unique(),
-  emailVerified: INTEGER_TIMESTEMP_OPTIONAL_FIELD("emailVerified"),
+  name: TEXT_REQUIRED_FIELD("name"),
+  email: TEXT_REQUIRED_FIELD("email").unique(),
+  emailVerified: INTEGER_TIMESTAMP_OPTIONAL_FIELD("emailVerified"),
   image: TEXT_OPTIONAL_FIELD("image"),
-  password: TEXT_REQUIERD_FIELD("password"),
-  role: TEXT_REQUIERD_FIELD('role', { enum: usersRoles }).default(UserRole.FIGHTER),
+  password: TEXT_REQUIRED_FIELD("password"),
+  role: TEXT_REQUIRED_FIELD('role', { enum: usersRoles }).default(UserRole.FIGHTER),
   deletedAt: TEXT_OPTIONAL_FIELD('deleted_at'),
 });
 
@@ -53,11 +53,11 @@ export type User = z.infer<typeof userSchema>;
 export const accounts = sqliteTable(
   "account",
   {
-    userId: TEXT_REQUIERD_FIELD("userId")
+    userId: TEXT_REQUIRED_FIELD("userId")
       .references(() => users.id, { onDelete: "cascade" }),
     type: TEXT_OPTIONAL_FIELD("type").$type<AdapterAccountType>().notNull(),
-    provider: TEXT_REQUIERD_FIELD("provider"),
-    providerAccountId: TEXT_REQUIERD_FIELD("providerAccountId"),
+    provider: TEXT_REQUIRED_FIELD("provider"),
+    providerAccountId: TEXT_REQUIRED_FIELD("providerAccountId"),
     refresh_token: text("refresh_token"),
     access_token: text("access_token"),
     expires_at: integer("expires_at"),
