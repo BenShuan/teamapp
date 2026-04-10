@@ -10,6 +10,7 @@ export const models = {
   fighter: schema.fighter,
   team: schema.team,
   platoon: schema.platoon,
+  dutyPeriod: schema.dutyPeriod,
   attendance: schema.attendance,
   serializedGear: schema.serializedGear,
   user: schema.users,

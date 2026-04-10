@@ -2,6 +2,7 @@ import {  sqliteTable, unique } from "drizzle-orm/sqlite-core";
 import { timestamps } from "../../utils/timeStamps";
 import { ID_FIELD, INTEGER_TIMESTAMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD } from "../../utils/schemaHelper";
 import {  fighter } from "./fighter";
+import { dutyPeriod } from "./dutyPeriod";
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { relations } from "drizzle-orm";
 import { z } from "zod";
@@ -28,14 +29,21 @@ export const attendance = sqliteTable("attendance", {
   // work_date stored as text (YYYY-MM-DD)
   workDate: TEXT_REQUIRED_FIELD("work_date"),
 
+  dutyPeriodId: TEXT_REQUIRED_FIELD("duty_period_id").references(() => dutyPeriod.id, {
+    onDelete: "restrict",
+  }),
+
   // notes as optional text
   notes: TEXT_OPTIONAL_FIELD("notes"),
 
   ...timestamps,
 }, (table) => {
   return [
-    // Ensures one member only has one status recorded for any given date
-    unique("fighter_date_UN").on(table.fighterId, table.workDate),
+    unique("fighter_duty_period_date_UN").on(
+      table.fighterId,
+      table.dutyPeriodId,
+      table.workDate,
+    ),
   ];
 });
 
@@ -43,6 +51,10 @@ export const attendaceRelations = relations(attendance, ({ one }) => ({
   fighter: one(fighter,{
     fields: [attendance.fighterId],
     references: [fighter.id],
+  }),
+  dutyPeriod: one(dutyPeriod, {
+    fields: [attendance.dutyPeriodId],
+    references: [dutyPeriod.id],
   }),
 }));
 

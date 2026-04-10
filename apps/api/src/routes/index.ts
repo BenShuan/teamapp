@@ -13,6 +13,7 @@ import usersRouter from "./users/users.index"
 import platoonsRouter from "./platoons/platoons.index"
 import serializedGearRouter from "./serializedGear/serializedGear.index"
 import logisticGearRouter from "./logisticGear/logisticGear.index"
+import dutyPeriodRouter from "./dutyPeriod/dutyPeriod.index"
 
 
 export function registerRoutes(app: AppOpenAPI) {
@@ -20,6 +21,7 @@ export function registerRoutes(app: AppOpenAPI) {
     .route("/", index)
     .route("/fighters", fighter)
     .route("/teams", team)
+    .route("/duty-periods", dutyPeriodRouter)
     .route("/attendance", attendance)
     .route("/users", usersRouter)
     .route("/auth", authRouter)

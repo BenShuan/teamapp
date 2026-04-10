@@ -10,6 +10,12 @@ import { requireScope } from "@/api/middleware/scope";
 
 const tags = ["attendance"];
 
+const CreateAttendanceItemSchema = NewAttendanceSchema.extend({
+  dutyPeriodId: z.string().uuid().optional(),
+});
+
+const attendanceCreateErrorSchema = z.object({ message: z.string() });
+
 export const list = createRoute({
   path: "/",
   method: "get",
@@ -34,7 +40,7 @@ export const create = createRoute({
   middleware: [requireScope()] as const, // TODO: Add requireRole('admin', 'commander', 'captain') if needed
   request: {
     body: jsonContentRequired(
-      z.array(NewAttendanceSchema),
+      z.array(CreateAttendanceItemSchema),
       "The attendance row to create",
     ),
   },
@@ -45,8 +51,10 @@ export const create = createRoute({
       "The created attendance row",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(z.array(NewAttendanceSchema)),
-      "The validation error(s)",
+      createErrorSchema(z.array(CreateAttendanceItemSchema)).or(
+        attendanceCreateErrorSchema,
+      ),
+      "Validation or duty-period rule",
     ),
   },
 });

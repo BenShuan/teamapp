@@ -9,6 +9,7 @@ import { createHash, randomUUID } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import type { D1Database } from "@cloudflare/workers-types";
 import { getPlatformProxy } from "wrangler";
 import { drizzle } from "drizzle-orm/d1";
 
@@ -21,6 +22,7 @@ import {
   userPlatoonMembership,
   userTeamMembership,
   fighter,
+  dutyPeriod,
   attendance,
   serializedGear,
   serializedGearFighter,
@@ -28,8 +30,8 @@ import {
   logisticGear,
   sessions,
   verificationTokens,
-} from "../src/db/schema/index.ts";
-import { UserRole } from "../src/db/schema/auth.ts";
+} from "../src/db/schema";
+import { UserRole } from "../src/db/schema/auth";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -44,6 +46,7 @@ async function clearTables(db: ReturnType<typeof drizzle>) {
   await db.delete(serializedGearCheck);
   await db.delete(serializedGearFighter);
   await db.delete(attendance);
+  await db.delete(dutyPeriod);
   await db.delete(logisticGear);
   await db.delete(userTeamMembership);
   await db.delete(userPlatoonMembership);
@@ -65,7 +68,7 @@ async function seed() {
     persist: true,
   });
 
-  const db = drizzle(env.DB, {
+  const db = drizzle(env.DB as D1Database, {
     schema: {
       platoon,
       team,
@@ -73,6 +76,7 @@ async function seed() {
       userTeamMembership,
       userPlatoonMembership,
       fighter,
+      dutyPeriod,
       attendance,
       serializedGear,
       serializedGearFighter,
@@ -130,24 +134,20 @@ async function seed() {
       },
     ]);
 
-    await db.insert(users).values([
-      {
-        id: adminUserId,
-        name: "מנהל מערכת",
-        email: "admin@demo.local",
-        password: passwordHash,
-        role: UserRole.ADMIN,
-        createdAt: now,
-      },
-      {
-        id: cmdUserId,
-        name: "מפקד כיתה",
-        email: "commander@demo.local",
-        password: passwordHash,
-        role: UserRole.COMMANDER,
-        createdAt: now,
-      },
-    ]);
+    await db.insert(users).values({
+      id: adminUserId,
+      name: "מנהל מערכת",
+      email: "admin@demo.local",
+      password: passwordHash,
+      role: UserRole.ADMIN,
+    });
+    await db.insert(users).values({
+      id: cmdUserId,
+      name: "מפקד כיתה",
+      email: "commander@demo.local",
+      password: passwordHash,
+      role: UserRole.COMMANDER,
+    });
 
     await db.insert(userPlatoonMembership).values([
       {
@@ -238,6 +238,24 @@ async function seed() {
     ]);
 
     const workDate = new Date().toISOString().slice(0, 10);
+    const dutyPeriodDemoId = randomUUID();
+    const periodEnd = new Date(`${workDate}T12:00:00.000Z`);
+    const periodStart = new Date(periodEnd);
+    periodStart.setUTCDate(periodStart.getUTCDate() - 14);
+    periodEnd.setUTCDate(periodEnd.getUTCDate() + 14);
+    const dutyPeriodStart = periodStart.toISOString().slice(0, 10);
+    const dutyPeriodEnd = periodEnd.toISOString().slice(0, 10);
+
+    console.log("Inserting duty period (demo)…");
+
+    await db.insert(dutyPeriod).values({
+      id: dutyPeriodDemoId,
+      name: "תקופת צו — דמו",
+      startDate: dutyPeriodStart,
+      endDate: dutyPeriodEnd,
+      isOpen: true,
+      createdAt: now,
+    });
 
     console.log("Inserting attendance…");
 
@@ -247,6 +265,7 @@ async function seed() {
         fighterId: fighter1Id,
         location: "נוכח",
         workDate,
+        dutyPeriodId: dutyPeriodDemoId,
         notes: "דמו — נוכחות רגילה",
         createdAt: now,
       },
@@ -255,6 +274,7 @@ async function seed() {
         fighterId: fighter2Id,
         location: "יוצא",
         workDate,
+        dutyPeriodId: dutyPeriodDemoId,
         notes: "יציאה לתרגיל",
         createdAt: now,
       },
@@ -263,6 +283,7 @@ async function seed() {
         fighterId: fighter3Id,
         location: "בבית",
         workDate,
+        dutyPeriodId: dutyPeriodDemoId,
         createdAt: now,
       },
     ]);
