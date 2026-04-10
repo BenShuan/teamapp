@@ -6,7 +6,7 @@ export const ID_FIELD = (fieldName: string) =>
     .primaryKey()
     .$default(() => uuid());
 
-export const TEXT_REQUIERD_FIELD = (fieldName: string, options?: any) => {
+export const TEXT_REQUIRED_FIELD = (fieldName: string, options?: any) => {
   if (options?.enum) {
     return text(fieldName, options).notNull();
   }
@@ -18,7 +18,7 @@ export const TEXT_OPTIONAL_FIELD = (fieldName: string, length?: number) => {
   return length ? text(fieldName, { length }) : text(fieldName);
 }
 
-export const INT_REQUIERD_FIELD = (fieldName: string) => {
+export const INT_REQUIRED_FIELD = (fieldName: string) => {
   return integer(fieldName).notNull();
 }
 
@@ -28,6 +28,6 @@ export const INTEGER_OPTIONAL_FIELD = (fieldName: string) => {
 
 }
 
-export const INTEGER_TIMESTEMP_OPTIONAL_FIELD = (fieldName: string) => {
+export const INTEGER_TIMESTAMP_OPTIONAL_FIELD = (fieldName: string) => {
   return integer(fieldName, { mode: "timestamp" });
 };

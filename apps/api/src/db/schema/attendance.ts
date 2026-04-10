@@ -1,6 +1,6 @@
 import {  sqliteTable, unique } from "drizzle-orm/sqlite-core";
 import { timestamps } from "../../utils/timeStamps";
-import { ID_FIELD, INTEGER_TIMESTEMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "../../utils/schemeHelper";
+import { ID_FIELD, INTEGER_TIMESTAMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD } from "../../utils/schemaHelper";
 import {  fighter } from "./fighter";
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { relations } from "drizzle-orm";
@@ -17,16 +17,16 @@ export const attendance = sqliteTable("attendance", {
   id: ID_FIELD("id"),
 
   // fighterId: references fighters(id)
-  fighterId: TEXT_REQUIERD_FIELD("fighter_id").references(() => fighter.id, {
+  fighterId: TEXT_REQUIRED_FIELD("fighter_id").references(() => fighter.id, {
     onDelete: "cascade",
   }),
-  location: TEXT_REQUIERD_FIELD('location', { enum: statusLocations }),
+  location: TEXT_REQUIRED_FIELD('location', { enum: statusLocations }),
   // check-in/out as timestamps
-  checkIn: INTEGER_TIMESTEMP_OPTIONAL_FIELD("check_in"),
-  checkOut: INTEGER_TIMESTEMP_OPTIONAL_FIELD("check_out"),
+  checkIn: INTEGER_TIMESTAMP_OPTIONAL_FIELD("check_in"),
+  checkOut: INTEGER_TIMESTAMP_OPTIONAL_FIELD("check_out"),
 
   // work_date stored as text (YYYY-MM-DD)
-  workDate: TEXT_REQUIERD_FIELD("work_date"),
+  workDate: TEXT_REQUIRED_FIELD("work_date"),
 
   // notes as optional text
   notes: TEXT_OPTIONAL_FIELD("notes"),

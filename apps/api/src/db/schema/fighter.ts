@@ -4,7 +4,7 @@ import { createInsertSchema, createSelectSchema, createUpdateSchema } from "driz
 import { z } from "zod";
 import { team } from "./team";
 import { relations } from "drizzle-orm";
-import { ID_FIELD, INTEGER_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "../../utils/schemeHelper";
+import { ID_FIELD, INTEGER_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD } from "../../utils/schemaHelper";
 import { attendance } from "./attendance";
 
 // Fighters table based on the FighterSchema fields
@@ -13,10 +13,10 @@ export const fighter = sqliteTable(
   {
     id: ID_FIELD("id"), // uuid
     idNumber: TEXT_OPTIONAL_FIELD("id_number"), // char(10)
-    firstName: TEXT_REQUIERD_FIELD("first_name"), // varchar(50)
-    lastName: TEXT_REQUIERD_FIELD("last_name"), // varchar(50)
+    firstName: TEXT_REQUIRED_FIELD("first_name"), // varchar(50)
+    lastName: TEXT_REQUIRED_FIELD("last_name"), // varchar(50)
     email: TEXT_OPTIONAL_FIELD("email"), // varchar(100)
-    personalNumber: TEXT_REQUIERD_FIELD("personal_number"), // char(8)
+    personalNumber: TEXT_REQUIRED_FIELD("personal_number"), // char(8)
     address: INTEGER_OPTIONAL_FIELD("address"),
     phoneNumber: TEXT_OPTIONAL_FIELD("phone_number"), // char(10)
     shoesSize: INTEGER_OPTIONAL_FIELD("shoes_size"), // tinyint

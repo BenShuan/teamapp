@@ -29,12 +29,11 @@ export default function createApp() {
       return response
     })
     .basePath(BASE_PATH) as AppOpenAPI;
-  ``
+
   app
     .use(
       "*",
       async (c, next) => {
-        console.log('c.url', c.req.url)
         c.set("authConfig", createAuthConfig(c.env));
         return next();
       },

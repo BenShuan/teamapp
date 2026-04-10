@@ -1,13 +1,13 @@
 import { sqliteTable } from "drizzle-orm/sqlite-core";
 import { timestamps } from "../../utils/timeStamps";
-import { ID_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIERD_FIELD } from "../../utils/schemeHelper";
+import { ID_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD } from "../../utils/schemaHelper";
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { z } from "zod";
 
 export const platoon = sqliteTable("platoons", {
   id: ID_FIELD("id"),
-  name: TEXT_REQUIERD_FIELD("name"),
-  codeName: TEXT_REQUIERD_FIELD("code_name"),
+  name: TEXT_REQUIRED_FIELD("name"),
+  codeName: TEXT_REQUIRED_FIELD("code_name"),
   description: TEXT_OPTIONAL_FIELD("description"),
   ...timestamps,
 });
