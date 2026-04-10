@@ -16,7 +16,8 @@
     "test": "cross-env NODE_ENV=test vitest",
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply teamapp --local",
-    "db:migrate:remote": "wrangler d1 migrations apply teamapp --remote"
+    "db:migrate:remote": "wrangler d1 migrations apply teamapp --remote",
+    "db:seed:local": "tsx scripts/seed-db.ts"
   },
   "dependencies": {
     "@auth/core": "^0.37.4",

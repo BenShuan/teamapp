@@ -10,11 +10,13 @@ import { verifyUser } from '../routes/auth/auth.handlers';
 import { createDb } from '../db';
 import { getUserScope } from './auth-scope';
 import { accounts, sessions, users, verificationTokens } from '../db/schema';
+import { BASE_PATH } from './constants';
 
 export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
   const db = drizzle(env.DB);
 
   return {
+    basePath: BASE_PATH + "/auth",
     adapter: DrizzleAdapter(db,{
       usersTable: users,
       accountsTable: accounts,
@@ -23,7 +25,6 @@ export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
     }),
     session: {
       strategy: "jwt",
-
     },
     providers: [
       GitHub({
@@ -56,6 +57,7 @@ export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
     trustHost: true,
     callbacks: {
       async session({ session, token }) {
+        
         // Add user data from token to session
         if (token?.sub) {
           session.user.id = token.sub;

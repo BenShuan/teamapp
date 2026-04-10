@@ -18,6 +18,7 @@ export type AppEnv = {
     authToken: string;
     scope: UserScope | null;
     userId: string | null;
+    authUser: any;
   }
 
 };

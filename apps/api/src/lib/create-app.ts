@@ -19,14 +19,10 @@ export default function createApp() {
       // SPA redirect to /index.html
       const requestUrl = new URL(c.req.raw.url);
 
-      let response = await c.env.ASSETS.fetch(new URL("/index.html", requestUrl.origin));
-
-
-      // If not found, fallback to index.html
-      if (response.status === 404) {
-        response = await c.env.ASSETS.fetch(new Request('http://dummy/index.html'))
+      if (!c.env.ASSETS) {
+        return next();
       }
-      return response
+      return await c.env.ASSETS.fetch(new URL("/index.html", requestUrl.origin));
     })
     .basePath(BASE_PATH) as AppOpenAPI;
 
