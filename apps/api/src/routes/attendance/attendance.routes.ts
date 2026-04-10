@@ -22,6 +22,7 @@ export const list = createRoute({
   tags,
   request: {
     query: z.object({
+      dutyPeriodId: z.string().uuid(),
       startDate: z.string().optional(),
       endDate: z.string().optional(),
     })
@@ -30,6 +31,10 @@ export const list = createRoute({
     [HttpStatusCodes.OK]: jsonContent(
       z.array(FighterAttendanceSchema),
       "The list of attendance rows",
+    ),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+      notFoundSchema,
+      "Duty period not found",
     ),
   },
 });

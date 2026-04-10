@@ -13,6 +13,7 @@ import { AttendancePopover } from './AttendancePopover';
 import { formatDateHeader, getDatesByRange } from '@teamapp/shared';
 
 interface MobileAttendanceViewProps {
+  dutyPeriodId: string;
   startDate: string;
   endDate: string;
 }
@@ -79,7 +80,7 @@ const LocationContainer: React.FC<{
 };
 
 export const MobileAttendanceView: React.FC<MobileAttendanceViewProps> = ({
-
+  dutyPeriodId,
 }) => {
   const { data: fighterArray = [] } = useFighters();
   
@@ -87,7 +88,7 @@ export const MobileAttendanceView: React.FC<MobileAttendanceViewProps> = ({
   const [selectedAttendance, setSelectedAttendance] = useState<any>(null);
   const [selectedFighterName, setSelectedFighterName] = useState('');
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const { data: attendanceRecords = [], isLoading } = useAttendance(new Date(selectedDate),new Date(selectedDate));
+  const { data: attendanceRecords = [], isLoading } = useAttendance(dutyPeriodId, new Date(selectedDate), new Date(selectedDate));
 
   const { buildContainers } = useAttendanceDragDrop(
     Array.isArray(attendanceRecords) ? attendanceRecords.flatMap((record: any) => record.attendances) : [],

@@ -15,6 +15,7 @@ import { Input } from '@/web/components/ui/input';
 import { useFighters } from '@/web/hooks/useFighter';
 
 interface AttendanceTableProps {
+  dutyPeriodId: string;
   startDate: string;
   endDate: string;
 }
@@ -23,6 +24,7 @@ interface AttendanceTableProps {
 
 
 export const AttendanceTable: React.FC<AttendanceTableProps> = ({
+  dutyPeriodId,
   startDate,
   endDate,
 }) => {
@@ -37,7 +39,7 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
     return dateRangeBuilder(start, end);
     
   }, [startDate, endDate]);
-  const { data: attendanceRecords = [], isLoading, error } = useAttendance(new Date(startDate),new Date(endDate));
+  const { data: attendanceRecords = [], isLoading, error } = useAttendance(dutyPeriodId, new Date(startDate), new Date(endDate));
   const attendanceColumns: ColumnDef<any>[] = useMemo(() => {
     const columns = ([
       {
@@ -116,6 +118,7 @@ export const AttendanceTable: React.FC<AttendanceTableProps> = ({
           fighterId: f.id,
           workDate: d,
           location: defaultLocation as any,
+          dutyPeriodId,
         });
       });
     });

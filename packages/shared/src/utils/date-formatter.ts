@@ -47,9 +47,14 @@ export const getDatesByRange=(dayToRefrence:Date=new Date(),daysBefore:number=0,
 }
 
 export const formatShortDate = (date:string|Date)=>{
-console.log('date', date)
+
   const dateformatted = new Date(date);
 
   return dateformatted.toISOString().split("T")[0]
 
+}
+
+export const formatHebrewDate = (date:string|Date)=>{
+  const dateformatted = new Date(date);
+  return dateformatted.toLocaleDateString("he-IL", { day: "2-digit", month: "2-digit", year: "numeric" })
 }

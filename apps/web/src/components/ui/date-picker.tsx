@@ -42,7 +42,7 @@ const isValidDate = (date: Date | undefined) => (date ? !isNaN(date.getTime()) :
 const DatePickerRoot: React.FC<DatePickerRootProps> = ({ value, defaultValue, onChange, id, label, children }) => {
   const [open, setOpen] = React.useState(false)
 
-  const [dateState, setDateState] = React.useState<DateValue>(value ?? defaultValue ?? new Date("2025-06-01"))
+  const [dateState, setDateState] = React.useState<DateValue>(value ?? defaultValue ?? new Date())
 
   React.useEffect(() => {
     if (value !== undefined) setDateState(value ?? null)

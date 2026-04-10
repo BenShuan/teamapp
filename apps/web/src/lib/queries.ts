@@ -14,7 +14,8 @@ export const queryKeys = {
     queryKey: ["team"] as const
   },
   teamItem: (userId: string) => ({ queryKey: ["team", userId] as const }) as const,
-  attendance: (startDate: Date, endDate: Date) => ({ queryKey: ["attendance", startDate, endDate] as const }),
+  dutyPeriods: { queryKey: ["duty-period"] as const },
+  attendance: (dutyPeriodId: string, startDate?: Date, endDate?: Date) => ({ queryKey: ["attendance", dutyPeriodId, startDate, endDate] as const }),
   attendanceItem: (id: string) => ({ queryKey: ["attendance", id] as const }),
   gearCatalog: { queryKey: ["gear-catalog"] as const },
   serializedGear: { queryKey: ["serialized-gear"] as const },

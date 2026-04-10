@@ -10,12 +10,13 @@ import queryClient from "@/web/lib/query-client";
 import { useAttendance } from "@/web/hooks/useAttendance";
 import { useTeams } from "@/web/hooks/useTeams";
 import { useFighters } from "@/web/hooks/useFighter";
-import { attendanceQueryOptions } from "@/web/services/attendance.api";
+import { useDutyPeriods } from "@/web/hooks/useDutyPeriod";
 import { teamQueryOptions } from "@/web/services/teams.api";
 import { fighterQueryOptions } from "@/web/services/fighter.api";
+import { dutyPeriodQueryOptions } from "@/web/services/dutyPeriod.api";
 import { attendnanceColorMap } from "../components/AttendanceCell";
 import { fullName } from "@teamapp/shared";
-import { StatusLocationEnum } from "@teamapp/api/schema";
+import { StatusLocationEnum, type DutyPeriod } from "@teamapp/api/schema";
 
 
 const DailyAttendancePage = () => {
@@ -23,7 +24,11 @@ const DailyAttendancePage = () => {
   const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
 
-  const { data: attendance=[], isLoading: attendanceLoading } = useAttendance(startOfDay, endOfDay);
+  const { data: dutyPeriods = [] } = useDutyPeriods();
+  const openPeriod = (dutyPeriods as DutyPeriod[]).find(dp => dp.isOpen);
+  const openPeriodId = openPeriod?.id ?? "";
+
+  const { data: attendance=[], isLoading: attendanceLoading } = useAttendance(openPeriodId, startOfDay, endOfDay);
   const { data: teams = [], isLoading: teamsLoading } = useTeams();
   const { data: fighters = [], isLoading: fightersLoading } = useFighters();
 
@@ -184,11 +189,8 @@ const DailyAttendancePage = () => {
 export const Route = createFileRoute("/(app)/attendance/daily/")({
   component: DailyAttendancePage,
   loader: () => {
-    const today = new Date();
-    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
     return Promise.all([
-      queryClient.ensureQueryData(attendanceQueryOptions(startOfDay, endOfDay)),
+      queryClient.ensureQueryData(dutyPeriodQueryOptions()),
       queryClient.ensureQueryData(teamQueryOptions),
       queryClient.ensureQueryData(fighterQueryOptions),
     ]);

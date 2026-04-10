@@ -5,10 +5,13 @@ import { queryOptions } from "@tanstack/react-query";
 import { NewAttendance, UpdateAttendance } from "@teamapp/api/schema";
 import { formatShortDate } from "@teamapp/shared";
 
-export const attendanceQueryOptions = (startDate: Date, endDate: Date) => queryOptions({
-  ...queryKeys.attendance(startDate, endDate),
+export const attendanceQueryOptions = (dutyPeriodId: string, startDate?: Date, endDate?: Date) => queryOptions({
+  ...queryKeys.attendance(dutyPeriodId, startDate, endDate),
   queryFn: async () => {
-    const response = await apiClient.api.attendance.$get({ query: { startDate:formatShortDate(startDate), endDate:formatShortDate(endDate) } });
+    const query: Record<string, string> = { dutyPeriodId };
+    if (startDate) query.startDate = formatShortDate(startDate);
+    if (endDate) query.endDate = formatShortDate(endDate);
+    const response = await apiClient.api.attendance.$get({ query: query as any });
     return response.json();
   },
 });

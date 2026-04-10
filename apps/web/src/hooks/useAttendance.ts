@@ -7,8 +7,8 @@ import { toast } from 'sonner';
 import { dateRangeBuilder } from '@teamapp/shared';
 import { queriesMap } from '../lib/queries';
 
-export const useAttendance = (startDate: Date, endDate: Date) => {
-  const query = useQuery(attendanceQueryOptions(startDate, endDate));
+export const useAttendance = (dutyPeriodId: string, startDate: Date, endDate: Date) => {
+  const query = useQuery(attendanceQueryOptions(dutyPeriodId, startDate, endDate));
 
   const dateRange = dateRangeBuilder(startDate, endDate);
   const attendanceMapByDate: queriesMap<Record<string, Attendance[]>> = {};

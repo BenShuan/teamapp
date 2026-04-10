@@ -3,6 +3,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { AdminUsersTable } from '@/web/components/admin-users-table'
 import { AdminPlatoonsTeamsManager } from '@/web/components/admin-platoons-teams'
 import { AdminSerializedGearManager } from '@/web/components/admin-serialized-gear'
+import { AdminDutyPeriodManager } from '@/web/components/admin-duty-periods'
 import AppNavbar from '@/web/components/app-navbar'
 
 export const Route = createFileRoute('/admin/')({
@@ -31,6 +32,11 @@ function AdminPage() {
         </div>
 
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+
+          <section>
+            <h2 className="text-2xl font-semibold mb-4">תקופות צו</h2>
+            <AdminDutyPeriodManager />
+          </section>
 
           <section>
             {/* Platoons & Teams Management */}

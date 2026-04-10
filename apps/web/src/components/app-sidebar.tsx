@@ -36,7 +36,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <SidebarTrigger className=" w-10 mr-2 rotate-180" />
               <div className="flex items-center gap-4 text-right text-sm leading-tight">
                 <img src={teamAppLogo} alt="TeamApp" width={40} />
                 <span className="truncate font-medium">הצוות</span>

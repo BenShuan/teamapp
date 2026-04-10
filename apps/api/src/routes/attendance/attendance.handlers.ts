@@ -1,4 +1,4 @@
-import { between, eq, inArray } from "drizzle-orm";
+import { and, between, eq, inArray } from "drizzle-orm";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import { formatShortDate } from "@teamapp/shared"
@@ -15,28 +15,35 @@ import { teamScopeWhere } from "@/api/lib/auth-scope";
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const db = createDb(c.env);
-  const scope = c.get("scope")
-  const { startDate, endDate } = c.req.valid("query");
+  const scope = c.get("scope");
+  const { dutyPeriodId, startDate, endDate } = c.req.valid("query");
 
-  const query = {
-    where: between(
-      attendance.workDate,
-      formatShortDate(startDate ?? ""),
-      formatShortDate(endDate ?? "")
-    ),
+  const period = await db.query.dutyPeriod.findFirst({
+    where: (fields, ops) => ops.eq(fields.id, dutyPeriodId),
+  });
+  if (!period) {
+    return c.json({ message: "תקופת צו לא נמצאה" }, HttpStatusCodes.NOT_FOUND);
   }
+
+  const effectiveStart = startDate && startDate > period.startDate ? startDate : period.startDate;
+  const effectiveEnd = endDate && endDate < period.endDate ? endDate : period.endDate;
 
   const rows = await db.query.fighter.findMany({
     columns: { id: true, firstName: true, lastName: true, personalNumber: true },
     with: {
-      attendances: query
+      attendances: {
+        where: and(
+          eq(attendance.dutyPeriodId, dutyPeriodId),
+          between(attendance.workDate, formatShortDate(effectiveStart), formatShortDate(effectiveEnd)),
+        ),
+      },
     },
     where: teamScopeWhere(scope),
     orderBy(fields, operators) {
       return operators.desc(fields.firstName);
     },
   });
-  return c.json(rows);
+  return c.json(rows, HttpStatusCodes.OK);
 };
 
 export const create: AppRouteHandler<CreateRoute> = async (c) => {

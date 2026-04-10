@@ -10,13 +10,14 @@ import { useLogisticGear } from "@/web/hooks/useLogisticGear";
 import { useSerializedGear } from "@/web/hooks/useSerializedGear";
 import { useTeams } from "@/web/hooks/useTeams";
 import { useAttendance } from "@/web/hooks/useAttendance";
+import { useDutyPeriods } from "@/web/hooks/useDutyPeriod";
 import { fighterQueryOptions } from "@/web/services/fighter.api";
 import { logisticGearQueryOptions } from "@/web/services/logisticGear.api";
 import { serializedGearQueryOptions } from "@/web/services/serializedGear.api";
 import { teamQueryOptions } from "@/web/services/teams.api";
-import { attendanceQueryOptions } from "@/web/services/attendance.api";
+import { dutyPeriodQueryOptions } from "@/web/services/dutyPeriod.api";
 import TeamCard from "./~home/TeamCard";
-import { type SerializedGearFighter, type LogisticGear, statusLocations, StatusLocationEnum, StatusLocation } from "@teamapp/api/schema";
+import { type SerializedGearFighter, type LogisticGear, type DutyPeriod, statusLocations, StatusLocationEnum, StatusLocation } from "@teamapp/api/schema";
 
 const HomePage = () => {
   const { data: fighters = [], isLoading: fightersLoading, fightersMap } = useFighters();
@@ -24,10 +25,14 @@ const HomePage = () => {
   const { data: serialized = [], isLoading: serializedLoading } = useSerializedGear();
   const { data: logistic = [], isLoading: logisticLoading } = useLogisticGear();
 
+  const { data: dutyPeriods = [] } = useDutyPeriods();
+  const openPeriod = (dutyPeriods as DutyPeriod[]).find(dp => dp.isOpen);
+  const openPeriodId = openPeriod?.id ?? "";
+
   const today = new Date();
   const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-  const { attendanceMapByDate, isLoading: attendanceLoading } = useAttendance(startOfDay, endOfDay);
+  const { attendanceMapByDate, isLoading: attendanceLoading } = useAttendance(openPeriodId, startOfDay, endOfDay);
 
   const totalFighters = Array.isArray(fighters) ? fighters.length : 0;
   const totalTeams = Array.isArray(teams) ? teams.length : 0;
@@ -129,15 +134,12 @@ const StatMini = ({ label, value, loading, to }: { label: string; value: number;
 export const Route = createFileRoute("/(app)/home")({
   component: HomePage,
   loader: () => {
-    const today = new Date();
-    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
     return Promise.all([
       queryClient.ensureQueryData(fighterQueryOptions),
       queryClient.ensureQueryData(teamQueryOptions),
       queryClient.ensureQueryData(serializedGearQueryOptions),
       queryClient.ensureQueryData(logisticGearQueryOptions),
-      queryClient.ensureQueryData(attendanceQueryOptions(startOfDay, endOfDay)),
+      queryClient.ensureQueryData(dutyPeriodQueryOptions()),
     ]);
   },
   pendingComponent: RoutePending,
