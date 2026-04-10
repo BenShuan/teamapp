@@ -39,7 +39,10 @@ export const fighter = sqliteTable(
 );
 
 export const fighterTeamRelations = relations(fighter, ({ one, many }) => ({
-  team: one(team),
+  team: one(team, {
+    fields: [fighter.teamId],
+    references: [team.id],
+  }),
   attendances: many(attendance),
 }));
 
