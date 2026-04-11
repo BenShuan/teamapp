@@ -2,7 +2,7 @@
 
 import { TextField, NumberField, AutocompleteField } from "@/web/components/forms";
 import { useTeams } from "@/web/hooks/useTeams";
-import type { Fighter, Team } from "@teamapp/api/schema";
+import { currentStatusEnum, type Fighter, type Team } from "@teamapp/api/schema";
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { Card, CardContent } from "@/web/components/ui/card";
 import { Button } from "@/web/components/ui/button";
@@ -33,7 +33,8 @@ const defaultFighter = {
   class: "",
   kit: "",
   address: undefined,
-} as unknown as Fighter
+  currentStatus: currentStatusEnum.פעיל,
+}  as Fighter
 
 const FighterForm: React.FC<FighterFormProps> = ({ fighter }) => {
 

@@ -7,7 +7,7 @@ import type { AppRouteHandler } from "@/api/lib/types";
 import type { DutyPeriod } from "@/api/db/schema";
 
 import { createDb } from "@/api/db";
-import { attendance, dutyPeriod } from "@/api/db/schema";
+import { attendance, currentStatusEnum, dutyPeriod, fighter } from "@/api/db/schema";
 import { ZOD_ERROR_CODES, ZOD_ERROR_MESSAGES } from "@/api/lib/constants";
 
 import type { CreateRoute, GetOneRoute, ListRoute, PatchRoute, RemoveRoute } from "./attendance.routes";
@@ -38,7 +38,7 @@ export const list: AppRouteHandler<ListRoute> = async (c) => {
         ),
       },
     },
-    where: teamScopeWhere(scope),
+    where: (teamScopeWhere(scope),eq(fighter.currentStatus, currentStatusEnum.פעיל)),
     orderBy(fields, operators) {
       return operators.desc(fields.firstName);
     },

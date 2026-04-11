@@ -7,6 +7,16 @@ import { relations } from "drizzle-orm";
 import { ID_FIELD, INTEGER_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD } from "../../utils/schemaHelper";
 import { attendance } from "./attendance";
 
+export const currentStatus = [
+  "פעיל",
+  "לא פעיל",
+  "פצוע",
+  "פרישה"
+] as const;
+export type currentStatusType = typeof currentStatus[number];
+export const currentStatusEnum = Object.fromEntries(currentStatus.map(loc => [loc, loc])) as { [key in currentStatusType]: key };
+
+
 // Fighters table based on the FighterSchema fields
 export const fighter = sqliteTable(
   "fighters",
@@ -29,6 +39,7 @@ export const fighter = sqliteTable(
     ironNumber: TEXT_OPTIONAL_FIELD("iron_number"), // tinyint
     class: TEXT_OPTIONAL_FIELD("class"), // varchar(1)
     kit: TEXT_OPTIONAL_FIELD("kit"), // varchar(10)
+    currentStatus: TEXT_REQUIRED_FIELD("current_status", { enum: currentStatus  }).default(currentStatusEnum.פעיל), // varchar(20)
     ...timestamps,
   },
   (t) => [
@@ -49,9 +60,9 @@ export const fighterTeamRelations = relations(fighter, ({ one, many }) => ({
 
 // Insert validator (runtime)
 export const NewFighterSchema = createInsertSchema(fighter).omit({
-    id: true,
-    createdAt: true,
-    updatedAt: true,
+  id: true,
+  createdAt: true,
+  updatedAt: true,
 });
 
 // Select validator (useful for output shaping)
@@ -59,13 +70,13 @@ export const fighterSchema = createSelectSchema(fighter);
 
 
 // Select validator (useful for output shaping)
-export const UpdateFighterSchema = createUpdateSchema(fighter,{
-  createdAt:(schema)=>schema.transform((str)=>new Date(str))
+export const UpdateFighterSchema = createUpdateSchema(fighter, {
+  createdAt: (schema) => schema.transform((str) => new Date(str))
 }).omit({
   createdAt: true,
   updatedAt: true,
 }).required({
-  id:true
+  id: true
 });
 
 

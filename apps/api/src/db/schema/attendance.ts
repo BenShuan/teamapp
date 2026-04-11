@@ -21,7 +21,7 @@ export const attendance = sqliteTable("attendance", {
   fighterId: TEXT_REQUIRED_FIELD("fighter_id").references(() => fighter.id, {
     onDelete: "cascade",
   }),
-  location: TEXT_REQUIRED_FIELD('location', { enum: statusLocations }),
+  location: TEXT_REQUIRED_FIELD('location', { enum: statusLocations, default: StatusLocationEnum.נוכח }),
   // check-in/out as timestamps
   checkIn: INTEGER_TIMESTAMP_OPTIONAL_FIELD("check_in"),
   checkOut: INTEGER_TIMESTAMP_OPTIONAL_FIELD("check_out"),

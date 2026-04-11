@@ -36,6 +36,10 @@ function FighterTable() {
       id: 'צוות',
       cell: ({ getValue }) => teamsMap?.[getValue<string | null>() ?? '']?.label ?? '-',
 
+    },   
+     {
+       accessorKey: 'currentStatus',
+      id: 'סטטוס נוכחי',
     },
     {
       accessorKey: 'ironNumber',
