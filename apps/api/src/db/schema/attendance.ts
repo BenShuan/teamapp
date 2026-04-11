@@ -90,10 +90,15 @@ export const FighterAttendanceSchema = z.object({
 });
 
 
-export type FightersAttendance = z.infer<typeof FighterAttendanceSchema>;
 export type NewAttendance = z.infer<typeof NewAttendanceSchema>;
 export type UpdateAttendance = z.infer<typeof UpdateAttendanceSchema>;
-export type Attendance = z.infer<typeof AttendanceSchema>;
+export type Attendance = Omit<typeof attendance.$inferSelect, 'checkIn' | 'checkOut'> & {
+  checkIn: string | null;
+  checkOut: string | null;
+};
+export type FightersAttendance = z.infer<typeof FighterAttendanceSchema> &{
+  attendances: Attendance[];
+};
 
 
 

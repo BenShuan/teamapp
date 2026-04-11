@@ -21,25 +21,25 @@ export const currentStatusEnum = Object.fromEntries(currentStatus.map(loc => [lo
 export const fighter = sqliteTable(
   "fighters",
   {
-    id: ID_FIELD("id"), // uuid
-    idNumber: TEXT_OPTIONAL_FIELD("id_number"), // char(10)
-    firstName: TEXT_REQUIRED_FIELD("first_name"), // varchar(50)
-    lastName: TEXT_REQUIRED_FIELD("last_name"), // varchar(50)
-    email: TEXT_OPTIONAL_FIELD("email"), // varchar(100)
-    personalNumber: TEXT_REQUIRED_FIELD("personal_number"), // char(8)
+    id: ID_FIELD("id"),
+    idNumber: TEXT_OPTIONAL_FIELD("id_number"),
+    firstName: TEXT_REQUIRED_FIELD("first_name"),
+    lastName: TEXT_REQUIRED_FIELD("last_name"),
+    email: TEXT_OPTIONAL_FIELD("email"),
+    personalNumber: TEXT_REQUIRED_FIELD("personal_number"),
     address: INTEGER_OPTIONAL_FIELD("address"),
-    phoneNumber: TEXT_OPTIONAL_FIELD("phone_number"), // char(10)
-    shoesSize: INTEGER_OPTIONAL_FIELD("shoes_size"), // tinyint
-    shirtSize: TEXT_OPTIONAL_FIELD("shirt_size"), // varchar(5)
-    pantsSize: TEXT_OPTIONAL_FIELD("pants_size"), // varchar(5)
-    professional: TEXT_OPTIONAL_FIELD("professional"), // varchar(50)
+    phoneNumber: TEXT_OPTIONAL_FIELD("phone_number"),
+    shoesSize: INTEGER_OPTIONAL_FIELD("shoes_size"),
+    shirtSize: TEXT_OPTIONAL_FIELD("shirt_size"),
+    pantsSize: TEXT_OPTIONAL_FIELD("pants_size"),
+    professional: TEXT_OPTIONAL_FIELD("professional"),
     teamId: TEXT_OPTIONAL_FIELD("team_id").references(() => team.id, {
       onDelete: "set null",
-    }), // references team(id) if available
-    ironNumber: TEXT_OPTIONAL_FIELD("iron_number"), // tinyint
-    class: TEXT_OPTIONAL_FIELD("class"), // varchar(1)
-    kit: TEXT_OPTIONAL_FIELD("kit"), // varchar(10)
-    currentStatus: TEXT_REQUIRED_ENUM_FIELD("current_status", currentStatus).default(currentStatusEnum.פעיל), // varchar(20)
+    }),
+    ironNumber: TEXT_OPTIONAL_FIELD("iron_number"),
+    class: TEXT_OPTIONAL_FIELD("class"),
+    kit: TEXT_OPTIONAL_FIELD("kit"),
+    currentStatus: TEXT_REQUIRED_ENUM_FIELD("current_status", currentStatus).default(currentStatusEnum.פעיל),
     ...timestamps,
   },
   (t) => [
@@ -66,7 +66,7 @@ export const NewFighterSchema = createInsertSchema(fighter).omit({
 });
 
 // Select validator (useful for output shaping)
-export const fighterSchema = createSelectSchema(fighter,{});
+export const fighterSchema = createSelectSchema(fighter);
 
 
 // Select validator (useful for output shaping)
@@ -82,4 +82,4 @@ export const UpdateFighterSchema = createUpdateSchema(fighter, {
 
 export type NewFighter = z.infer<typeof NewFighterSchema>;
 export type UpdateFighter = z.infer<typeof UpdateFighterSchema>;
-export type Fighter = z.infer<typeof fighterSchema>;
+export type Fighter = typeof fighter.$inferSelect;

@@ -36,4 +36,4 @@ export const UpdateTeamSchema = createUpdateSchema(team).omit({
 
 export type NewTeam = z.infer<typeof NewTeamSchema>;
 export type UpdateTeam = z.infer<typeof UpdateTeamSchema>;
-export type Team = z.infer<typeof teamSchema>;
+export type Team = typeof team.$inferSelect;

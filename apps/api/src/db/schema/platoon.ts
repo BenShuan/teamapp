@@ -21,4 +21,4 @@ export const UpdatePlatoonSchema = createUpdateSchema(platoon).omit({
 
 export type NewPlatoon = z.infer<typeof NewPlatoonSchema>;
 export type UpdatePlatoon = z.infer<typeof UpdatePlatoonSchema>;
-export type Platoon = z.infer<typeof PlatoonSchema>;
+export type Platoon = typeof platoon.$inferSelect;

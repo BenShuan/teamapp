@@ -16,7 +16,7 @@ import { fighterQueryOptions } from "@/web/services/fighter.api";
 import { dutyPeriodQueryOptions } from "@/web/services/dutyPeriod.api";
 import { attendnanceColorMap } from "../components/AttendanceCell";
 import { fullName } from "@teamapp/shared";
-import { StatusLocationEnum, type DutyPeriod } from "@teamapp/api/schema";
+import { Attendance, StatusLocationEnum } from "@teamapp/api/schema";
 
 
 const DailyAttendancePage = () => {
@@ -25,8 +25,8 @@ const DailyAttendancePage = () => {
   const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
 
   const { data: dutyPeriods = [] } = useDutyPeriods();
-  const openPeriod = (dutyPeriods as DutyPeriod[]).find(dp => dp.isOpen);
-  const openPeriodId = openPeriod?.id ?? "";
+  const openPeriod = dutyPeriods.find(dp => dp.isOpen);
+  const openPeriodId = openPeriod?.id ?? "" as string;
 
   const { data: attendance=[], isLoading: attendanceLoading } = useAttendance(openPeriodId, startOfDay, endOfDay);
   const { data: teams = [], isLoading: teamsLoading } = useTeams();
@@ -54,7 +54,7 @@ const DailyAttendancePage = () => {
     // Count attendance per team for today
     const todayKey = today.toISOString().split('T')[0];
     const todayAttendance = attendance.flatMap((a) => {
-      return a.attendances.filter((att)=> new Date(att.workDate).toISOString().split('T')[0] === todayKey)
+      return a.attendances.filter((att:Attendance)=> new Date(att.workDate).toISOString().split('T')[0] === todayKey)
     });
 
     for (const team of teams) {
@@ -66,7 +66,6 @@ const DailyAttendancePage = () => {
           return null;
         }
         const fighterAttendance = todayAttendance.find((att) => att.fighterId === fighter.id)?.location;
-        console.log('fighterAttendance', fighterAttendance);
         return {
           fighter,
           status: fighterAttendance ? fighterAttendance : null,

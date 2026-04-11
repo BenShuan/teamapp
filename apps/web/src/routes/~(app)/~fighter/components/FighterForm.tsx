@@ -2,7 +2,7 @@
 
 import { TextField, NumberField, AutocompleteField } from "@/web/components/forms";
 import { useTeams } from "@/web/hooks/useTeams";
-import { currentStatusEnum, type Fighter, type Team } from "@teamapp/api/schema";
+import { currentStatusEnum,Fighter, type Team } from "@teamapp/api/schema";
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { Card, CardContent } from "@/web/components/ui/card";
 import { Button } from "@/web/components/ui/button";
@@ -12,12 +12,12 @@ import { useNavigate } from "@tanstack/react-router";
 
 
 type FighterFormProps = {
-  fighter?: Fighter
+  fighter?: Fighter;
   onCreated?: (fighter: any) => void;
 };
 
 
-type FighterFormData = Omit<Fighter, 'id' | 'createdAt' | 'updatedAt'>;
+type FighterFormData = Omit<Fighter, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>;
 
 const defaultFighter: FighterFormData = {
   firstName: "",
@@ -131,6 +131,16 @@ const FighterForm: React.FC<FighterFormProps> = ({ fighter }) => {
                 placeholder="בחר צוות"
                 isLoading={teamsData.isLoading}
               />
+              
+              <AutocompleteField
+                name="currentStatus"
+                label="סטטוס נוכחי"
+                options={Object.entries(currentStatusEnum).map(([label, value]) => ({ label, value }))}
+                placeholder="בחר סטטוס"
+                isLoading={teamsData.isLoading}
+              />
+
+        
 
               <TextField name="class" label="כיתה" maxLength={2} />
               <TextField name="kit" label="ערכת ציוד" />

@@ -67,7 +67,7 @@ const HomePage = () => {
     const todayAttendance = attendanceMapByDate[todayKey]?.value || {};
 
     for (const team of teams) {
-      stats[team.id].attendance = statusLocations.reduce((acc, loc) => {
+      stats[team.id].attendance = statusLocations?.reduce((acc, loc) => {
         acc[loc] = todayAttendance[loc]?.filter(att=>fightersMap[att.fighterId]?.value.teamId === team.id).length;
         return acc;
       }, {} as Record<StatusLocation, number>);
@@ -135,10 +135,10 @@ export const Route = createFileRoute("/(app)/home")({
   component: HomePage,
   loader: () => {
     return Promise.all([
-      queryClient.ensureQueryData(fighterQueryOptions),
-      queryClient.ensureQueryData(teamQueryOptions),
-      queryClient.ensureQueryData(serializedGearQueryOptions),
-      queryClient.ensureQueryData(logisticGearQueryOptions),
+      queryClient.fetchQuery(fighterQueryOptions),
+      queryClient.fetchQuery(teamQueryOptions),
+      queryClient.fetchQuery(serializedGearQueryOptions),
+      queryClient.fetchQuery(logisticGearQueryOptions),
       queryClient.ensureQueryData(dutyPeriodQueryOptions()),
     ]);
   },

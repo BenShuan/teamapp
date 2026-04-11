@@ -12,6 +12,10 @@ export const attendanceQueryOptions = (dutyPeriodId: string, startDate?: Date, e
     if (startDate) query.startDate = formatShortDate(startDate);
     if (endDate) query.endDate = formatShortDate(endDate);
     const response = await apiClient.api.attendance.$get({ query: query as any });
+    if (!response.ok) {
+     return [] ;
+    }
+
     return response.json();
   },
 });

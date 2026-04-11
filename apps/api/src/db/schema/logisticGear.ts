@@ -37,6 +37,6 @@ export const UpdateLogisticGearSchema = createUpdateSchema(logisticGear)
   .omit({ createdAt: true, updatedAt: true })
   .partial();
 
-export type LogisticGear = z.infer<typeof LogisticGearSchema>;
+export type LogisticGear = typeof logisticGear.$inferSelect;
 export type NewLogisticGear = z.infer<typeof NewLogisticGearSchema>;
 export type UpdateLogisticGear = z.infer<typeof UpdateLogisticGearSchema>;

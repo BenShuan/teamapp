@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/~__root'
 import { Route as appRouteImport } from './routes/~(app)/~route'
 import { Route as AuthRegisterImport } from './routes/~auth/~register'
+import { Route as AuthLoginImport } from './routes/~auth/~login'
 import { Route as appHomeImport } from './routes/~(app)/~home'
 import { Route as AdminIndexImport } from './routes/~admin/~index'
 import { Route as appGearIndexImport } from './routes/~(app)/~gear/~index'
@@ -46,6 +47,12 @@ const Route = Import.update({
 const AuthRegisterRoute = AuthRegisterImport.update({
   id: '/auth/register',
   path: '/auth/register',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthLoginRoute = AuthLoginImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -156,6 +163,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/home'
       preLoaderRoute: typeof appHomeImport
       parentRoute: typeof appRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginImport
+      parentRoute: typeof rootRoute
     }
     '/auth/register': {
       id: '/auth/register'
@@ -285,6 +299,7 @@ export interface FileRoutesByFullPath {
   '/': typeof appRouteRouteWithChildren
   '/admin': typeof AdminIndexRoute
   '/home': typeof appHomeRoute
+  '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/attendance': typeof appAttendanceIndexRoute
   '/fighter': typeof appFighterIndexRoute
@@ -302,6 +317,7 @@ export interface FileRoutesByTo {
   '/': typeof appRouteRouteWithChildren
   '/admin': typeof AdminIndexRoute
   '/home': typeof appHomeRoute
+  '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/attendance': typeof appAttendanceIndexRoute
   '/fighter': typeof appFighterIndexRoute
@@ -321,6 +337,7 @@ export interface FileRoutesById {
   '/(app)': typeof appRouteRouteWithChildren
   '/admin/': typeof AdminIndexRoute
   '/(app)/home': typeof appHomeRoute
+  '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/(app)/attendance/': typeof appAttendanceIndexRoute
   '/(app)/fighter/': typeof appFighterIndexRoute
@@ -340,6 +357,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/home'
+    | '/auth/login'
     | '/auth/register'
     | '/attendance'
     | '/fighter'
@@ -356,6 +374,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/home'
+    | '/auth/login'
     | '/auth/register'
     | '/attendance'
     | '/fighter'
@@ -373,6 +392,7 @@ export interface FileRouteTypes {
     | '/(app)'
     | '/admin/'
     | '/(app)/home'
+    | '/auth/login'
     | '/auth/register'
     | '/(app)/attendance/'
     | '/(app)/fighter/'
@@ -390,12 +410,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   Route: typeof RouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
+  AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   Route: RouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
+  AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
 }
 
@@ -411,6 +433,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/admin/",
+        "/auth/login",
         "/auth/register"
       ]
     },
@@ -443,6 +466,9 @@ export const routeTree = rootRoute
     "/(app)/home": {
       "filePath": "~(app)/~home.tsx",
       "parent": "/(app)"
+    },
+    "/auth/login": {
+      "filePath": "~auth/~login.tsx"
     },
     "/auth/register": {
       "filePath": "~auth/~register.tsx"

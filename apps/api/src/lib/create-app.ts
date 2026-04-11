@@ -18,6 +18,7 @@ export default function createApp() {
       }
       // SPA redirect to /index.html
       const requestUrl = new URL(c.req.raw.url);
+      console.log('requestUrl', requestUrl)
 
       if (!c.env.ASSETS) {
         return next();
@@ -34,8 +35,8 @@ export default function createApp() {
         return next();
       },
     )
-    .route('auth', authRouter)
     .use("/auth/*", authHandler())
+    .route('auth', authRouter)
     .use("*", verifyAuth())
     .use("*", attachScope())
     .notFound(notFound)

@@ -10,6 +10,10 @@ import { queriesMap } from '../lib/queries';
 export const useAttendance = (dutyPeriodId: string, startDate: Date, endDate: Date) => {
   const query = useQuery(attendanceQueryOptions(dutyPeriodId, startDate, endDate));
 
+  if (query.error){
+    
+  }
+
   const dateRange = dateRangeBuilder(startDate, endDate);
   const attendanceMapByDate: queriesMap<Record<string, Attendance[]>> = {};
   for (const date of dateRange) {

@@ -13,7 +13,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-  SidebarTrigger,
 } from "@/web/components/ui/sidebar"
 import useAuth from "../hooks/useAuth"
 

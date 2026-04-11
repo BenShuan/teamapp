@@ -45,6 +45,6 @@ export const NewUserPlatoonMembershipSchema = createInsertSchema(userPlatoonMemb
 export const UserPlatoonMembershipSchema = createSelectSchema(userPlatoonMembership);
 
 export type NewUserTeamMembership = z.infer<typeof NewUserTeamMembershipSchema>;
-export type UserTeamMembership = z.infer<typeof UserTeamMembershipSchema>;
+export type UserTeamMembership = typeof userTeamMembership.$inferSelect;
 export type NewUserPlatoonMembership = z.infer<typeof NewUserPlatoonMembershipSchema>;
-export type UserPlatoonMembership = z.infer<typeof UserPlatoonMembershipSchema>;
+export type UserPlatoonMembership = typeof userPlatoonMembership.$inferSelect;

@@ -3,6 +3,7 @@ import {
   ChevronsUpDown,
 } from "lucide-react"
 import { signOut, useSession } from "@hono/auth-js/react"
+import { useNavigate } from "@tanstack/react-router"
 
 import {
   Avatar,
@@ -26,6 +27,7 @@ import {
 export function NavUser() {
   const { isMobile } = useSidebar()
   const session = useSession()
+  const navigate = useNavigate()
   const user = session.data?.user
 
   if (!user) return null
@@ -61,7 +63,10 @@ export function NavUser() {
           >
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => signOut({ callbackUrl: "/" })}
+              onClick={async () => {
+                await signOut({ redirect: false });
+                navigate({ to: "/auth/login" });
+              }}
             >
               <LogOut />
               התנתק

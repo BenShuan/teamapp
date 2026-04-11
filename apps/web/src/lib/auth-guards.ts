@@ -12,7 +12,7 @@ export async function requireAuth({ context }: any) {
 
   if (!session?.data?.user) {
     throw redirect({
-      to: '/auth/register',
+      to: '/auth/login',
     });
   }
 

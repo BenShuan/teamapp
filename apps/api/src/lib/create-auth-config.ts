@@ -41,7 +41,6 @@ export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
           email: { label: 'Email', type: 'email' },
           password: { label: 'Password', type: 'password' },
         },
-
         async authorize(credentials) {
           // Your authentication logic here
 
@@ -56,6 +55,7 @@ export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
     secret: env.AUTH_SECRET,
     trustHost: true,
     callbacks: {
+
       async session({ session, token }) {
         
         // Add user data from token to session
@@ -108,6 +108,7 @@ export default function createAuthConfig(env: AppEnv["Bindings"]): AuthConfig {
         }
         return token;
       },
+
     },
 
   };

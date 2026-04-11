@@ -5,7 +5,7 @@ import type { AdapterAccountType } from "@auth/core/adapters";
 import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
-import { userPlatoonMembership, UserPlatoonMembershipSchema, userTeamMembership, UserTeamMembershipSchema } from "./membership";
+import { userPlatoonMembership, UserPlatoonMembershipSchema, userTeamMembership, UserTeamMembershipSchema, type UserTeamMembership, type UserPlatoonMembership } from "./membership";
 
 
 export enum UserRole {
@@ -48,7 +48,10 @@ export const userSchema = createSelectSchema(users).omit({
 })
 export const createUserSchema = createInsertSchema(users)
 export type NewUser = z.infer<typeof createUserSchema>;
-export type User = z.infer<typeof userSchema>;
+export type User = Omit<typeof users.$inferSelect, 'password' | 'emailVerified'> & {
+  userTeamMembership?: UserTeamMembership[];
+  userPlatoonMembership?: UserPlatoonMembership[];
+};
 
 export const accounts = sqliteTable(
   "account",

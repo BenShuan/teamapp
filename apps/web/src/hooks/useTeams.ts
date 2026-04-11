@@ -9,15 +9,15 @@ import { queriesMap } from "../lib/queries";
 export function useTeams() {
 
   const query = useQuery(teamQueryOptions);
-
-  const teamsMap:queriesMap<Team> = useMemo(()=>query.data?.reduce((acc, team) => {
+  const teamArray = query.data as Team[] | undefined;
+  const teamsMap: queriesMap<Team> = useMemo(() => teamArray?.reduce((acc, team) => {
 
     acc[team.id] = {
       label: team.name,
       value: team
     }
     return acc
-  }, {} as queriesMap<Team> ),[query.dataUpdatedAt]) || {} ;
+  }, {} as queriesMap<Team>), [query.dataUpdatedAt]) || {};
 
   return { ...query, teamsMap }
 }

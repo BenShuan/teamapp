@@ -32,5 +32,5 @@ export const UpdateDutyPeriodSchema = createUpdateSchema(dutyPeriod)
   .partial();
 
 export type NewDutyPeriod = z.infer<typeof NewDutyPeriodSchema>;
-export type DutyPeriod = z.infer<typeof DutyPeriodSchema>;
+export type DutyPeriod = typeof dutyPeriod.$inferSelect;
 export type UpdateDutyPeriod = z.infer<typeof UpdateDutyPeriodSchema>;

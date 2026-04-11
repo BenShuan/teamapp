@@ -12,7 +12,7 @@ export default function useAuth() {
     navigate({ to: "/home" });
   }
   const redirectToSignIn = () => {
-    navigate({ to: "/auth/register" });
+    navigate({ to: "/auth/login" });
   }
 
 

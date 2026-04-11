@@ -132,14 +132,16 @@ export const UpdateSerializedGearCheckSchema = createUpdateSchema(serializedGear
   .partial();
 
 // Types
-export type SerializedGear = z.infer<typeof SerializedGearSchema>;
+export type SerializedGear = typeof serializedGear.$inferSelect;
 export type NewSerializedGear = z.infer<typeof NewSerializedGearSchema>;
 export type UpdateSerializedGear = z.infer<typeof UpdateSerializedGearSchema>;
 
-export type SerializedGearFighter = z.infer<typeof SerializedGearFighterSchema>;
+export type SerializedGearFighter = typeof serializedGearFighter.$inferSelect & {
+  checks?: SerializedGearCheck[];
+};
 export type NewSerializedGearFighter = z.infer<typeof NewSerializedGearFighterSchema>;
 export type UpdateSerializedGearFighter = z.infer<typeof UpdateSerializedGearFighterSchema>;
 
-export type SerializedGearCheck = z.infer<typeof SerializedGearCheckSchema>;
+export type SerializedGearCheck = typeof serializedGearCheck.$inferSelect;
 export type NewSerializedGearCheck = z.infer<typeof NewSerializedGearCheckSchema>;
 export type UpdateSerializedGearCheck = z.infer<typeof UpdateSerializedGearCheckSchema>;

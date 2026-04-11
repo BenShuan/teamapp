@@ -1,6 +1,6 @@
 'use client';
 
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { FormProvider, useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { register as registerUser } from "@/web/services/auth.api";
@@ -10,7 +10,6 @@ import { Button } from "@/web/components/ui/button";
 import { Card, CardContent } from "@/web/components/ui/card";
 import { toast } from 'sonner';
 import { NewUser, UserRole } from "@teamapp/api/schema";
-import { signIn } from "@hono/auth-js/react";
 
 type RegisterForm = NewUser;
 
@@ -89,12 +88,11 @@ function RegisterPage() {
                   {(isSubmitting || mutation.isPending) ? "רושם..." : "הרשם"}
                 </Button>
               </div>
-              <div>
-                <Button type="button" variant={"ghost"} onClick={async () => {
-                  await signIn("simplelogin", { callbackUrl: window.location.origin + "/#/home" });
-                }}>
+              <div className="text-center text-sm pt-2">
+                <span className="text-muted-foreground">כבר יש לך חשבון? </span>
+                <Link to="/auth/login" className="underline font-medium">
                   התחבר
-                </Button>
+                </Link>
               </div>
             </form>
           </CardContent>
