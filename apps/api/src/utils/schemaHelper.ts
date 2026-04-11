@@ -6,17 +6,17 @@ export const ID_FIELD = (fieldName: string) =>
     .primaryKey()
     .$default(() => uuid());
 
-export const TEXT_REQUIRED_FIELD = (fieldName: string, options?: any) => {
-  if (options?.enum) {
-    return text(fieldName, options).notNull();
-  }
-  return options?.length
-    ? text(fieldName, { length: options.length }).notNull()
-    : text(fieldName).notNull();
-};
-export const TEXT_OPTIONAL_FIELD = (fieldName: string, length?: number) => {
-  return length ? text(fieldName, { length }) : text(fieldName);
-}
+export const TEXT_REQUIRED_FIELD = (fieldName: string) =>
+  text(fieldName).notNull();
+
+export const TEXT_REQUIRED_ENUM_FIELD = <
+  U extends string,
+  T extends readonly [U, ...U[]],
+>(fieldName: string, enumValues: T) =>
+  text(fieldName, { enum: enumValues }).notNull();
+
+export const TEXT_OPTIONAL_FIELD = (fieldName: string) =>
+  text(fieldName);
 
 export const INT_REQUIRED_FIELD = (fieldName: string) => {
   return integer(fieldName).notNull();

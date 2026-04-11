@@ -1,6 +1,6 @@
 import {  sqliteTable, unique } from "drizzle-orm/sqlite-core";
 import { timestamps } from "../../utils/timeStamps";
-import { ID_FIELD, INTEGER_TIMESTAMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD } from "../../utils/schemaHelper";
+import { ID_FIELD, INTEGER_TIMESTAMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD, TEXT_REQUIRED_ENUM_FIELD } from "../../utils/schemaHelper";
 import {  fighter } from "./fighter";
 import { dutyPeriod } from "./dutyPeriod";
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
@@ -21,7 +21,7 @@ export const attendance = sqliteTable("attendance", {
   fighterId: TEXT_REQUIRED_FIELD("fighter_id").references(() => fighter.id, {
     onDelete: "cascade",
   }),
-  location: TEXT_REQUIRED_FIELD('location', { enum: statusLocations, default: StatusLocationEnum.נוכח }),
+  location: TEXT_REQUIRED_ENUM_FIELD('location', statusLocations).default(StatusLocationEnum.נוכח),
   // check-in/out as timestamps
   checkIn: INTEGER_TIMESTAMP_OPTIONAL_FIELD("check_in"),
   checkOut: INTEGER_TIMESTAMP_OPTIONAL_FIELD("check_out"),

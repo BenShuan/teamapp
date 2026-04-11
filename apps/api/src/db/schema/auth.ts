@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { ID_FIELD, INTEGER_TIMESTAMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD } from "../../utils/schemaHelper";
+import { ID_FIELD, INTEGER_TIMESTAMP_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD, TEXT_REQUIRED_ENUM_FIELD } from "../../utils/schemaHelper";
 import type { AdapterAccountType } from "@auth/core/adapters";
 
 import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
@@ -15,7 +15,7 @@ export enum UserRole {
   ADMIN="ADMIN"
 }
 
-export const usersRoles = Object.values(UserRole);
+export const usersRoles = [UserRole.FIGHTER, UserRole.COMMANDER, UserRole.CAPTAIN, UserRole.ADMIN] as const;
 
 
 export const users = sqliteTable("user", {
@@ -25,7 +25,7 @@ export const users = sqliteTable("user", {
   emailVerified: INTEGER_TIMESTAMP_OPTIONAL_FIELD("emailVerified"),
   image: TEXT_OPTIONAL_FIELD("image"),
   password: TEXT_REQUIRED_FIELD("password"),
-  role: TEXT_REQUIRED_FIELD('role', { enum: usersRoles }).default(UserRole.FIGHTER),
+  role: TEXT_REQUIRED_ENUM_FIELD('role', usersRoles).default(UserRole.FIGHTER),
   deletedAt: TEXT_OPTIONAL_FIELD('deleted_at'),
 });
 

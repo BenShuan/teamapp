@@ -1,5 +1,5 @@
 import { sqliteTable } from "drizzle-orm/sqlite-core";
-import { ID_FIELD, TEXT_REQUIRED_FIELD } from "../../utils/schemaHelper";
+import { ID_FIELD, TEXT_REQUIRED_FIELD, TEXT_REQUIRED_ENUM_FIELD } from "../../utils/schemaHelper";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { users } from "./auth";
@@ -8,19 +8,15 @@ import { platoon } from "./platoon";
 import { timestamps } from "../../utils/timeStamps";
 import { relations } from "drizzle-orm";
 
-export enum Permissions {
-  "VIEWER" ,
-  "EDITOR" ,
-  "MANAGER" ,
-  "ADMIN" 
-}
+export const permissions = ["VIEWER", "EDITOR", "MANAGER", "ADMIN"] as const;
+export type Permission = typeof permissions[number];
 
 // User <-> Team membership with per-team role override
 export const userTeamMembership = sqliteTable("user_team_membership", {
   id: ID_FIELD("id"),
   userId: TEXT_REQUIRED_FIELD("user_id").references(() => users.id, { onDelete: "cascade" }),
   teamId: TEXT_REQUIRED_FIELD("team_id").references(() => team.id, { onDelete: "cascade" }),
-  teamRole: TEXT_REQUIRED_FIELD("team_role", { enum: Permissions }).default(Permissions[0]),
+  teamRole: TEXT_REQUIRED_ENUM_FIELD("team_role", permissions).default("VIEWER"),
   ...timestamps,
 });
 
@@ -28,7 +24,7 @@ export const userPlatoonMembership = sqliteTable("user_platoon_membership", {
   id: ID_FIELD("id"),
   userId: TEXT_REQUIRED_FIELD("user_id").references(() => users.id, { onDelete: "cascade" }),
   platoonId: TEXT_REQUIRED_FIELD("platoon_id").references(() => platoon.id, { onDelete: "cascade" }),
-  platoonRole: TEXT_REQUIRED_FIELD("platoon_role", { enum: Permissions }).default(Permissions[0]),
+  platoonRole: TEXT_REQUIRED_ENUM_FIELD("platoon_role", permissions).default("VIEWER"),
   ...timestamps,
 });
 

@@ -8,6 +8,7 @@ import {
   ID_FIELD,
   TEXT_OPTIONAL_FIELD,
   TEXT_REQUIRED_FIELD,
+  TEXT_REQUIRED_ENUM_FIELD,
 } from "../../utils/schemaHelper";
 
 export const gearTypes = ["אמרל", "קשר", "נשק", "כללי", "נפיצה", "חבלה"] as const;
@@ -18,7 +19,7 @@ export const serializedGear = sqliteTable(
   {
     id: ID_FIELD("id"),
     name: TEXT_REQUIRED_FIELD("name"),
-    type: TEXT_REQUIRED_FIELD("type", { enum: gearTypes }),
+    type: TEXT_REQUIRED_ENUM_FIELD("type", gearTypes),
     ...timestamps,
   },
   (table) => [unique("gear_name_un").on(table.name)],

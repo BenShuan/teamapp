@@ -17,31 +17,33 @@ type FighterFormProps = {
 };
 
 
-const defaultFighter = {
+type FighterFormData = Omit<Fighter, 'id' | 'createdAt' | 'updatedAt'>;
+
+const defaultFighter: FighterFormData = {
   firstName: "",
   lastName: "",
-  idNumber: "",
+  idNumber: null,
   personalNumber: "",
-  email: "",
-  phoneNumber: "",
-  shoesSize: undefined,
-  shirtSize: "",
-  pantsSize: "",
-  professional: "",
-  ironNumber: undefined,
-  teamId: undefined,
-  class: "",
-  kit: "",
-  address: undefined,
+  email: null,
+  phoneNumber: null,
+  shoesSize: null,
+  shirtSize: null,
+  pantsSize: null,
+  professional: null,
+  ironNumber: null,
+  teamId: null,
+  class: null,
+  kit: null,
+  address: null,
   currentStatus: currentStatusEnum.פעיל,
-}  as Fighter
+}
 
 const FighterForm: React.FC<FighterFormProps> = ({ fighter }) => {
 
   const isNew = !fighter?.id
 
-  // Use NewFighter for creation to match API type
-  const methods = useForm<Fighter>({
+  // Use FighterFormData for the form
+  const methods = useForm<FighterFormData>({
     defaultValues: isNew ? defaultFighter : fighter,
   });
 
@@ -52,8 +54,9 @@ const FighterForm: React.FC<FighterFormProps> = ({ fighter }) => {
 
 
 
-  const onSubmit: SubmitHandler<Fighter> = async (values) => {
-    await mutateAsync(values);
+  const onSubmit: SubmitHandler<FighterFormData> = async (values) => {
+    const data = isNew ? values : { ...values, id: fighter!.id };
+    await mutateAsync(data as Fighter);
 
     methods.reset();
 

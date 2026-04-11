@@ -72,7 +72,7 @@ export const patch = createRoute({
     params: IdUUIDParamsSchema,
     body: jsonContentRequired(
       z.object({
-        role: z.enum(usersRoles as [string, ...string[]]).optional(),
+        role: z.enum(usersRoles).optional(),
         name: z.string().optional(),
         email: z.string().email().optional(),
         deletedAt: z.string().nullable().optional()

@@ -4,7 +4,7 @@ import { createInsertSchema, createSelectSchema, createUpdateSchema } from "driz
 import { z } from "zod";
 import { team } from "./team";
 import { relations } from "drizzle-orm";
-import { ID_FIELD, INTEGER_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD } from "../../utils/schemaHelper";
+import { ID_FIELD, INTEGER_OPTIONAL_FIELD, TEXT_OPTIONAL_FIELD, TEXT_REQUIRED_FIELD, TEXT_REQUIRED_ENUM_FIELD } from "../../utils/schemaHelper";
 import { attendance } from "./attendance";
 
 export const currentStatus = [
@@ -39,7 +39,7 @@ export const fighter = sqliteTable(
     ironNumber: TEXT_OPTIONAL_FIELD("iron_number"), // tinyint
     class: TEXT_OPTIONAL_FIELD("class"), // varchar(1)
     kit: TEXT_OPTIONAL_FIELD("kit"), // varchar(10)
-    currentStatus: TEXT_REQUIRED_FIELD("current_status", { enum: currentStatus  }).default(currentStatusEnum.פעיל), // varchar(20)
+    currentStatus: TEXT_REQUIRED_ENUM_FIELD("current_status", currentStatus).default(currentStatusEnum.פעיל), // varchar(20)
     ...timestamps,
   },
   (t) => [
@@ -66,12 +66,12 @@ export const NewFighterSchema = createInsertSchema(fighter).omit({
 });
 
 // Select validator (useful for output shaping)
-export const fighterSchema = createSelectSchema(fighter);
+export const fighterSchema = createSelectSchema(fighter,{});
 
 
 // Select validator (useful for output shaping)
 export const UpdateFighterSchema = createUpdateSchema(fighter, {
-  createdAt: (schema) => schema.transform((str) => new Date(str))
+  createdAt: (schema) => schema.transform((str) => new Date(str)),
 }).omit({
   createdAt: true,
   updatedAt: true,
